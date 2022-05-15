@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:generate_receipt/view/main_screen.dart';
+import 'package:flutter_pdf_designer/flutter_pdf_designer.dart';
+import 'package:flutter_pdf_designer/src/data_model.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+   MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'PDF Design',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MainScreen(),
+      home: Scaffold(
+        body: PdfDesign(onChange: (json){},json:{"width":300.0,"height":300.0,
+          'elements':[{'type':WidgetType.text,'text':"Galal",'fontSize':30.0,'xPo'
+              'sition':0.0,'yPosition':0.0}
+          ]},width: 100,height: 200,),
+      ),
     );
   }
 }
