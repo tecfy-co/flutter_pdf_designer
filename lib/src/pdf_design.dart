@@ -7,7 +7,7 @@ class PdfDesign extends StatefulWidget {
   const PdfDesign(
       {Key? key,
       required this.onChange,
-      required this.json,
+      this.json,
       this.width = 300,
       this.height = 300})
       : super(key: key);
@@ -123,8 +123,8 @@ class _PdfDesignState extends State<PdfDesign> {
           Container(
             key: containerKey,
             decoration: BoxDecoration(color: Colors.blue, border: Border.all()),
-            height: widget.height,
-            width: widget.width,
+            height: dataModel.height,
+            width: dataModel.width,
             child: Stack(
               children: dataModel.elements!.map<Widget>((e) {
                 switch (e.type) {
