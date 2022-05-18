@@ -123,8 +123,8 @@ class _PdfDesignState extends State<PdfDesign> {
           Container(
             key: containerKey,
             decoration: BoxDecoration(color: Colors.blue, border: Border.all()),
-            height: dataModel.height,
-            width: dataModel.width,
+            height: widget.height,
+            width: widget.width,
             child: Stack(
               children: dataModel.elements!.map<Widget>((e) {
                 switch (e.type) {
@@ -230,7 +230,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         top: e.yPosition,
                         child: Draggable(
                           feedback: Container(
-                            color: Color(e.color),
+                            color: Color(e.color ?? 0),
                             height: e.thickness,
                             width: e.width,
                           ),

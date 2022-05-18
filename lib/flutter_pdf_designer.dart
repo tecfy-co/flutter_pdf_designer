@@ -7,6 +7,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 
 part './src/pdf_design.dart';
@@ -17,5 +19,6 @@ part './src/elements/line_element.dart';
 part './src/elements/text_edit_dialog.dart';
 part './src/elements/image_edit_dialog.dart';
 part './src/elements/line_edit_dialog.dart';
+part './src/pdf_widget.dart';
 
 

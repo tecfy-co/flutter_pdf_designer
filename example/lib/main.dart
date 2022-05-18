@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdf_designer/flutter_pdf_designer.dart';
 // Second import data_model
 import 'package:flutter_pdf_designer/src/data_model.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-   MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -20,16 +23,18 @@ class _MyAppState extends State<MyApp> {
   late DataModel dataModel;
   // initialize List of Elements
   List<Elements>? elements = [
-  Elements(
-  type: WidgetType.text,
-  text: 'Tecfy.co',
-  color: 0xffFF000000,
-  fontSize: 20.0),];
+    Elements(
+        type: WidgetType.text,
+        text: 'Tecfy.co',
+        color: 0xffFF000000,
+        fontSize: 20.0),
+  ];
+  var json;
 
   @override
   void initState() {
     // initialize dataModel
-    dataModel = DataModel(width: 200,height: 200,elements:elements);
+    dataModel = DataModel(width: 400, height: 400, elements: elements);
     super.initState();
   }
 
@@ -43,8 +48,47 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         //call PdfDesign in your widget tree, pass to it width and height to
         // make box of printing box's size
-        body: PdfDesign(onChange: (json){},json: dataModel.toJson(),width: 100,
-          height: 200,),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                PdfDesign(
+                  onChange: (json) {
+                    print(json);
+                    this.json = json;
+                  },
+                  json: dataModel.toJson(),
+                  width: 400,
+                  height: 400,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                MaterialButton(
+                  onPressed: () async {
+                    final doc = pw.Document();
+                    doc.addPage(pw.Page(
+                        build: (context) => pw.Column(children: [
+                          pw.Text('Header'),
+                      PdfWidget.generate(json)],)
+                    ,
+                        // pageFormat: PdfPageFormat(dataModel.width!,dataModel
+                        // .height!)
+                        //
+                    ));
+                    await Printing.layoutPdf(
+                        onLayout: (PdfPageFormat format) async =>
+                            doc.save()); // Page
+                    print('Printing');
+                  },
+                  color: Colors.blue,
+                  child: const Text('Print'),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
