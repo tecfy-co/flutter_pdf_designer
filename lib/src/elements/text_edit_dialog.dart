@@ -42,12 +42,20 @@ class _TextEditDialogState extends State<TextEditDialog> {
   }
 
   @override
+  void dispose(){
+    _textController.dispose();
+    _fontSizeController.dispose();
+    _fontColorController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: const Text('Edit'),
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Form(
             key: formKey,
             child: Column(children: [
@@ -69,7 +77,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextFormField(
                 autofocus: true,
                 controller: _fontSizeController,
@@ -92,7 +100,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               ColorPicker(
                 hexInputController: _fontColorController,
@@ -105,9 +113,11 @@ class _TextEditDialogState extends State<TextEditDialog> {
                 onColorChanged: changeColor,
                 displayThumbColor: true,
                 portraitOnly: true,
+                enableAlpha: false,
+                pickerAreaHeightPercent: 0.24,
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               MaterialButton(
                   color: Colors.blue,

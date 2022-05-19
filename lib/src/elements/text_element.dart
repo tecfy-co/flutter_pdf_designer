@@ -16,7 +16,8 @@ class TextElement extends StatefulWidget {
 class _TextElementState extends State<TextElement> {
   var formKey= GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _fontSizeController = TextEditingController();
+  final TextEditingController _fontSizeController = TextEditingController
+    (text: 25.toString());
   final TextEditingController _fontColorController = TextEditingController();
 
   Color pickerColor = const Color(0xff000000);
@@ -25,7 +26,14 @@ class _TextElementState extends State<TextElement> {
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
-    print(pickerColor.value);
+  }
+  @override
+  void dispose(){
+    _textController.dispose();
+    _fontSizeController.dispose();
+    _fontColorController.dispose();
+    super.dispose();
+
   }
 
   @override
@@ -39,7 +47,7 @@ class _TextElementState extends State<TextElement> {
                 title: Text(widget.titleDialog),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Form(
                       key: formKey ,
                       child: Column(children: [
@@ -64,7 +72,7 @@ class _TextElementState extends State<TextElement> {
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         TextFormField(
                           autofocus: true,
                           controller: _fontSizeController,
@@ -93,24 +101,26 @@ class _TextElementState extends State<TextElement> {
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(
-                          height: 20,
+                        const SizedBox(
+                          height: 10,
                         ),
                         ColorPicker(
                           hexInputController: _fontColorController,
                           onHsvColorChanged: (color){
-                            print('Color = ${color.toColor().value}');
+                         //   print('Color = ${color.toColor().value}');
                             // _fontColorController.text= color.toColor().value;
-                            print(_fontColorController.text);
+                     //       print(_fontColorController.text);
                             selectedColor = color.toColor().value;
                           },
                           pickerColor: pickerColor,
                           onColorChanged: changeColor,
-                          displayThumbColor: true,
+                         displayThumbColor: true,
+                          enableAlpha: false,
                           portraitOnly: true,
+                          pickerAreaHeightPercent: 0.24,
                         ),
-                        SizedBox(
-                          height: 20,
+                        const SizedBox(
+                          height: 10,
                         ),
                         MaterialButton(
                             color: Colors.blue,

@@ -17,8 +17,8 @@ class ImageEditDialog extends StatefulWidget {
 }
 
 class _ImageEditDialogState extends State<ImageEditDialog> {
-  TextEditingController _widthController = TextEditingController();
-  TextEditingController _heightController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -26,6 +26,12 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
     _widthController.text = widget.element.width!.toString();
     _heightController.text = widget.element.height!.toString();
     super.initState();
+  }
+  @override
+  void dispose(){
+    _heightController.dispose();
+    _widthController.dispose();
+    super.dispose();
   }
 
   @override

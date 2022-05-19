@@ -36,12 +36,18 @@ class _LineEditDialogState extends State<LineEditDialog> {
   void initState() {
     _lineWidthController.text = widget.element.width.toString();
     _lineColorController.text = widget.element.color.toString();
-    _lineThicknessController.text = widget.element.thickness.toString();
+    _lineThicknessController.text = widget.element.height.toString();
     pickerColor = Color(widget.element.color);
 
     super.initState();
   }
-
+@override
+void dispose(){
+    _lineWidthController.dispose();
+    _lineThicknessController.dispose();
+    _lineColorController.dispose();
+    super.dispose();
+}
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
@@ -49,7 +55,7 @@ class _LineEditDialogState extends State<LineEditDialog> {
       children: [
         SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.all(10.0),
             child: Form(
               key: formKey,
               child: Column(
@@ -76,7 +82,7 @@ class _LineEditDialogState extends State<LineEditDialog> {
                         hintText: 'Enter Line Thickness (Max '
                             '10)'),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   TextFormField(
                     controller: _lineWidthController,
                     keyboardType: TextInputType.number,
@@ -88,7 +94,7 @@ class _LineEditDialogState extends State<LineEditDialog> {
                         hintText: 'Enter Line width (Max 400)'),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 10,
                   ),
                   ColorPicker(
                     hexInputController: _lineColorController,
@@ -100,20 +106,22 @@ class _LineEditDialogState extends State<LineEditDialog> {
                         widget.onSubmitted.call();
                       });
                     },
-                    displayThumbColor: true,
+                    enableAlpha: false,
                     portraitOnly: true,
+                    pickerAreaHeightPercent: 0.24,
+                    displayThumbColor: true,
                   ),
                   const SizedBox(
-                    height: 50,
+                    height: 10,
                   ),
                   MaterialButton(
-                      color: Colors.deepOrange,
+                      color: Colors.blue,
                       onPressed: () {
                         setState(() {
                           if (formKey.currentState!.validate()) {
                             widget.element.width =
                                 double.parse(_lineWidthController.text);
-                            widget.element.thickness =
+                            widget.element.height =
                                 double.parse(_lineThicknessController.text);
                             widget.element.color = selectedColor;
                             widget.onSubmitted.call();

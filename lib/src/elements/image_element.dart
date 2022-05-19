@@ -19,9 +19,20 @@ class ImageElements extends StatefulWidget {
 
 class _ImageElementsState extends State<ImageElements> {
 
-  TextEditingController _widthController = TextEditingController();
-  TextEditingController _heightController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController(text:
+  200.toString());
+  final TextEditingController _heightController = TextEditingController(text:
+  200.toString());
   var formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose(){
+    _widthController.dispose();
+    _heightController.dispose();
+    super.dispose();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
@@ -34,7 +45,8 @@ class _ImageElementsState extends State<ImageElements> {
               children: [
                 Form(
                   key: formKey ,
-                  child: Column(children: [
+                  child: Padding(padding:const EdgeInsets.all(10),
+                  child:  Column(children: [
                     TextFormField(
                       autofocus: true,
                       controller: _widthController,
@@ -85,7 +97,8 @@ class _ImageElementsState extends State<ImageElements> {
                     const SizedBox(
                       height: 20,
                     ),
-                        OutlinedButton(
+                        MaterialButton(
+                          color: Colors.blue,
                         onPressed: () async {
                           if(formKey.currentState!.validate()) {
                             await MainController.pickFile().then((value) {
@@ -136,7 +149,7 @@ class _ImageElementsState extends State<ImageElements> {
                     //     },
                     //     child: Text('Save')),
                   ]),
-                ),
+                  ),),
 
             //     OutlinedButton(
             //     onPressed: () async {

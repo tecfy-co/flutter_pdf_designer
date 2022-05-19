@@ -31,7 +31,7 @@ class DataModel {
 enum WidgetType { text, image, line }
 
 class Elements {
-  late final WidgetType type;
+  WidgetType? type;
   late GlobalKey key;
   String? text;
   double? fontSize;
@@ -39,7 +39,6 @@ class Elements {
   late double xPosition;
   late double yPosition;
   double? height;
-  double? thickness;
   double? width;
   dynamic color;
 
@@ -51,27 +50,24 @@ class Elements {
       this.xPosition = 0,
       this.yPosition = 0,
       this.height,
-      this.thickness,
       this.width,
       this.color}) {
     key = GlobalKey();
   }
   Elements.fromJson(Map<String, dynamic> json) {
-    type = json['type'] ?? WidgetType.text;
+    type =  WidgetType.values[json['type']];
+    xPosition = json['xPosition'];
+    yPosition = json['yPosition'];
     if (type == WidgetType.text) {
       text = json['text'];
       fontSize = json['fontSize'];
       color = json['color'];
-      xPosition = json['xPosition'];
-      yPosition = json['yPosition'];
     } else if (type == WidgetType.image) {
       image = json['image'];
       height = json['height'];
       width = json['width'];
-      xPosition = json['xPosition'];
-      yPosition = json['yPosition'];
     } else {
-      thickness = json['thickness'];
+      height = json['height'];
       width = json['width'];
       color = json['color'];
     }
@@ -80,24 +76,25 @@ class Elements {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    if (type == WidgetType.text) {
-      data['text'] = this.text;
-      data['fontSize'] = this.fontSize;
-      data['color'] = this.color;
-      data['xPosition'] = this.xPosition;
-      data['yPosition'] = this.yPosition;
+    data['type'] = type!.index;
+
+    data['xPosition'] = xPosition;
+    data['yPosition'] = yPosition;
+
+    if (type ==WidgetType.text) {
+
+      data['text'] = text;
+      data['fontSize'] = fontSize;
+      data['color'] = color;
     } else if (type == WidgetType.image) {
-      data['image'] = this.image;
-      data['xPosition'] = this.xPosition;
-      data['yPosition'] = this.yPosition;
-      data['width'] = this.width;
-      data['height'] = this.height;
+
+      data['image'] = image;
+      data['width'] = width;
+      data['height'] = height;
     } else {
-      data['thickness'] = this.thickness;
-      data['width'] = this.width;
-      data['color'] = this.color;
-      data['xPosition'] = this.xPosition;
-      data['yPosition'] = this.yPosition;
+      data['width'] = width;
+      data['color'] = color;
+      data['height'] = height;
     }
     return data;
   }

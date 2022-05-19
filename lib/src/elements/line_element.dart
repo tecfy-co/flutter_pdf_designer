@@ -9,10 +9,11 @@ part of flutter_pdf_designer;
 class LineElement extends StatefulWidget {
   final String titleDialog;
   final String outlineBtnName;
+  final double lineWidth;
   void Function(Elements elements)? onSubmitted;
 
    LineElement(
-      {Key? key, required this.titleDialog, required this.outlineBtnName,this.onSubmitted})
+      {Key? key, required this.titleDialog, required this.outlineBtnName,this.onSubmitted, required this.lineWidth})
       : super(key: key);
 
   @override
@@ -20,10 +21,11 @@ class LineElement extends StatefulWidget {
 }
 
 class _LineElementState extends State<LineElement> {
-  final TextEditingController _lineWidthController = TextEditingController();
+  final TextEditingController _lineWidthController = TextEditingController
+    (text: 300.toString());
   final TextEditingController _lineColorController = TextEditingController();
   final TextEditingController _lineThicknessController =
-      TextEditingController();
+      TextEditingController(text: 10.toString());
 
   var formKey = GlobalKey<FormState>();
   Color pickerColor = const Color(0xff000000);
@@ -33,6 +35,15 @@ class _LineElementState extends State<LineElement> {
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  @override
+  void dispose(){
+    _lineWidthController.dispose();
+    _lineThicknessController.dispose();
+    _lineColorController.dispose();
+    super.dispose();
+
   }
 
   @override
@@ -47,7 +58,7 @@ class _LineElementState extends State<LineElement> {
                 children: [
                   SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Form(
                         key: formKey,
                         child: Column(
@@ -71,48 +82,53 @@ class _LineElementState extends State<LineElement> {
                               },
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
-                                  hintText: 'Enter Line Thickness (Max '
-                                      '10)'),
-                            ),
-                            const SizedBox(height: 30),
+                                  hintText: 'Enter Line Thickness',
+                                  labelText: 'Thickness'),
+                           //   initialValue: 20.toString(),
+                           ),
+                            const SizedBox(height: 10),
                             TextFormField(
                               controller: _lineWidthController,
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   border:  OutlineInputBorder(),
-                                  hintText: 'Enter Line width (Max 400)'),
+                                  hintText: 'Enter Line width (Max ${widget
+                                  .lineWidth.toInt()})',labelText: 'Width'),
                             ),
                             const SizedBox(
-                              height: 40,
+                              height: 10,
                             ),
                             ColorPicker(
                               hexInputController: _lineColorController,
+                              enableAlpha: false,
                               pickerColor: pickerColor,
                               onColorChanged: changeColor,
                               onHsvColorChanged: (color){
                                 selectedColor = color.toColor().value;
                               },
-                              displayThumbColor: true,
+                             // displayThumbColor: true,
                                portraitOnly: true,
+                              pickerAreaHeightPercent: 0.24,
                             ),
                             const SizedBox(
-                              height: 50,
+                              height: 10,
                             ),
                             MaterialButton(
-                                color: Colors.deepOrange,
+                                color: Colors.blue,
                                 onPressed: () {
                                   setState(() {
                                     if (formKey.currentState!.validate()) {
                                       widget.onSubmitted!.call
                                       (Elements(type: WidgetType.line,
-                                          thickness: double.parse
+                                          height: double.parse
                                             (_lineThicknessController.text),
                                           width: double.parse
                                             (_lineWidthController.text),
-                                          color: selectedColor));
+                                          color: selectedColor,yPosition: 0,
+                                          xPosition: 0));
                                       _lineWidthController.clear();
                                       _lineThicknessController.clear();
                                       _lineColorController.clear();

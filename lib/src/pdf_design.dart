@@ -82,11 +82,14 @@ class _PdfDesignState extends State<PdfDesign> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              TextElement(
+              Padding(padding: const EdgeInsets.only(right: 10),child:TextElement(
                   titleDialog: 'Enter your Text',
                   outlineBtnName: 'Text'
                       '',
@@ -95,8 +98,8 @@ class _PdfDesignState extends State<PdfDesign> {
                       dataModel.elements!.add(elm);
                       widget.onChange(dataModel.toJson());
                     });
-                  }),
-              ImageElements(
+                  })),
+              Padding(padding: const EdgeInsets.only(right: 10),child: ImageElements(
                   titleDialog: 'Add your Images',
                   outlineBtnName: 'Im'
                       'age',
@@ -105,8 +108,8 @@ class _PdfDesignState extends State<PdfDesign> {
                       dataModel.elements!.add(elm);
                       widget.onChange(dataModel.toJson());
                     });
-                  }),
-              LineElement(
+                  })),
+              Padding(padding: const EdgeInsets.only(right: 10),child:  LineElement(
                   titleDialog: 'Add your Lines',
                   outlineBtnName: 'Line',
                   onSubmitted: (elm) {
@@ -114,15 +117,15 @@ class _PdfDesignState extends State<PdfDesign> {
                       dataModel.elements!.add(elm);
                       widget.onChange(dataModel.toJson());
                     });
-                  }),
+                  },lineWidth: widget.width,)),
             ],
           ),
           const SizedBox(
-            height: 50,
+            height: 20,
           ),
           Container(
             key: containerKey,
-            decoration: BoxDecoration(color: Colors.blue, border: Border.all()),
+            decoration: BoxDecoration(border: Border.all()),
             height: widget.height,
             width: widget.width,
             child: Stack(
@@ -231,7 +234,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         child: Draggable(
                           feedback: Container(
                             color: Color(e.color ?? 0),
-                            height: e.thickness,
+                            height: e.height,
                             width: e.width,
                           ),
                           onDragEnd: (dragDetails) {
@@ -259,7 +262,7 @@ class _PdfDesignState extends State<PdfDesign> {
                             child: Container(
                               key: e.key,
                               color: Color(e.color),
-                              height: e.thickness,
+                              height: e.height,
                               width: e.width,
                             ),
                           ),
@@ -267,6 +270,7 @@ class _PdfDesignState extends State<PdfDesign> {
                       );
                     }
                 }
+                return const SizedBox();
               }).toList(),
             ),
           ),
