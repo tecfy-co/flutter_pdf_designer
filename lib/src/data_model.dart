@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/cupertino.dart';
+
 class DataModel {
   double? width;
   double? height;
@@ -28,7 +32,7 @@ class DataModel {
   }
 }
 
-enum WidgetType { text, image, line }
+enum WidgetType { text, image, line, barcode }
 
 class Elements {
   WidgetType? type;
@@ -41,21 +45,58 @@ class Elements {
   double? height;
   double? width;
   dynamic color;
+  Barcode? barcode;
 
-  Elements(
-      {required this.type,
-      this.text,
-      this.fontSize,
-      this.image,
-      this.xPosition = 0,
-      this.yPosition = 0,
-      this.height,
-      this.width,
-      this.color}) {
+  Elements({
+    required this.type,
+    this.text,
+    this.fontSize,
+    this.image,
+    this.xPosition = 0,
+    this.yPosition = 0,
+    this.height,
+    this.width,
+    this.color,
+    this.barcode,
+  }) {
     key = GlobalKey();
   }
+
+  Elements.text({
+    required this.type,
+    required this.text,
+    this.fontSize,
+    this.xPosition = 0,
+    this.yPosition = 0,
+    this.color,
+  }) {
+    key = GlobalKey();
+  }
+
+  Elements.image({
+    required this.image,
+    this.type = WidgetType.image,
+    this.width = 100,
+    this.height = 100,
+    this.xPosition = 0,
+    this.yPosition = 0,
+  }) {
+    key = GlobalKey();
+  }
+
+  Elements.line({
+    this.type = WidgetType.line,
+    this.width = 100,
+    this.height = 10,
+    this.color,
+    this.xPosition = 0,
+    this.yPosition = 0,
+  }) {
+    key = GlobalKey();
+  }
+
   Elements.fromJson(Map<String, dynamic> json) {
-    type =  WidgetType.values[json['type']];
+    type = WidgetType.values[json['type']];
     xPosition = json['xPosition'];
     yPosition = json['yPosition'];
     if (type == WidgetType.text) {
@@ -66,7 +107,13 @@ class Elements {
       image = json['image'];
       height = json['height'];
       width = json['width'];
+    } else if (type == WidgetType.line) {
+      height = json['height'];
+      width = json['width'];
+      color = json['color'];
     } else {
+      text = json['text'];
+      barcode = json['barcode'];
       height = json['height'];
       width = json['width'];
       color = json['color'];
@@ -82,16 +129,20 @@ class Elements {
     data['yPosition'] = yPosition;
 
     if (type ==WidgetType.text) {
-
       data['text'] = text;
       data['fontSize'] = fontSize;
       data['color'] = color;
     } else if (type == WidgetType.image) {
-
       data['image'] = image;
       data['width'] = width;
       data['height'] = height;
+    } else if (type == WidgetType.line) {
+      data['width'] = width;
+      data['color'] = color;
+      data['height'] = height;
     } else {
+      data['text'] = text;
+      data['barcode'] = barcode;
       data['width'] = width;
       data['color'] = color;
       data['height'] = height;

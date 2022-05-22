@@ -1,22 +1,27 @@
 part of flutter_pdf_designer;
 
 class PdfWidget {
-  static pw.Widget generate(Map<String, dynamic> json) {
+  static pw.Widget generate(
+      Map<String, dynamic> json, Map<String, dynamic> data) {
     final DataModel dataModel;
     dataModel = DataModel.fromJson(json);
-
+    print(data);
+    var barcodeData = data['barcode'];
+    print(barcodeData);
+    // var logo = data['logo'] as Uint8List;
+    // print(logo);
 
     // final Uint8List fontData = File('lib/assets/STC-Regular.ttf')
     //     .readAsBytesSync();
     // final ttf = pw.Font.ttf(fontData.buffer.asByteData());
 
-    return
-      pw.Container(
+    return pw.Container(
       width: dataModel.width,
-        height: dataModel.height,
+      height: dataModel.height,
       child: pw.Stack(
         children: dataModel.elements!.map<pw.Widget>((e) {
           print(e.type);
+
           if (dataModel.elements!.isNotEmpty) {
             switch (e.type) {
 
@@ -27,11 +32,12 @@ class PdfWidget {
                     left: e.xPosition,
                     top: e.yPosition,
                     child: pw.Text(
-                      e.text ?? '-',
+                      e.text == 'CustomerName'
+                          ? data.values.first.toString()
+                          : e.text!,
                       style: pw.TextStyle(
                           fontSize: e.fontSize,
-                          color: PdfColor.fromInt(e.color ??
-                         0xffFF000000)),
+                          color: PdfColor.fromInt(e.color ?? 0xffFF000000)),
                     ), );
                 }
               case WidgetType.image:
@@ -40,9 +46,15 @@ class PdfWidget {
                   return pw.Positioned(
                     left: e.xPosition,
                     top: e.yPosition,
-                        child: pw.Image( pw.MemoryImage(
-                          e.image,
-                        ),height: e.height,width: e.width),
+                    child: e.image != null
+                        ? pw.Image(
+                            pw.MemoryImage(
+                              e.image!,
+                            ),
+                            height: e.height,
+                            width: e.width)
+                        : pw.Container(
+                            color: PdfColors.red, width: 100, height: 100),
                   );
                 }
               case WidgetType.line:
@@ -52,10 +64,22 @@ class PdfWidget {
                     left: e.xPosition,
                     top: e.yPosition,
                     child: pw.Container(
-                      color:  PdfColor.fromInt(e.color),
+                      color: PdfColor.fromInt(e.color),
                       height: e.height,
-                      width: e.width ?? 300  ,
+                      width: e.width ?? 300,
                     ),
+                  );
+                }
+              case WidgetType.barcode:
+                {
+                  return pw.Positioned(
+                    left: e.xPosition,
+                    top: e.yPosition,
+                    child: pw.BarcodeWidget(
+                        height: e.height,
+                        width: e.width,
+                        barcode: e.barcode!,
+                        data: barcodeData),
                   );
                 }
             }

@@ -1,10 +1,5 @@
 part of flutter_pdf_designer;
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-//
-// import '../../models/data_model.dart';
 
 class LineEditDialog extends StatefulWidget {
   final Elements element;

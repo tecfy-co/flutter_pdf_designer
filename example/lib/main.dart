@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
         fontSize: 20.0),
   ];
   var json;
-
   @override
   void initState() {
     // initialize dataModel
@@ -61,6 +60,11 @@ class _MyAppState extends State<MyApp> {
                   json: dataModel.toJson(),
                   width: 400,
                   height: 400,
+                  variableList: const {
+                    "CustomerName": WidgetType.text,
+                    "Logo": WidgetType.image,
+                    'invoiceBarcode': WidgetType.barcode
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -69,13 +73,20 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     final doc = pw.Document();
                     doc.addPage(pw.Page(
-                        build: (context) => pw.Column(children: [
+                      build: (context) => pw.Column(
+                        children: [
                           pw.Text('Header'),
-                      PdfWidget.generate(json)],)
-                    ,
-                        // pageFormat: PdfPageFormat(dataModel.width!,dataModel
-                        // .height!)
-                        //
+                          PdfWidget.generate(json, {
+                            'CustomerName': 'Ahmed',
+                            'logo': [1, 1, 1, 2],
+                            'barcode': 'wa.me/+201119369127'
+                          })
+                        ],
+                      ),
+                      // pageFormat: PdfPageFormat(dataModel.width!,dat, '
+                      // aModel
+                      // .height!)
+                      //
                     ));
                     await Printing.layoutPdf(
                         onLayout: (PdfPageFormat format) async =>

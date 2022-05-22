@@ -1,10 +1,5 @@
 part of flutter_pdf_designer;
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:generate_receipt/controller/main_controller.dart';
-//
-// import '../../models/data_model.dart';
 class ImageEditDialog extends StatefulWidget {
   final Elements element;
   final void Function() onSubmitted;
@@ -86,8 +81,8 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
                 textInputAction: TextInputAction.next,
                 enableSuggestions: true,
                 decoration: const InputDecoration(
-                  hintText: 'Enter your font size',
-                  labelText: 'Font Size',
+                  hintText: 'Enter your Height',
+                  labelText: 'Height',
                   border: OutlineInputBorder(),
                 ),
               ),

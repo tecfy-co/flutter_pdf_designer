@@ -9,16 +9,29 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 part './src/pdf_design.dart';
+
 part './src/main_controller.dart';
+
 part './src/elements/text_element.dart';
+
 part './src/elements/image_element.dart';
+
 part './src/elements/line_element.dart';
+
 part './src/elements/text_edit_dialog.dart';
+
 part './src/elements/image_edit_dialog.dart';
+
 part './src/elements/line_edit_dialog.dart';
+
+part './src/elements/barcode_edit_dialog.dart';
+
 part './src/pdf_widget.dart';
 
+part './src/elements/barcode_conf.dart';
 
+part './src/elements/barcode_dropdown.dart';

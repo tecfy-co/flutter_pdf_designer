@@ -1,15 +1,19 @@
 part of flutter_pdf_designer;
+
 class PdfDesign extends StatefulWidget {
+  final Map<String, WidgetType>? variableList;
   final double width;
   final double height;
   final Map<String, dynamic>? json;
   final void Function(Map<String, dynamic>) onChange;
+
   const PdfDesign(
       {Key? key,
       required this.onChange,
       this.json,
       this.width = 300,
-      this.height = 300})
+      this.height = 300,
+      this.variableList})
       : super(key: key);
 
   @override
@@ -71,10 +75,16 @@ class _PdfDesignState extends State<PdfDesign> {
   }
 
   GlobalKey containerKey = GlobalKey();
+  List<String> list = [];
 
   @override
   void initState() {
     dataModel = DataModel.fromJson(widget.json!);
+    widget.variableList!.forEach((key, value) {
+      list.add(key);
+    });
+    // widget.variableList!.entries.map((e) => list.add(e.key));
+    //  print(list);
     super.initState();
   }
 
@@ -89,35 +99,97 @@ class _PdfDesignState extends State<PdfDesign> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(padding: const EdgeInsets.only(right: 10),child:TextElement(
-                  titleDialog: 'Enter your Text',
-                  outlineBtnName: 'Text'
-                      '',
-                  onSubmitted: (elm) {
-                    setState(() {
-                      dataModel.elements!.add(elm);
-                      widget.onChange(dataModel.toJson());
-                    });
-                  })),
-              Padding(padding: const EdgeInsets.only(right: 10),child: ImageElements(
-                  titleDialog: 'Add your Images',
-                  outlineBtnName: 'Im'
-                      'age',
-                  onSubmitted: (elm) {
-                    setState(() {
-                      dataModel.elements!.add(elm);
-                      widget.onChange(dataModel.toJson());
-                    });
-                  })),
-              Padding(padding: const EdgeInsets.only(right: 10),child:  LineElement(
-                  titleDialog: 'Add your Lines',
-                  outlineBtnName: 'Line',
-                  onSubmitted: (elm) {
-                    setState(() {
-                      dataModel.elements!.add(elm);
-                      widget.onChange(dataModel.toJson());
-                    });
-                  },lineWidth: widget.width,)),
+              Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: TextElement(
+                      titleDialog: 'Enter your Text',
+                      outlineBtnName: 'Text'
+                          '',
+                      onSubmitted: (elm) {
+                        setState(() {
+                          dataModel.elements!.add(elm);
+                          widget.onChange(dataModel.toJson());
+                        });
+                      })),
+              Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: ImageElements(
+                      titleDialog: 'Add your Images',
+                      outlineBtnName: 'Im'
+                          'age',
+                      onSubmitted: (elm) {
+                        setState(() {
+                          dataModel.elements!.add(elm);
+                          widget.onChange(dataModel.toJson());
+                        });
+                      })),
+              Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: LineElement(
+                    titleDialog: 'Add your Lines',
+                    outlineBtnName: 'Line',
+                    onSubmitted: (elm) {
+                      setState(() {
+                        dataModel.elements!.add(elm);
+                        widget.onChange(dataModel.toJson());
+                      });
+                    },
+                    lineWidth: widget.width,
+                  )),
+              SizedBox(
+                  width: 150,
+                  child: DropdownSearch<String>(
+                    popupProps: const PopupProps.menu(
+                      showSelectedItems: true,
+                      showSearchBox: true,
+                      // disabledItemFn: (String s) => s.startsWith('I'),
+                    ),
+                    items: list,
+                    dropdownSearchDecoration: const InputDecoration(
+                      labelText: "Your Texts",
+                      hintText: "Texts",
+                    ),
+                    onChanged: (s) {
+                      widget.variableList!.forEach((key, value) {
+                        print('S = $s,key = $key');
+                        if (s == key && value == WidgetType.text) {
+                          print('-------Adding[ Text ]to your Model--------');
+                          setState(() {
+                            dataModel.elements!.add(Elements.text(
+                                type: WidgetType.text,
+                                text: s,
+                                fontSize: 20.0,
+                                color: 1099494850560));
+                            widget.onChange(dataModel.toJson());
+                          });
+                        }
+                        if (s == key && value == WidgetType.image) {
+                          print('-------Adding[ Image ]to your Model--------');
+                          setState(() {
+                            dataModel.elements!.add(Elements.image(
+                              type: WidgetType.image,
+                              image: null,
+                            ));
+                            widget.onChange(dataModel.toJson());
+                          });
+                        }
+                        if (s == key && value == WidgetType.barcode) {
+                          print('-------Adding[ Barcode ]to your '
+                              'Model--------');
+                          setState(() {
+                            dataModel.elements!.add(Elements(
+                                type: WidgetType.barcode,
+                                text: 'your barcode',
+                                width: 100,
+                                height: 100,
+                                color: 1099494850560,
+                                barcode: Barcode.code128()));
+                            widget.onChange(dataModel.toJson());
+                          });
+                        }
+                      });
+                    },
+                  )),
             ],
           ),
           const SizedBox(
@@ -190,11 +262,22 @@ class _PdfDesignState extends State<PdfDesign> {
                         left: e.xPosition,
                         top: e.yPosition,
                         child: Draggable(
-                          feedback: Image.memory(
-                            e.image,
-                            width: e.width,
-                            height: e.height,
-                          ),
+                          feedback: e.image != null
+                              ? Image.memory(
+                                  e.image!,
+                                  width: e.width,
+                                  height: e.height,
+                                )
+                              : Material(
+                                  child: Container(
+                                    color: Colors.red,
+                                    width: 100,
+                                    height: 100,
+                                    child: Center(
+                                      child: Text('YourLogoHere!'),
+                                    ),
+                                  ),
+                                ),
                           onDragEnd: (dragDetails) {
                             setState(() {
                               setWidgetOverStack(dragDetails, e);
@@ -215,13 +298,25 @@ class _PdfDesignState extends State<PdfDesign> {
                                         });
                                   });
                             },
-                            child: Image.memory(
-                              e.image,
-                              key: e.key,
-                              fit: BoxFit.contain,
-                              width: e.width,
-                              height: e.height,
-                            ),
+                            child: e.image != null
+                                ? Image.memory(
+                                    e.image!,
+                                    key: e.key,
+                                    fit: BoxFit.contain,
+                                    width: e.width,
+                                    height: e.height,
+                                  )
+                                : Material(
+                                    child: Container(
+                                      key: e.key,
+                                      color: Colors.red,
+                                      width: 100,
+                                      height: 100,
+                                      child: const Center(
+                                        child: Text('YourLogoHere!'),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
                       );
@@ -264,6 +359,63 @@ class _PdfDesignState extends State<PdfDesign> {
                               color: Color(e.color),
                               height: e.height,
                               width: e.width,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  case WidgetType.barcode:
+                    {
+                      return Positioned(
+                        left: e.xPosition,
+                        top: e.yPosition,
+                        key: e.key,
+                        child: Draggable(
+                          feedback: Material(
+                            child: BarcodeWidget(
+                              data: e.text!,
+                              barcode: e.barcode!,
+                              color: Color(e.color),
+                              width: e.width,
+                              height: e.height,
+                              errorBuilder: (context, string) {
+                                return Container(
+                                  child: Text(string),
+                                );
+                              },
+                            ),
+                          ),
+                          onDragEnd: (dragDetails) {
+                            setState(() {
+                              setWidgetOverStack(dragDetails, e);
+                              widget.onChange(dataModel.toJson());
+                            });
+                          },
+                          child: InkWell(
+                            onDoubleTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return BarcodeEditDialog(
+                                        element: e,
+                                        onSubmitted: () {
+                                          setState(() {
+                                            widget.onChange(dataModel.toJson());
+                                          });
+                                        });
+                                  });
+                            },
+                            child: BarcodeWidget(
+                              data: e.text!,
+                              barcode: e.barcode!,
+                              width: e.width,
+                              height: e.height,
+                              color: Color(e.color),
+                              errorBuilder: (context, string) {
+                                return Container(
+                                  child: Text(string),
+                                );
+                              },
                             ),
                           ),
                         ),
