@@ -14,11 +14,15 @@ class TextElement extends StatefulWidget {
 }
 
 class _TextElementState extends State<TextElement> {
-  var formKey= GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _fontSizeController = TextEditingController
-    (text: 25.toString());
+  final TextEditingController _fontSizeController =
+      TextEditingController(text: 25.toString());
   final TextEditingController _fontColorController = TextEditingController();
+  final TextEditingController _widthController =
+      TextEditingController(text: 50.toString());
+  final TextEditingController _heightController =
+      TextEditingController(text: 50.toString());
 
   Color pickerColor = const Color(0xff000000);
   Color currentColor = const Color(0xff000000);
@@ -27,13 +31,13 @@ class _TextElementState extends State<TextElement> {
   void changeColor(Color color) {
     setState(() => pickerColor = color);
   }
+
   @override
-  void dispose(){
+  void dispose() {
     _textController.dispose();
     _fontSizeController.dispose();
     _fontColorController.dispose();
     super.dispose();
-
   }
 
   @override
@@ -73,48 +77,118 @@ class _TextElementState extends State<TextElement> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        TextFormField(
-                          autofocus: true,
-                          controller: _fontSizeController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          validator: (s){
-                            if(s!.isEmpty){
-                              return 'Font Size Must be Entered';
-                            }
-                          },
-                          textInputAction: TextInputAction.next,
-                          enableSuggestions: true,
-                          onFieldSubmitted: (String submittedText, [size]) {
-                            // widget.onSubmitted!.call(submittedText,data: [size]);
-                            // _textController.clear();
-                            // _fontSizeController.clear();
-                          },
-                          onEditingComplete: () {
-                            print('OnEditingComplete');
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your font size',
-                            labelText: 'Font Size',
-                            border: OutlineInputBorder(),
+                        Row(children: [
+                          Expanded(
+                            child: TextFormField(
+                              autofocus: true,
+                              controller: _fontSizeController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: (s) {
+                                if (s!.isEmpty) {
+                                  return 'Font Size Must be Entered';
+                                }
+                              },
+                              textInputAction: TextInputAction.next,
+                              enableSuggestions: true,
+                              onFieldSubmitted: (String submittedText, [size]) {
+                                // widget.onSubmitted!.call(submittedText,data: [size]);
+                                // _textController.clear();
+                                // _fontSizeController.clear();
+                              },
+                              onEditingComplete: () {
+                                print('OnEditingComplete');
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'Enter your font size',
+                                labelText: 'Font Size',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              autofocus: true,
+                              controller: _widthController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: (s) {
+                                if (s!.isEmpty) {
+                                  return 'Width Must be Entered';
+                                }
+                              },
+                              textInputAction: TextInputAction.next,
+                              enableSuggestions: true,
+                              onFieldSubmitted: (String submittedText, [size]) {
+                                // widget.onSubmitted!.call(submittedText,data: [size]);
+                                // _textController.clear();
+                                // _fontSizeController.clear();
+                              },
+                              onEditingComplete: () {
+                                print('OnEditingComplete');
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'Enter your width',
+                                labelText: 'Width',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              autofocus: true,
+                              controller: _heightController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: (s) {
+                                if (s!.isEmpty) {
+                                  return 'Height Must be Entered';
+                                }
+                              },
+                              textInputAction: TextInputAction.next,
+                              enableSuggestions: true,
+                              onFieldSubmitted: (String submittedText, [size]) {
+                                // widget.onSubmitted!.call(submittedText,data: [size]);
+                                // _textController.clear();
+                                // _fontSizeController.clear();
+                              },
+                              onEditingComplete: () {
+                                print('OnEditingComplete');
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'Enter your height',
+                                labelText: 'Height',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ]),
                         const SizedBox(
                           height: 10,
                         ),
                         ColorPicker(
                           hexInputController: _fontColorController,
-                          onHsvColorChanged: (color){
-                         //   print('Color = ${color.toColor().value}');
+                          onHsvColorChanged: (color) {
+                            //   print('Color = ${color.toColor().value}');
                             // _fontColorController.text= color.toColor().value;
-                     //       print(_fontColorController.text);
+                            //       print(_fontColorController.text);
                             selectedColor = color.toColor().value;
                           },
                           pickerColor: pickerColor,
                           onColorChanged: changeColor,
-                         displayThumbColor: true,
+                          displayThumbColor: true,
                           enableAlpha: false,
                           portraitOnly: true,
                           pickerAreaHeightPercent: 0.24,
@@ -128,18 +202,21 @@ class _TextElementState extends State<TextElement> {
                               if(formKey.currentState!.validate()){
                                 setState(() {
                                   print("Font Color =  "
-                                      "${_fontColorController
-                                      .text}");
-                                  widget.onSubmitted!.call(Elements(type:
-                                  WidgetType.text,
+                                      "${_fontColorController.text}");
+                                  widget.onSubmitted!.call(Elements(
+                                      type: WidgetType.text,
                                       text: _textController.text,
-                                      fontSize: double.parse(_fontSizeController
-                                          .text),
-                                      color: selectedColor));
+                                      fontSize: double.parse(
+                                          _fontSizeController.text),
+                                      color: selectedColor,
+                                      width:
+                                          double.parse(_widthController.text),
+                                      height: double.parse(
+                                          _heightController.text)));
                                   _fontSizeController.clear();
                                   _textController.clear();
                                   _fontColorController.clear();
-                                     Navigator.pop(context);
+                                  Navigator.pop(context);
                                 });
                               }
                               // widget.onSubmitted!.call(_textController.text,data:

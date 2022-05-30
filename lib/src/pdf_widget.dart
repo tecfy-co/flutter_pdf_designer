@@ -2,18 +2,13 @@ part of flutter_pdf_designer;
 
 class PdfWidget {
   static pw.Widget generate(
-      Map<String, dynamic> json, Map<String, dynamic> data) {
+      Map<String, dynamic> json, Map<String, dynamic> data, font) {
     final DataModel dataModel;
     dataModel = DataModel.fromJson(json);
     print(data);
     var barcodeData = data['barcode'];
     print(barcodeData);
-    // var logo = data['logo'] as Uint8List;
-    // print(logo);
-
-    // final Uint8List fontData = File('lib/assets/STC-Regular.ttf')
-    //     .readAsBytesSync();
-    // final ttf = pw.Font.ttf(fontData.buffer.asByteData());
+    final ttf = pw.Font.ttf(font.buffer.asByteData());
 
     return pw.Container(
       width: dataModel.width,
@@ -24,7 +19,6 @@ class PdfWidget {
 
           if (dataModel.elements!.isNotEmpty) {
             switch (e.type) {
-
               case WidgetType.text:
                 {
                   print('it\'s Text !');
@@ -36,6 +30,7 @@ class PdfWidget {
                           ? data.values.first.toString()
                           : e.text!,
                       style: pw.TextStyle(
+                          font: ttf,
                           fontSize: e.fontSize,
                           color: PdfColor.fromInt(e.color ?? 0xffFF000000)),
                     ), );
@@ -84,9 +79,14 @@ class PdfWidget {
                 }
             }
           }
-          return pw.Container(color: PdfColors.red,width: 50,height: 50);
+          return pw.Container(color: PdfColors.red, width: 50, height: 50);
         }).toList(),
       ),
     );
+  }
+
+  static Future<ByteData> loadFont(String fontPath) async {
+    final font = await rootBundle.load(fontPath);
+    return font;
   }
 }

@@ -23,6 +23,8 @@ class _TextEditDialogState extends State<TextEditDialog> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _fontSizeController = TextEditingController();
   final TextEditingController _fontColorController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
 
   Color pickerColor = const Color(0xff000000);
   dynamic selectedColor;
@@ -37,7 +39,9 @@ class _TextEditDialogState extends State<TextEditDialog> {
   void initState() {
     _textController.text = widget.element.text!;
     _fontSizeController.text = widget.element.fontSize!.toString();
-    pickerColor = Color(widget.element.color);
+    _widthController.text = widget.element.width!.toString();
+    _heightController.text = widget.element.height!.toString();
+    pickerColor = Color(widget.element.color ?? 0xff000000);
     super.initState();
   }
 
@@ -46,6 +50,8 @@ class _TextEditDialogState extends State<TextEditDialog> {
     _textController.dispose();
     _fontSizeController.dispose();
     _fontColorController.dispose();
+    _widthController.dispose();
+    _heightController.dispose();
     super.dispose();
   }
 
@@ -78,26 +84,88 @@ class _TextEditDialogState extends State<TextEditDialog> {
                 ),
               ),
               const SizedBox(height: 10),
-              TextFormField(
-                autofocus: true,
-                controller: _fontSizeController,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: _fontSizeController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      validator: (s) {
+                        if (s!.isEmpty) {
+                          return 'Font Size Must be Entered';
+                        }
+                        return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      enableSuggestions: true,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your font size',
+                        labelText: 'Font Size',
+                        isDense: true,
+                        isCollapsed: false,
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: TextFormField(
+                    autofocus: true,
+                    controller: _widthController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    validator: (s) {
+                      if (s!.isEmpty) {
+                        return 'Width Must be Entered';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    enableSuggestions: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your Width',
+                      labelText: 'Width',
+                      isDense: true,
+                      isCollapsed: false,
+                      border: OutlineInputBorder(),
+                    ),
+                  )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: TextFormField(
+                    autofocus: true,
+                    controller: _heightController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    validator: (s) {
+                      if (s!.isEmpty) {
+                        return 'Height Must be Entered';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    enableSuggestions: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your Height',
+                      labelText: 'Height',
+                      isDense: true,
+                      isCollapsed: false,
+                      border: OutlineInputBorder(),
+                    ),
+                  )),
                 ],
-                validator: (s) {
-                  if (s!.isEmpty) {
-                    return 'Font Size Must be Entered';
-                  }
-                  return null;
-                },
-                textInputAction: TextInputAction.next,
-                enableSuggestions: true,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your font size',
-                  labelText: 'Font Size',
-                  border: OutlineInputBorder(),
-                ),
               ),
               const SizedBox(
                 height: 10,
@@ -128,6 +196,10 @@ class _TextEditDialogState extends State<TextEditDialog> {
                         widget.element.fontSize =
                             double.parse(_fontSizeController.text);
                         widget.element.color = selectedColor;
+                        widget.element.width =
+                            double.parse(_widthController.text);
+                        widget.element.height =
+                            double.parse(_heightController.text);
                         widget.onSubmitted.call();
                         Navigator.pop(context);
                       });

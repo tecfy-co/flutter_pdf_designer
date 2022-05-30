@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -99,23 +97,19 @@ class Elements {
     type = WidgetType.values[json['type']];
     xPosition = json['xPosition'];
     yPosition = json['yPosition'];
+    width = json['width'];
+    height = json['height'];
     if (type == WidgetType.text) {
       text = json['text'];
       fontSize = json['fontSize'];
       color = json['color'];
     } else if (type == WidgetType.image) {
       image = json['image'];
-      height = json['height'];
-      width = json['width'];
     } else if (type == WidgetType.line) {
-      height = json['height'];
-      width = json['width'];
       color = json['color'];
     } else {
       text = json['text'];
       barcode = json['barcode'];
-      height = json['height'];
-      width = json['width'];
       color = json['color'];
     }
     key = GlobalKey();
@@ -127,25 +121,21 @@ class Elements {
 
     data['xPosition'] = xPosition;
     data['yPosition'] = yPosition;
+    data['width'] = width;
+    data['height'] = height;
 
-    if (type ==WidgetType.text) {
+    if (type == WidgetType.text) {
       data['text'] = text;
       data['fontSize'] = fontSize;
       data['color'] = color;
     } else if (type == WidgetType.image) {
       data['image'] = image;
-      data['width'] = width;
-      data['height'] = height;
     } else if (type == WidgetType.line) {
-      data['width'] = width;
       data['color'] = color;
-      data['height'] = height;
     } else {
       data['text'] = text;
       data['barcode'] = barcode;
-      data['width'] = width;
       data['color'] = color;
-      data['height'] = height;
     }
     return data;
   }

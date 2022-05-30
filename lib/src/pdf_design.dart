@@ -83,8 +83,6 @@ class _PdfDesignState extends State<PdfDesign> {
     widget.variableList!.forEach((key, value) {
       list.add(key);
     });
-    // widget.variableList!.entries.map((e) => list.add(e.key));
-    //  print(list);
     super.initState();
   }
 
@@ -141,13 +139,13 @@ class _PdfDesignState extends State<PdfDesign> {
                   child: DropdownSearch<String>(
                     popupProps: const PopupProps.menu(
                       showSelectedItems: true,
-                      showSearchBox: true,
-                      // disabledItemFn: (String s) => s.startsWith('I'),
+                      showSearchBox: false,
                     ),
                     items: list,
                     dropdownSearchDecoration: const InputDecoration(
-                      labelText: "Your Texts",
-                      hintText: "Texts",
+                      labelText: "Your Components",
+                      hintText: "Components",
+                      labelStyle: TextStyle(fontSize: 12),
                     ),
                     onChanged: (s) {
                       widget.variableList!.forEach((key, value) {
@@ -216,43 +214,54 @@ class _PdfDesignState extends State<PdfDesign> {
                             });
                           },
                           feedback: Material(
-                              child: Text(
-                            e.text ?? '-',
-                            key: e.key,
-                            style: TextStyle(
-                                fontSize: e.fontSize,
-                                color: Color(e.color ?? 0xffFF000000)),
-                            // key: GlobalObjectKey(e.text ?? ''),
-                          )),
+                              child: Container(
+                                  width: e.width,
+                                  height: e.height,
+                                  color: Color(e.color ?? 0xffFF000000)
+                                      .withOpacity(0.3),
+                                  child: Text(
+                                    e.text ?? '-',
+                                    key: e.key,
+                                    style: TextStyle(
+                                        fontSize: e.fontSize,
+                                        color: Color(e.color ?? 0xffFF000000)),
+                                    // key: GlobalObjectKey(e.text ?? ''),
+                                  ))),
                           childWhenDragging: const SizedBox(),
                           child: InkWell(
-                            onDoubleTap: () {
-                              setState(() {
-                                isLongPressed = !isLongPressed;
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return TextEditDialog(
-                                        element: e,
-                                        onSubmitted: () {
-                                          setState(() {
-                                            widget.onChange(dataModel.toJson());
-                                          });
-                                        },
-                                      );
-                                    });
+                              onDoubleTap: () {
+                                setState(() {
+                                  isLongPressed = !isLongPressed;
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return TextEditDialog(
+                                          element: e,
+                                          onSubmitted: () {
+                                            setState(() {
+                                              widget
+                                                  .onChange(dataModel.toJson());
+                                            });
+                                          },
+                                        );
+                                      });
 
-                                debugPrint('Long Press = $isLongPressed');
-                              });
-                            },
-                            child: Text(
-                              e.text ?? '-',
-                              key: e.key,
-                              style: TextStyle(
-                                  fontSize: e.fontSize,
-                                  color: Color(e.color ?? 0xffFF000000)),
-                            ),
-                          ),
+                                  debugPrint('Long Press = $isLongPressed');
+                                });
+                              },
+                              child: Container(
+                                color: Color(e.color ?? 0xffFF000000)
+                                    .withOpacity(0.2),
+                                width: e.width,
+                                height: e.height,
+                                child: Text(
+                                  e.text ?? '-',
+                                  key: e.key,
+                                  style: TextStyle(
+                                      fontSize: e.fontSize,
+                                      color: Color(e.color ?? 0xffFF000000)),
+                                ),
+                              )),
                         ),
                       );
                     }

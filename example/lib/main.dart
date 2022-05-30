@@ -27,7 +27,9 @@ class _MyAppState extends State<MyApp> {
         type: WidgetType.text,
         text: 'Tecfy.co',
         color: 0xffFF000000,
-        fontSize: 20.0),
+        fontSize: 40.0,
+        height: 100,
+        width: 100),
   ];
   var json;
   @override
@@ -71,27 +73,37 @@ class _MyAppState extends State<MyApp> {
                 ),
                 MaterialButton(
                   onPressed: () async {
-                    final doc = pw.Document();
-                    doc.addPage(pw.Page(
-                      build: (context) => pw.Column(
-                        children: [
-                          pw.Text('Header'),
-                          PdfWidget.generate(json, {
-                            'CustomerName': 'Ahmed',
-                            'logo': [1, 1, 1, 2],
-                            'barcode': 'wa.me/+201119369127'
-                          })
-                        ],
-                      ),
-                      // pageFormat: PdfPageFormat(dataModel.width!,dat, '
-                      // aModel
-                      // .height!)
-                      //
-                    ));
-                    await Printing.layoutPdf(
-                        onLayout: (PdfPageFormat format) async =>
-                            doc.save()); // Page
-                    print('Printing');
+                    // pass font path as a String in loadFont Function after
+                    // adding it in your pupspec.ymal
+                    await PdfWidget.loadFont('assets/fonts/STC-Regular.ttf')
+                        .then((value) async {
+                      final doc = pw.Document();
+                      doc.addPage(pw.Page(
+                          textDirection: pw.TextDirection.rtl,
+                          build: (context) {
+                            return pw.Column(
+                              children: [
+                                pw.Text('Header'),
+                                PdfWidget.generate(
+                                    json,
+                                    {
+                                      'CustomerName': 'Ahmed',
+                                      'logo': [1, 1, 1, 2],
+                                      'barcode': 'wa.me/+201119369127'
+                                    },
+                                    value)
+                              ],
+                            );
+                            // pageFormat: PdfPageFormat(dataModel.width!,dat, '
+                            // aModel
+                            // .height!)
+                            //
+                          }));
+                      await Printing.layoutPdf(
+                          onLayout: (PdfPageFormat format) async =>
+                              doc.save()); // Page
+                      print('Printing');
+                    });
                   },
                   color: Colors.blue,
                   child: const Text('Print'),
