@@ -1,7 +1,7 @@
 part of flutter_pdf_designer;
 
 class BarcodeEditDialog extends StatefulWidget {
-  final Elements element;
+  final PdfElement element;
   final void Function() onSubmitted;
 
   const BarcodeEditDialog(
