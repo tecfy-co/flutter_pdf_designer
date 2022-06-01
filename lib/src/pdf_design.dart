@@ -1,7 +1,7 @@
 part of flutter_pdf_designer;
 
 class PdfDesign extends StatefulWidget {
-  final Map<String, WidgetType>? variableList;
+  final Map<String, PdfElementType>? variableList;
   final double width;
   final double height;
   final Map<String, dynamic>? json;
@@ -21,7 +21,7 @@ class PdfDesign extends StatefulWidget {
 }
 
 class _PdfDesignState extends State<PdfDesign> {
-  late DataModel dataModel;
+  late PdfModel dataModel;
   bool isLongPressed = false;
 
   void setWidgetOverStack(dragDetails, e) {
@@ -79,7 +79,7 @@ class _PdfDesignState extends State<PdfDesign> {
 
   @override
   void initState() {
-    dataModel = DataModel.fromJson(widget.json!);
+    dataModel = PdfModel.fromJson(widget.json!);
     widget.variableList!.forEach((key, value) {
       list.add(key);
     });
@@ -150,33 +150,33 @@ class _PdfDesignState extends State<PdfDesign> {
                     onChanged: (s) {
                       widget.variableList!.forEach((key, value) {
                         print('S = $s,key = $key');
-                        if (s == key && value == WidgetType.text) {
+                        if (s == key && value == PdfElementType.text) {
                           print('-------Adding[ Text ]to your Model--------');
                           setState(() {
-                            dataModel.elements!.add(Elements.text(
-                                type: WidgetType.text,
+                            dataModel.elements!.add(PdfElement.text(
+                                type: PdfElementType.text,
                                 text: s,
                                 fontSize: 20.0,
                                 color: 1099494850560));
                             widget.onChange(dataModel.toJson());
                           });
                         }
-                        if (s == key && value == WidgetType.image) {
+                        if (s == key && value == PdfElementType.image) {
                           print('-------Adding[ Image ]to your Model--------');
                           setState(() {
-                            dataModel.elements!.add(Elements.image(
-                              type: WidgetType.image,
+                            dataModel.elements!.add(PdfElement.image(
+                              type: PdfElementType.image,
                               image: null,
                             ));
                             widget.onChange(dataModel.toJson());
                           });
                         }
-                        if (s == key && value == WidgetType.barcode) {
+                        if (s == key && value == PdfElementType.barcode) {
                           print('-------Adding[ Barcode ]to your '
                               'Model--------');
                           setState(() {
-                            dataModel.elements!.add(Elements(
-                                type: WidgetType.barcode,
+                            dataModel.elements!.add(PdfElement(
+                                type: PdfElementType.barcode,
                                 text: 'your barcode',
                                 width: 100,
                                 height: 100,
@@ -201,7 +201,7 @@ class _PdfDesignState extends State<PdfDesign> {
             child: Stack(
               children: dataModel.elements!.map<Widget>((e) {
                 switch (e.type) {
-                  case WidgetType.text:
+                  case PdfElementType.text:
                     {
                       return Positioned(
                         left: e.xPosition,
@@ -265,7 +265,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         ),
                       );
                     }
-                  case WidgetType.image:
+                  case PdfElementType.image:
                     {
                       return Positioned(
                         left: e.xPosition,
@@ -330,7 +330,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         ),
                       );
                     }
-                  case WidgetType.line:
+                  case PdfElementType.line:
                     {
                       return Positioned(
                         left: e.xPosition,
@@ -373,7 +373,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         ),
                       );
                     }
-                  case WidgetType.barcode:
+                  case PdfElementType.barcode:
                     {
                       return Positioned(
                         left: e.xPosition,

@@ -1,7 +1,7 @@
 part of flutter_pdf_designer;
 
 class ImageEditDialog extends StatefulWidget {
-  final Elements element;
+  final PdfElement element;
   final void Function() onSubmitted;
   const ImageEditDialog(
       {Key? key, required this.element, required this.onSubmitted})
@@ -22,8 +22,9 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
     _heightController.text = widget.element.height!.toString();
     super.initState();
   }
+
   @override
-  void dispose(){
+  void dispose() {
     _heightController.dispose();
     _widthController.dispose();
     super.dispose();
@@ -92,17 +93,17 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
               OutlinedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      await MainController.pickFile().then((value) {
+                      await FileService.pickFile().then((value) {
                         setState(() {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                  'Image ${MainController.file!.path} has been selected')));
-                          widget.element.image = MainController.bytes;
+                                  'Image ${FileService.file!.path} has been selected')));
+                          widget.element.image = FileService.bytes;
                         });
                       });
                     }
                   },
-                  child: MainController.bytes != null
+                  child: FileService.bytes != null
                       ? const Text('Change Image')
                       : const Text('Browse my '
                           'images ...')),
@@ -113,9 +114,9 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
                   color: Colors.blue,
                   onPressed: () {
                     if (formKey.currentState!.validate() &&
-                        MainController.bytes != null) {
+                        FileService.bytes != null) {
                       setState(() {
-                        widget.element.image = MainController.bytes;
+                        widget.element.image = FileService.bytes;
                         widget.element.width =
                             double.parse(_widthController.text);
                         widget.element.height =

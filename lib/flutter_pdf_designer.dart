@@ -1,7 +1,6 @@
 library flutter_pdf_designer;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pdf_designer/src/data_model.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,7 +13,7 @@ import 'package:barcode_widget/barcode_widget.dart';
 
 part './src/pdf_design.dart';
 
-part './src/main_controller.dart';
+part 'src/file.service.dart';
 
 part './src/elements/text_element.dart';
 
@@ -35,3 +34,6 @@ part './src/pdf_widget.dart';
 part './src/elements/barcode_conf.dart';
 
 part './src/elements/barcode_dropdown.dart';
+part 'src/models/data.model.dart';
+part './src/models/element.model.dart';
+part './src/models/element_types.dart';

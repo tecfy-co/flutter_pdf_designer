@@ -1,39 +1,7 @@
-import 'package:barcode_widget/barcode_widget.dart';
-import 'package:flutter/cupertino.dart';
+part of flutter_pdf_designer;
 
-class DataModel {
-  double? width;
-  double? height;
-  List<Elements>? elements;
-
-  DataModel({this.width, this.height, this.elements});
-
-  DataModel.fromJson(Map<String, dynamic> json) {
-    width = json['width'];
-    height = json['height'];
-    if (json['elements'] != null) {
-      elements = <Elements>[];
-      json['elements'].forEach((v) {
-        elements!.add(new Elements.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['width'] = this.width;
-    data['height'] = this.height;
-    if (this.elements != null) {
-      data['elements'] = this.elements!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-enum WidgetType { text, image, line, barcode }
-
-class Elements {
-  WidgetType? type;
+class PdfElement {
+  PdfElementType? type;
   late GlobalKey key;
   String? text;
   double? fontSize;
@@ -45,7 +13,7 @@ class Elements {
   dynamic color;
   Barcode? barcode;
 
-  Elements({
+  PdfElement({
     required this.type,
     this.text,
     this.fontSize,
@@ -60,7 +28,7 @@ class Elements {
     key = GlobalKey();
   }
 
-  Elements.text({
+  PdfElement.text({
     required this.type,
     required this.text,
     this.fontSize,
@@ -71,9 +39,9 @@ class Elements {
     key = GlobalKey();
   }
 
-  Elements.image({
+  PdfElement.image({
     required this.image,
-    this.type = WidgetType.image,
+    this.type = PdfElementType.image,
     this.width = 100,
     this.height = 100,
     this.xPosition = 0,
@@ -82,8 +50,8 @@ class Elements {
     key = GlobalKey();
   }
 
-  Elements.line({
-    this.type = WidgetType.line,
+  PdfElement.line({
+    this.type = PdfElementType.line,
     this.width = 100,
     this.height = 10,
     this.color,
@@ -93,19 +61,19 @@ class Elements {
     key = GlobalKey();
   }
 
-  Elements.fromJson(Map<String, dynamic> json) {
-    type = WidgetType.values[json['type']];
+  PdfElement.fromJson(Map<String, dynamic> json) {
+    type = PdfElementType.values[json['type']];
     xPosition = json['xPosition'];
     yPosition = json['yPosition'];
     width = json['width'];
     height = json['height'];
-    if (type == WidgetType.text) {
+    if (type == PdfElementType.text) {
       text = json['text'];
       fontSize = json['fontSize'];
       color = json['color'];
-    } else if (type == WidgetType.image) {
+    } else if (type == PdfElementType.image) {
       image = json['image'];
-    } else if (type == WidgetType.line) {
+    } else if (type == PdfElementType.line) {
       color = json['color'];
     } else {
       text = json['text'];
@@ -116,7 +84,7 @@ class Elements {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type!.index;
 
     data['xPosition'] = xPosition;
@@ -124,13 +92,13 @@ class Elements {
     data['width'] = width;
     data['height'] = height;
 
-    if (type == WidgetType.text) {
+    if (type == PdfElementType.text) {
       data['text'] = text;
       data['fontSize'] = fontSize;
       data['color'] = color;
-    } else if (type == WidgetType.image) {
+    } else if (type == PdfElementType.image) {
       data['image'] = image;
-    } else if (type == WidgetType.line) {
+    } else if (type == PdfElementType.line) {
       data['color'] = color;
     } else {
       data['text'] = text;

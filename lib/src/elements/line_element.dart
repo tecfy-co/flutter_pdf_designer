@@ -10,10 +10,14 @@ class LineElement extends StatefulWidget {
   final String titleDialog;
   final String outlineBtnName;
   final double lineWidth;
-  void Function(Elements elements)? onSubmitted;
+  void Function(PdfElement elements)? onSubmitted;
 
-   LineElement(
-      {Key? key, required this.titleDialog, required this.outlineBtnName,this.onSubmitted, required this.lineWidth})
+  LineElement(
+      {Key? key,
+      required this.titleDialog,
+      required this.outlineBtnName,
+      this.onSubmitted,
+      required this.lineWidth})
       : super(key: key);
 
   @override
@@ -21,8 +25,8 @@ class LineElement extends StatefulWidget {
 }
 
 class _LineElementState extends State<LineElement> {
-  final TextEditingController _lineWidthController = TextEditingController
-    (text: 300.toString());
+  final TextEditingController _lineWidthController =
+      TextEditingController(text: 300.toString());
   final TextEditingController _lineColorController = TextEditingController();
   final TextEditingController _lineThicknessController =
       TextEditingController(text: 10.toString());
@@ -32,18 +36,16 @@ class _LineElementState extends State<LineElement> {
   Color currentColor = const Color(0xff000000);
   dynamic selectedColor;
 
-
   void changeColor(Color color) {
     setState(() => pickerColor = color);
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _lineWidthController.dispose();
     _lineThicknessController.dispose();
     _lineColorController.dispose();
     super.dispose();
-
   }
 
   @override
@@ -84,8 +86,8 @@ class _LineElementState extends State<LineElement> {
                                   border: OutlineInputBorder(),
                                   hintText: 'Enter Line Thickness',
                                   labelText: 'Thickness'),
-                           //   initialValue: 20.toString(),
-                           ),
+                              //   initialValue: 20.toString(),
+                            ),
                             const SizedBox(height: 10),
                             TextFormField(
                               controller: _lineWidthController,
@@ -93,10 +95,11 @@ class _LineElementState extends State<LineElement> {
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              decoration:  InputDecoration(
-                                  border:  OutlineInputBorder(),
-                                  hintText: 'Enter Line width (Max ${widget
-                                  .lineWidth.toInt()})',labelText: 'Width'),
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText:
+                                      'Enter Line width (Max ${widget.lineWidth.toInt()})',
+                                  labelText: 'Width'),
                             ),
                             const SizedBox(
                               height: 10,
@@ -106,11 +109,11 @@ class _LineElementState extends State<LineElement> {
                               enableAlpha: false,
                               pickerColor: pickerColor,
                               onColorChanged: changeColor,
-                              onHsvColorChanged: (color){
+                              onHsvColorChanged: (color) {
                                 selectedColor = color.toColor().value;
                               },
-                             // displayThumbColor: true,
-                               portraitOnly: true,
+                              // displayThumbColor: true,
+                              portraitOnly: true,
                               pickerAreaHeightPercent: 0.24,
                             ),
                             const SizedBox(
@@ -121,13 +124,14 @@ class _LineElementState extends State<LineElement> {
                                 onPressed: () {
                                   setState(() {
                                     if (formKey.currentState!.validate()) {
-                                      widget.onSubmitted!.call
-                                      (Elements(type: WidgetType.line,
-                                          height: double.parse
-                                            (_lineThicknessController.text),
-                                          width: double.parse
-                                            (_lineWidthController.text),
-                                          color: selectedColor,yPosition: 0,
+                                      widget.onSubmitted!.call(PdfElement(
+                                          type: PdfElementType.line,
+                                          height: double.parse(
+                                              _lineThicknessController.text),
+                                          width: double.parse(
+                                              _lineWidthController.text),
+                                          color: selectedColor,
+                                          yPosition: 0,
                                           xPosition: 0));
                                       _lineWidthController.clear();
                                       _lineThicknessController.clear();

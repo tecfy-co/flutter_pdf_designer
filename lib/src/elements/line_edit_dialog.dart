@@ -1,8 +1,7 @@
 part of flutter_pdf_designer;
 
-
 class LineEditDialog extends StatefulWidget {
-  final Elements element;
+  final PdfElement element;
   final void Function() onSubmitted;
   const LineEditDialog(
       {Key? key, required this.element, required this.onSubmitted})
@@ -36,13 +35,15 @@ class _LineEditDialogState extends State<LineEditDialog> {
 
     super.initState();
   }
-@override
-void dispose(){
+
+  @override
+  void dispose() {
     _lineWidthController.dispose();
     _lineThicknessController.dispose();
     _lineColorController.dispose();
     super.dispose();
-}
+  }
+
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(

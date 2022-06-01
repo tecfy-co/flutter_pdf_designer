@@ -7,7 +7,7 @@ part of flutter_pdf_designer;
 // import '../../models/data_model.dart';
 
 class TextEditDialog extends StatefulWidget {
-  final Elements element;
+  final PdfElement element;
   final void Function() onSubmitted;
 
   const TextEditDialog(
@@ -46,7 +46,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _textController.dispose();
     _fontSizeController.dispose();
     _fontColorController.dispose();

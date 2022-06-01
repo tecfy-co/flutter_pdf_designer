@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 //First import flutter_pdf_designer
 import 'package:flutter_pdf_designer/flutter_pdf_designer.dart';
 // Second import data_model
-import 'package:flutter_pdf_designer/src/data_model.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -20,11 +19,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   //declare dataModel as late to initialize lately at initState function and
-  late DataModel dataModel;
+  late PdfModel dataModel;
   // initialize List of Elements
-  List<Elements>? elements = [
-    Elements(
-        type: WidgetType.text,
+  List<PdfElement>? elements = [
+    PdfElement(
+        type: PdfElementType.text,
         text: 'Tecfy.co',
         color: 0xffFF000000,
         fontSize: 40.0,
@@ -35,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // initialize dataModel
-    dataModel = DataModel(width: 400, height: 400, elements: elements);
+    dataModel = PdfModel(width: 400, height: 400, elements: elements);
     super.initState();
   }
 
@@ -63,9 +62,9 @@ class _MyAppState extends State<MyApp> {
                   width: 400,
                   height: 400,
                   variableList: const {
-                    "CustomerName": WidgetType.text,
-                    "Logo": WidgetType.image,
-                    'invoiceBarcode': WidgetType.barcode
+                    "CustomerName": PdfElementType.text,
+                    "Logo": PdfElementType.image,
+                    'invoiceBarcode': PdfElementType.barcode
                   },
                 ),
                 const SizedBox(

@@ -3,8 +3,8 @@ part of flutter_pdf_designer;
 class PdfWidget {
   static pw.Widget generate(
       Map<String, dynamic> json, Map<String, dynamic> data, font) {
-    final DataModel dataModel;
-    dataModel = DataModel.fromJson(json);
+    final PdfModel dataModel;
+    dataModel = PdfModel.fromJson(json);
     print(data);
     var barcodeData = data['barcode'];
     print(barcodeData);
@@ -19,7 +19,7 @@ class PdfWidget {
 
           if (dataModel.elements!.isNotEmpty) {
             switch (e.type) {
-              case WidgetType.text:
+              case PdfElementType.text:
                 {
                   print('it\'s Text !');
                   return pw.Positioned(
@@ -33,9 +33,10 @@ class PdfWidget {
                           font: ttf,
                           fontSize: e.fontSize,
                           color: PdfColor.fromInt(e.color ?? 0xffFF000000)),
-                    ), );
+                    ),
+                  );
                 }
-              case WidgetType.image:
+              case PdfElementType.image:
                 {
                   print('it\'s Image !');
                   return pw.Positioned(
@@ -52,7 +53,7 @@ class PdfWidget {
                             color: PdfColors.red, width: 100, height: 100),
                   );
                 }
-              case WidgetType.line:
+              case PdfElementType.line:
                 {
                   print('it\'s Line !');
                   return pw.Positioned(
@@ -65,7 +66,7 @@ class PdfWidget {
                     ),
                   );
                 }
-              case WidgetType.barcode:
+              case PdfElementType.barcode:
                 {
                   return pw.Positioned(
                     left: e.xPosition,

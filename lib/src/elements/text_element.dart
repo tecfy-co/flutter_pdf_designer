@@ -3,10 +3,12 @@ part of flutter_pdf_designer;
 class TextElement extends StatefulWidget {
   final String titleDialog;
   final String outlineBtnName;
-  void Function(Elements elements)? onSubmitted;
-   TextElement(
-      {Key? key, required this.titleDialog, required this.outlineBtnName,
-  this.onSubmitted})
+  void Function(PdfElement elements)? onSubmitted;
+  TextElement(
+      {Key? key,
+      required this.titleDialog,
+      required this.outlineBtnName,
+      this.onSubmitted})
       : super(key: key);
 
   @override
@@ -53,15 +55,15 @@ class _TextElementState extends State<TextElement> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Form(
-                      key: formKey ,
+                      key: formKey,
                       child: Column(children: [
                         TextFormField(
                           autofocus: true,
                           controller: _textController,
                           keyboardType: TextInputType.text,
                           enableSuggestions: true,
-                          validator: (s){
-                            if(s!.isEmpty){
+                          validator: (s) {
+                            if (s!.isEmpty) {
                               return 'Text must be entered';
                             }
                           },
@@ -199,12 +201,12 @@ class _TextElementState extends State<TextElement> {
                         MaterialButton(
                             color: Colors.blue,
                             onPressed: () {
-                              if(formKey.currentState!.validate()){
+                              if (formKey.currentState!.validate()) {
                                 setState(() {
                                   print("Font Color =  "
                                       "${_fontColorController.text}");
-                                  widget.onSubmitted!.call(Elements(
-                                      type: WidgetType.text,
+                                  widget.onSubmitted!.call(PdfElement(
+                                      type: PdfElementType.text,
                                       text: _textController.text,
                                       fontSize: double.parse(
                                           _fontSizeController.text),
@@ -226,7 +228,6 @@ class _TextElementState extends State<TextElement> {
                               //       data: double.parse(_fontSizeController.text));
                               //   _textController.clear();
                               //   _fontSizeController.clear();
-
                             },
                             child: Text('Save')),
                       ]),
