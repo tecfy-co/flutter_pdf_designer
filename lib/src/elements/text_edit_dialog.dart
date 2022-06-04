@@ -1,10 +1,5 @@
 part of flutter_pdf_designer;
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-//
-// import '../../models/data_model.dart';
 
 class TextEditDialog extends StatefulWidget {
   final PdfElement element;
@@ -28,6 +23,75 @@ class _TextEditDialogState extends State<TextEditDialog> {
 
   Color pickerColor = const Color(0xff000000);
   dynamic selectedColor;
+  List<String> dropdownItems = [
+    'Center',
+    'Top Center',
+    'Bottom Center',
+    'Top Left',
+    'Center Left',
+    'Bottom Left',
+    'Center Right',
+    'Top Right',
+    'Bottom Right',
+  ];
+
+  void changeSelectedItemFromAlignmentModel() {
+    if (widget.element.alignment == Alignment.center) {
+      selectedItem = 'Center';
+    } else if (widget.element.alignment == Alignment.topCenter) {
+      selectedItem = 'Top Center';
+    } else if (widget.element.alignment == Alignment.bottomCenter) {
+      selectedItem = 'Bottom Center';
+    } else if (widget.element.alignment == Alignment.topLeft) {
+      selectedItem = 'Top Left';
+    } else if (widget.element.alignment == Alignment.centerLeft) {
+      selectedItem = 'Center Left';
+    } else if (widget.element.alignment == Alignment.bottomLeft) {
+      selectedItem = 'Bottom Left';
+    } else if (widget.element.alignment == Alignment.topRight) {
+      selectedItem = 'Top Right';
+    } else if (widget.element.alignment == Alignment.centerRight) {
+      selectedItem = 'Center Right';
+    } else if (widget.element.alignment == Alignment.bottomRight) {
+      selectedItem = 'Bottom Right';
+    }
+  }
+
+  String selectedItem = 'Top Left';
+
+  void changeAlignFromText(element) {
+    switch (selectedItem) {
+      case 'Bottom Right':
+        element.alignment = Alignment.bottomRight;
+        break;
+      case 'Center':
+        element.alignment = Alignment.center;
+        break;
+      case 'Bottom Center':
+        element.alignment = Alignment.bottomCenter;
+        break;
+      case 'Top Center':
+        element.alignment = Alignment.topCenter;
+        break;
+      case 'Top Right':
+        element.alignment = Alignment.topRight;
+        break;
+      case 'Center Right':
+        element.alignment = Alignment.centerRight;
+        break;
+      case 'Center Left':
+        element.alignment = Alignment.centerLeft;
+        break;
+      case 'Bottom Left':
+        element.alignment = Alignment.bottomLeft;
+        break;
+      case 'Top Left':
+        element.alignment = Alignment.topLeft;
+        break;
+      default:
+        element.alignment = Alignment.topLeft;
+    }
+  }
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
@@ -42,6 +106,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
     _widthController.text = widget.element.width!.toString();
     _heightController.text = widget.element.height!.toString();
     pickerColor = Color(widget.element.color ?? 0xff000000);
+    changeSelectedItemFromAlignmentModel();
     super.initState();
   }
 
@@ -65,23 +130,57 @@ class _TextEditDialogState extends State<TextEditDialog> {
           child: Form(
             key: formKey,
             child: Column(children: [
-              TextFormField(
-                autofocus: true,
-                controller: _textController,
-                keyboardType: TextInputType.text,
-                enableSuggestions: true,
-                validator: (s) {
-                  if (s!.isEmpty) {
-                    return 'Text must be entered';
-                  }
-                  return null;
-                },
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your text here',
-                  labelText: 'Text',
-                  border: OutlineInputBorder(),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: _textController,
+                      keyboardType: TextInputType.text,
+                      enableSuggestions: true,
+                      validator: (s) {
+                        if (s!.isEmpty) {
+                          return 'Text must be entered';
+                        }
+                        return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your text here',
+                        labelText: 'Text',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: DropdownButtonFormField<String>(
+                        items: dropdownItems
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(item),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedItem = value!;
+                          });
+                        },
+                        value: selectedItem,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Alignment',
+                        ),
+                        validator: (s) {
+                          if (s!.isEmpty) {
+                            return 'Alignment must be entered';
+                          }
+                          return null;
+                        }),
+                  )
+                ],
               ),
               const SizedBox(height: 10),
               Row(
@@ -192,6 +291,8 @@ class _TextEditDialogState extends State<TextEditDialog> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       setState(() {
+                        changeAlignFromText(widget.element);
+
                         widget.element.text = _textController.text;
                         widget.element.fontSize =
                             double.parse(_fontSizeController.text);

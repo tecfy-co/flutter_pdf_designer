@@ -23,12 +23,14 @@ class _MyAppState extends State<MyApp> {
   // initialize List of Elements
   List<PdfElement>? elements = [
     PdfElement(
-        type: PdfElementType.text,
-        text: 'Tecfy.co',
-        color: 0xffFF000000,
-        fontSize: 40.0,
-        height: 100,
-        width: 100),
+      type: PdfElementType.text,
+      text: 'Tecfy.co',
+      color: 0xffFF000000,
+      fontSize: 40.0,
+      height: 250,
+      width: 250,
+      alignment: PdfAlign.topRight,
+    ),
   ];
   var json;
   @override
@@ -82,7 +84,6 @@ class _MyAppState extends State<MyApp> {
                           build: (context) {
                             return pw.Column(
                               children: [
-                                pw.Text('Header'),
                                 PdfWidget.generate(
                                     json,
                                     {

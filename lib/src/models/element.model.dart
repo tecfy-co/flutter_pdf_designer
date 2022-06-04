@@ -12,6 +12,7 @@ class PdfElement {
   double? width;
   dynamic color;
   Barcode? barcode;
+  dynamic alignment;
 
   PdfElement({
     required this.type,
@@ -24,6 +25,7 @@ class PdfElement {
     this.width,
     this.color,
     this.barcode,
+    this.alignment,
   }) {
     key = GlobalKey();
   }
@@ -32,9 +34,12 @@ class PdfElement {
     required this.type,
     required this.text,
     this.fontSize,
+    this.width = 150,
+    this.height = 100,
     this.xPosition = 0,
     this.yPosition = 0,
     this.color,
+    this.alignment = PdfAlign.topLeft,
   }) {
     key = GlobalKey();
   }
@@ -71,6 +76,7 @@ class PdfElement {
       text = json['text'];
       fontSize = json['fontSize'];
       color = json['color'];
+      alignment = json['alignment'];
     } else if (type == PdfElementType.image) {
       image = json['image'];
     } else if (type == PdfElementType.line) {
@@ -96,6 +102,7 @@ class PdfElement {
       data['text'] = text;
       data['fontSize'] = fontSize;
       data['color'] = color;
+      data['alignment'] = alignment;
     } else if (type == PdfElementType.image) {
       data['image'] = image;
     } else if (type == PdfElementType.line) {

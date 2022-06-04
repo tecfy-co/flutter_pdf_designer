@@ -5,9 +5,11 @@ class PdfWidget {
       Map<String, dynamic> json, Map<String, dynamic> data, font) {
     final PdfModel dataModel;
     dataModel = PdfModel.fromJson(json);
-    print(data);
+    changeAlignmentToPrint(dataModel);
+    print(dataModel.toJson());
+    //   print(data);
     var barcodeData = data['barcode'];
-    print(barcodeData);
+    //  print(barcodeData);
     final ttf = pw.Font.ttf(font.buffer.asByteData());
 
     return pw.Container(
@@ -25,14 +27,19 @@ class PdfWidget {
                   return pw.Positioned(
                     left: e.xPosition,
                     top: e.yPosition,
-                    child: pw.Text(
-                      e.text == 'CustomerName'
-                          ? data.values.first.toString()
-                          : e.text!,
-                      style: pw.TextStyle(
-                          font: ttf,
-                          fontSize: e.fontSize,
-                          color: PdfColor.fromInt(e.color ?? 0xffFF000000)),
+                    child: pw.Container(
+                      alignment: e.alignment,
+                      width: e.width,
+                      height: e.height,
+                      child: pw.Text(
+                        e.text == 'CustomerName'
+                            ? data.values.first.toString()
+                            : e.text!,
+                        style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: e.fontSize,
+                            color: PdfColor.fromInt(e.color ?? 0xffFF000000)),
+                      ),
                     ),
                   );
                 }
@@ -89,5 +96,31 @@ class PdfWidget {
   static Future<ByteData> loadFont(String fontPath) async {
     final font = await rootBundle.load(fontPath);
     return font;
+  }
+
+  static changeAlignmentToPrint(PdfModel dataModel) {
+    dataModel.elements!.forEach((element) {
+      if (element.alignment == Alignment.topLeft) {
+        element.alignment = pw.Alignment.topLeft;
+      } else if (element.alignment == Alignment.centerLeft) {
+        element.alignment = pw.Alignment.centerLeft;
+      } else if (element.alignment == Alignment.center) {
+        element.alignment = pw.Alignment.center;
+      } else if (element.alignment == Alignment.centerRight) {
+        element.alignment = pw.Alignment.centerRight;
+      } else if (element.alignment == Alignment.bottomCenter) {
+        element.alignment = pw.Alignment.bottomCenter;
+      } else if (element.alignment == Alignment.bottomLeft) {
+        element.alignment = pw.Alignment.bottomLeft;
+      } else if (element.alignment == Alignment.topRight) {
+        element.alignment = pw.Alignment.topRight;
+      } else if (element.alignment == Alignment.bottomRight) {
+        element.alignment = pw.Alignment.bottomRight;
+      } else if (element.alignment == Alignment.topCenter) {
+        element.alignment = pw.Alignment.topCenter;
+      } else {
+        element.alignment = pw.Alignment.topLeft;
+      }
+    });
   }
 }
