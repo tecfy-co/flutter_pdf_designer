@@ -105,6 +105,14 @@ class _PdfDesignState extends State<PdfDesign> {
     }
   }
 
+  double widthConstraints(BoxConstraints constraints) {
+    if (constraints.maxWidth < 480) {
+      return 300.0;
+    } else {
+      return 400.0;
+    }
+  }
+
   void onChange() {
     widget.onChange({});
   }
@@ -126,11 +134,48 @@ class _PdfDesignState extends State<PdfDesign> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          Row(children: [
+            const SizedBox(width: 10),
+            Expanded(
+                child: TextFormField(
+                    inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
+                    initialValue: dataModel.height!.toStringAsFixed(1),
+                    onChanged: (v) {
+                      setState(() {
+                        var number = int.parse(v);
+                        print(number * PdfPageFormat.inch);
+                        dataModel.height = number * PdfPageFormat.inch;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                        label: Text('Label Height (inch)')))),
+            const SizedBox(width: 10),
+            Expanded(
+                child: TextFormField(
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
+                    initialValue: dataModel.width!.toStringAsFixed(1),
+                    onChanged: (v) {
+                      setState(() {
+                        var number = int.parse(v);
+                        print(number * PdfPageFormat.inch);
+                        dataModel.width = number * PdfPageFormat.inch;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                        label: Text('Label Width (inch)')))),
+            const SizedBox(width: 10),
+          ]),
+          Wrap(
             children: [
               Padding(
-                  padding: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(right: 10, top: 15),
                   child: TextElement(
                       titleDialog: 'Enter your Text',
                       outlineBtnName: 'Text'
@@ -142,7 +187,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         });
                       })),
               Padding(
-                  padding: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(right: 10, top: 15),
                   child: ImageElements(
                       titleDialog: 'Add your Images',
                       outlineBtnName: 'Im'
@@ -154,7 +199,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         });
                       })),
               Padding(
-                  padding: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(right: 10, top: 15),
                   child: LineElement(
                     titleDialog: 'Add your Lines',
                     outlineBtnName: 'Line',
@@ -226,251 +271,264 @@ class _PdfDesignState extends State<PdfDesign> {
           const SizedBox(
             height: 20,
           ),
-          Container(
-            key: containerKey,
-            decoration: BoxDecoration(border: Border.all()),
-            height: widget.height,
-            width: widget.width,
-            child: Stack(
-              children: dataModel.elements!.map<Widget>((e) {
-                switch (e.type) {
-                  case PdfElementType.text:
-                    {
-                      return Positioned(
-                        left: e.xPosition,
-                        top: e.yPosition,
-                        child: Draggable(
-                          onDragEnd: (dragDetails) {
-                            setState(() {
-                              setWidgetOverStack(dragDetails, e);
-                              widget.onChange(dataModel.toJson());
-                            });
-                          },
-                          feedback: Material(
-                              child: Container(
-                                  width: e.width,
-                                  height: e.height,
-                                  alignment: getAlignment(
-                                      e.alignment ?? PdfAlign.center),
-                                  color: Color(e.color ?? 0xffFF000000)
-                                      .withOpacity(0.3),
-                                  child: Text(
-                                    e.text ?? '-',
-                                    key: e.key,
-                                    style: TextStyle(
-                                        fontSize: e.fontSize,
-                                        color: Color(e.color ?? 0xffFF000000)),
-                                    // key: GlobalObjectKey(e.text ?? ''),
-                                  ))),
-                          childWhenDragging: const SizedBox(),
-                          child: InkWell(
-                              onDoubleTap: () {
+          LayoutBuilder(
+            builder: (context, constraints) {
+              print(constraints);
+              return Container(
+                key: containerKey,
+                decoration: BoxDecoration(border: Border.all()),
+                height:
+                    MediaQuery.of(context).size.height / (dataModel.height!),
+                width: constraints.maxWidth / (dataModel.width!),
+                child: Stack(
+                  children: dataModel.elements!.map<Widget>((e) {
+                    switch (e.type) {
+                      case PdfElementType.text:
+                        {
+                          return Positioned(
+                            left: e.xPosition,
+                            top: e.yPosition,
+                            child: Draggable(
+                              onDragEnd: (dragDetails) {
                                 setState(() {
-                                  isDoubleTap = !isDoubleTap;
+                                  setWidgetOverStack(dragDetails, e);
+                                  widget.onChange(dataModel.toJson());
+                                });
+                              },
+                              feedback: Material(
+                                  child: Container(
+                                      width: e.width,
+                                      height: e.height,
+                                      alignment: getAlignment(
+                                          e.alignment ?? PdfAlign.center),
+                                      color: Color(e.color ?? 0xffFF000000)
+                                          .withOpacity(0.3),
+                                      child: Text(
+                                        e.text ?? '-',
+                                        key: e.key,
+                                        style: TextStyle(
+                                            fontSize: constraints.maxWidth /
+                                                (e.fontSize ?? 14),
+                                            color:
+                                                Color(e.color ?? 0xffFF000000)),
+                                        // key: GlobalObjectKey(e.text ?? ''),
+                                      ))),
+                              childWhenDragging: const SizedBox(),
+                              child: InkWell(
+                                  onDoubleTap: () {
+                                    setState(() {
+                                      isDoubleTap = !isDoubleTap;
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return TextEditDialog(
+                                              element: e,
+                                              onSubmitted: () {
+                                                setState(() {
+                                                  widget.onChange(
+                                                      dataModel.toJson());
+                                                });
+                                              },
+                                            );
+                                          });
+
+                                      debugPrint(' Double Tap = $isDoubleTap');
+                                    });
+                                  },
+                                  child: Container(
+                                    color: Color(e.color ?? 0xffFF000000)
+                                        .withOpacity(0.2),
+                                    width: e.width,
+                                    height: e.height,
+                                    alignment: getAlignment(
+                                        e.alignment ?? PdfAlign.center),
+                                    child: Text(
+                                      e.text ?? '-',
+                                      key: e.key,
+                                      style: TextStyle(
+                                          fontSize: constraints.maxWidth /
+                                              (e.fontSize ?? 14),
+                                          color:
+                                              Color(e.color ?? 0xffFF000000)),
+                                    ),
+                                  )),
+                            ),
+                          );
+                        }
+                      case PdfElementType.image:
+                        {
+                          return Positioned(
+                            left: e.xPosition,
+                            top: e.yPosition,
+                            child: Draggable(
+                              feedback: e.image != null
+                                  ? Image.memory(
+                                      e.image!,
+                                      width: e.width,
+                                      height: e.height,
+                                    )
+                                  : Material(
+                                      child: Container(
+                                        color: Colors.red,
+                                        width: 100,
+                                        height: 100,
+                                        child: const Center(
+                                          child: Text('YourLogoHere!'),
+                                        ),
+                                      ),
+                                    ),
+                              onDragEnd: (dragDetails) {
+                                setState(() {
+                                  setWidgetOverStack(dragDetails, e);
+                                  widget.onChange(dataModel.toJson());
+                                });
+                              },
+                              child: InkWell(
+                                onDoubleTap: () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return TextEditDialog(
-                                          element: e,
-                                          onSubmitted: () {
-                                            setState(() {
-                                              widget
-                                                  .onChange(dataModel.toJson());
+                                        return ImageEditDialog(
+                                            element: e,
+                                            onSubmitted: () {
+                                              setState(() {
+                                                widget.onChange(
+                                                    dataModel.toJson());
+                                              });
                                             });
-                                          },
-                                        );
                                       });
-
-                                  debugPrint(' Double Tap = $isDoubleTap');
-                                });
-                              },
-                              child: Container(
-                                color: Color(e.color ?? 0xffFF000000)
-                                    .withOpacity(0.2),
-                                width: e.width,
+                                },
+                                child: e.image != null
+                                    ? Image.memory(
+                                        e.image!,
+                                        key: e.key,
+                                        fit: BoxFit.contain,
+                                        width: e.width,
+                                        height: e.height,
+                                      )
+                                    : Material(
+                                        child: Container(
+                                          key: e.key,
+                                          color: Colors.red,
+                                          width: 100,
+                                          height: 100,
+                                          child: const Center(
+                                            child: Text('YourLogoHere!'),
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          );
+                        }
+                      case PdfElementType.line:
+                        {
+                          return Positioned(
+                            left: e.xPosition,
+                            top: e.yPosition,
+                            child: Draggable(
+                              feedback: Container(
+                                color: Color(e.color ?? 0),
                                 height: e.height,
-                                alignment: getAlignment(
-                                    e.alignment ?? PdfAlign.center),
-                                child: Text(
-                                  e.text ?? '-',
+                                width: e.width,
+                              ),
+                              onDragEnd: (dragDetails) {
+                                setState(
+                                  () {
+                                    setWidgetOverStack(dragDetails, e);
+                                    widget.onChange(dataModel.toJson());
+                                  },
+                                );
+                              },
+                              child: InkWell(
+                                onDoubleTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return LineEditDialog(
+                                            element: e,
+                                            onSubmitted: () {
+                                              setState(() {
+                                                widget.onChange(
+                                                    dataModel.toJson());
+                                              });
+                                            });
+                                      });
+                                },
+                                child: Container(
                                   key: e.key,
-                                  style: TextStyle(
-                                      fontSize: e.fontSize,
-                                      color: Color(e.color ?? 0xffFF000000)),
+                                  color: Color(e.color),
+                                  height: e.height,
+                                  width: e.width,
                                 ),
-                              )),
-                        ),
-                      );
-                    }
-                  case PdfElementType.image:
-                    {
-                      return Positioned(
-                        left: e.xPosition,
-                        top: e.yPosition,
-                        child: Draggable(
-                          feedback: e.image != null
-                              ? Image.memory(
-                                  e.image!,
+                              ),
+                            ),
+                          );
+                        }
+                      case PdfElementType.barcode:
+                        {
+                          return Positioned(
+                            left: e.xPosition,
+                            top: e.yPosition,
+                            key: e.key,
+                            child: Draggable(
+                              feedback: Material(
+                                child: BarcodeWidget(
+                                  data: e.text ?? "Barcode Data",
+                                  barcode: e.barcode!,
+                                  color: Color(e.color),
                                   width: e.width,
                                   height: e.height,
-                                )
-                              : Material(
-                                  child: Container(
-                                    color: Colors.red,
-                                    width: 100,
-                                    height: 100,
-                                    child: Center(
-                                      child: Text('YourLogoHere!'),
-                                    ),
-                                  ),
+                                  errorBuilder: (context, string) {
+                                    return Container(
+                                      child: Text(string),
+                                    );
+                                  },
                                 ),
-                          onDragEnd: (dragDetails) {
-                            setState(() {
-                              setWidgetOverStack(dragDetails, e);
-                              widget.onChange(dataModel.toJson());
-                            });
-                          },
-                          child: InkWell(
-                            onDoubleTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return ImageEditDialog(
-                                        element: e,
-                                        onSubmitted: () {
-                                          setState(() {
-                                            widget.onChange(dataModel.toJson());
-                                          });
-                                        });
-                                  });
-                            },
-                            child: e.image != null
-                                ? Image.memory(
-                                    e.image!,
-                                    key: e.key,
-                                    fit: BoxFit.contain,
-                                    width: e.width,
-                                    height: e.height,
-                                  )
-                                : Material(
-                                    child: Container(
-                                      key: e.key,
-                                      color: Colors.red,
-                                      width: 100,
-                                      height: 100,
-                                      child: const Center(
-                                        child: Text('YourLogoHere!'),
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      );
-                    }
-                  case PdfElementType.line:
-                    {
-                      return Positioned(
-                        left: e.xPosition,
-                        top: e.yPosition,
-                        child: Draggable(
-                          feedback: Container(
-                            color: Color(e.color ?? 0),
-                            height: e.height,
-                            width: e.width,
-                          ),
-                          onDragEnd: (dragDetails) {
-                            setState(
-                              () {
-                                setWidgetOverStack(dragDetails, e);
-                                widget.onChange(dataModel.toJson());
+                              ),
+                              onDragEnd: (dragDetails) {
+                                setState(() {
+                                  setWidgetOverStack(dragDetails, e);
+                                  widget.onChange(dataModel.toJson());
+                                });
                               },
-                            );
-                          },
-                          child: InkWell(
-                            onDoubleTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return LineEditDialog(
-                                        element: e,
-                                        onSubmitted: () {
-                                          setState(() {
-                                            widget.onChange(dataModel.toJson());
-                                          });
-                                        });
-                                  });
-                            },
-                            child: Container(
-                              key: e.key,
-                              color: Color(e.color),
-                              height: e.height,
-                              width: e.width,
+                              child: InkWell(
+                                onDoubleTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return BarcodeEditDialog(
+                                            element: e,
+                                            onSubmitted: () {
+                                              setState(() {
+                                                widget.onChange(
+                                                    dataModel.toJson());
+                                              });
+                                            });
+                                      });
+                                },
+                                child: BarcodeWidget(
+                                  data: e.text!,
+                                  barcode: e.barcode!,
+                                  width: e.width,
+                                  height: e.height,
+                                  color: Color(e.color),
+                                  errorBuilder: (context, string) {
+                                    return Container(
+                                      child: Text(string),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
+                          );
+                        }
                     }
-                  case PdfElementType.barcode:
-                    {
-                      return Positioned(
-                        left: e.xPosition,
-                        top: e.yPosition,
-                        key: e.key,
-                        child: Draggable(
-                          feedback: Material(
-                            child: BarcodeWidget(
-                              data: e.text! ?? "Barcode Data",
-                              barcode: e.barcode!,
-                              color: Color(e.color),
-                              width: e.width,
-                              height: e.height,
-                              errorBuilder: (context, string) {
-                                return Container(
-                                  child: Text(string),
-                                );
-                              },
-                            ),
-                          ),
-                          onDragEnd: (dragDetails) {
-                            setState(() {
-                              setWidgetOverStack(dragDetails, e);
-                              widget.onChange(dataModel.toJson());
-                            });
-                          },
-                          child: InkWell(
-                            onDoubleTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return BarcodeEditDialog(
-                                        element: e,
-                                        onSubmitted: () {
-                                          setState(() {
-                                            widget.onChange(dataModel.toJson());
-                                          });
-                                        });
-                                  });
-                            },
-                            child: BarcodeWidget(
-                              data: e.text!,
-                              barcode: e.barcode!,
-                              width: e.width,
-                              height: e.height,
-                              color: Color(e.color),
-                              errorBuilder: (context, string) {
-                                return Container(
-                                  child: Text(string),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                }
-                return const SizedBox();
-              }).toList(),
-            ),
+                    return const SizedBox();
+                  }).toList(),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 40),
         ],
