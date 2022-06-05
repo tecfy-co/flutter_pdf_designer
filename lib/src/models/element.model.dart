@@ -12,7 +12,7 @@ class PdfElement {
   double? width;
   dynamic color;
   Barcode? barcode;
-  dynamic alignment;
+  PdfAlign? alignment;
 
   PdfElement({
     required this.type,
@@ -76,7 +76,7 @@ class PdfElement {
       text = json['text'];
       fontSize = json['fontSize'];
       color = json['color'];
-      alignment = json['alignment'];
+      alignment = PdfAlign.values[json['alignment'] ?? 0];
     } else if (type == PdfElementType.image) {
       image = json['image'];
     } else if (type == PdfElementType.line) {
@@ -102,7 +102,7 @@ class PdfElement {
       data['text'] = text;
       data['fontSize'] = fontSize;
       data['color'] = color;
-      data['alignment'] = alignment;
+      data['alignment'] = alignment?.index;
     } else if (type == PdfElementType.image) {
       data['image'] = image;
     } else if (type == PdfElementType.line) {

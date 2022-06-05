@@ -26,40 +26,37 @@ class _PdfDesignState extends State<PdfDesign> {
   GlobalKey containerKey = GlobalKey();
   List<String> list = [];
 
-  void changeAlign() {
-    dataModel.elements!.forEach((element) {
-      switch (element.alignment) {
-        case PdfAlign.bottomRight:
-          element.alignment = Alignment.bottomRight;
-          break;
-        case PdfAlign.center:
-          element.alignment = Alignment.center;
-          break;
-        case PdfAlign.bottomCenter:
-          element.alignment = Alignment.bottomCenter;
-          break;
-        case PdfAlign.topCenter:
-          element.alignment = Alignment.topCenter;
-          break;
-        case PdfAlign.topRight:
-          element.alignment = Alignment.topRight;
-          break;
-        case PdfAlign.centerRight:
-          element.alignment = Alignment.centerRight;
-          break;
-        case PdfAlign.centerLeft:
-          element.alignment = Alignment.centerLeft;
-          break;
-        case PdfAlign.bottomLeft:
-          element.alignment = Alignment.bottomLeft;
-          break;
-        case PdfAlign.topLeft:
-          element.alignment = Alignment.topLeft;
-          break;
-        default:
-          element.alignment = Alignment.topLeft;
-      }
-    });
+  Alignment getAlignment(PdfAlign align) {
+    switch (align) {
+      case PdfAlign.bottomRight:
+        return Alignment.bottomRight;
+      case PdfAlign.center:
+        return Alignment.center;
+
+      case PdfAlign.bottomCenter:
+        return Alignment.bottomCenter;
+
+      case PdfAlign.topCenter:
+        return Alignment.topCenter;
+
+      case PdfAlign.topRight:
+        return Alignment.topRight;
+
+      case PdfAlign.centerRight:
+        return Alignment.centerRight;
+
+      case PdfAlign.centerLeft:
+        return Alignment.centerLeft;
+
+      case PdfAlign.bottomLeft:
+        return Alignment.bottomLeft;
+
+      case PdfAlign.topLeft:
+        return Alignment.topLeft;
+
+      default:
+        return Alignment.topLeft;
+    }
   }
 
   void setWidgetOverStack(dragDetails, e) {
@@ -115,7 +112,6 @@ class _PdfDesignState extends State<PdfDesign> {
   @override
   void initState() {
     dataModel = PdfModel.fromJson(widget.json!);
-    changeAlign();
     widget.variableList!.forEach((key, value) {
       list.add(key);
     });
@@ -194,7 +190,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                 text: s,
                                 fontSize: 20.0,
                                 color: 1099494850560,
-                                alignment: Alignment.topLeft));
+                                alignment: PdfAlign.topLeft));
                             widget.onChange(dataModel.toJson());
                           });
                         }
@@ -254,7 +250,8 @@ class _PdfDesignState extends State<PdfDesign> {
                               child: Container(
                                   width: e.width,
                                   height: e.height,
-                                  alignment: e.alignment,
+                                  alignment: getAlignment(
+                                      e.alignment ?? PdfAlign.center),
                                   color: Color(e.color ?? 0xffFF000000)
                                       .withOpacity(0.3),
                                   child: Text(
@@ -292,7 +289,8 @@ class _PdfDesignState extends State<PdfDesign> {
                                     .withOpacity(0.2),
                                 width: e.width,
                                 height: e.height,
-                                alignment: e.alignment,
+                                alignment: getAlignment(
+                                    e.alignment ?? PdfAlign.center),
                                 child: Text(
                                   e.text ?? '-',
                                   key: e.key,
