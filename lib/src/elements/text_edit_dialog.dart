@@ -35,61 +35,72 @@ class _TextEditDialogState extends State<TextEditDialog> {
     'Bottom Right',
   ];
 
-  void changeSelectedItemFromAlignmentModel() {
-    if (widget.element.alignment == Alignment.center) {
-      selectedItem = 'Center';
-    } else if (widget.element.alignment == Alignment.topCenter) {
-      selectedItem = 'Top Center';
-    } else if (widget.element.alignment == Alignment.bottomCenter) {
-      selectedItem = 'Bottom Center';
-    } else if (widget.element.alignment == Alignment.topLeft) {
-      selectedItem = 'Top Left';
-    } else if (widget.element.alignment == Alignment.centerLeft) {
-      selectedItem = 'Center Left';
-    } else if (widget.element.alignment == Alignment.bottomLeft) {
-      selectedItem = 'Bottom Left';
-    } else if (widget.element.alignment == Alignment.topRight) {
-      selectedItem = 'Top Right';
-    } else if (widget.element.alignment == Alignment.centerRight) {
-      selectedItem = 'Center Right';
-    } else if (widget.element.alignment == Alignment.bottomRight) {
-      selectedItem = 'Bottom Right';
-    }
-  }
-
   String selectedItem = 'Top Left';
 
   void changeAlignFromText(element) {
     switch (selectedItem) {
       case 'Bottom Right':
-        element.alignment = Alignment.bottomRight;
+        element.alignment = PdfAlign.bottomRight;
         break;
       case 'Center':
-        element.alignment = Alignment.center;
+        element.alignment = PdfAlign.center;
         break;
       case 'Bottom Center':
-        element.alignment = Alignment.bottomCenter;
+        element.alignment = PdfAlign.bottomCenter;
         break;
       case 'Top Center':
-        element.alignment = Alignment.topCenter;
+        element.alignment = PdfAlign.topCenter;
         break;
       case 'Top Right':
-        element.alignment = Alignment.topRight;
+        element.alignment = PdfAlign.topRight;
         break;
       case 'Center Right':
-        element.alignment = Alignment.centerRight;
+        element.alignment = PdfAlign.centerRight;
         break;
       case 'Center Left':
-        element.alignment = Alignment.centerLeft;
+        element.alignment = PdfAlign.centerLeft;
         break;
       case 'Bottom Left':
-        element.alignment = Alignment.bottomLeft;
+        element.alignment = PdfAlign.bottomLeft;
         break;
       case 'Top Left':
-        element.alignment = Alignment.topLeft;
+        element.alignment = PdfAlign.topLeft;
         break;
       default:
-        element.alignment = Alignment.topLeft;
+        element.alignment = PdfAlign.topLeft;
+    }
+  }
+
+  String getCurrentAlignment(PdfAlign align) {
+    switch (align) {
+      case PdfAlign.bottomRight:
+        return 'Bottom Right';
+      case PdfAlign.center:
+        return 'Center';
+
+      case PdfAlign.bottomCenter:
+        return 'Bottom Center';
+
+      case PdfAlign.topCenter:
+        return 'Top Center';
+
+      case PdfAlign.topRight:
+        return 'Top Right';
+
+      case PdfAlign.centerRight:
+        return 'Center Right';
+
+      case PdfAlign.centerLeft:
+        return 'Center Left';
+
+      case PdfAlign.bottomLeft:
+        return 'Bottom Left';
+
+      case PdfAlign.topLeft:
+        return 'Top Left';
+
+      default:
+        return 'Top Left';
     }
   }
 
@@ -106,7 +117,6 @@ class _TextEditDialogState extends State<TextEditDialog> {
     _widthController.text = widget.element.width!.toString();
     _heightController.text = widget.element.height!.toString();
     pickerColor = Color(widget.element.color ?? 0xff000000);
-    changeSelectedItemFromAlignmentModel();
     super.initState();
   }
 
@@ -168,7 +178,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
                             selectedItem = value!;
                           });
                         },
-                        value: selectedItem,
+                        value: getCurrentAlignment(widget.element.alignment!),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Alignment',

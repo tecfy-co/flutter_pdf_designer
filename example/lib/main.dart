@@ -66,7 +66,8 @@ class _MyAppState extends State<MyApp> {
                   variableList: const {
                     "CustomerName": PdfElementType.text,
                     "Logo": PdfElementType.image,
-                    'invoiceBarcode': PdfElementType.barcode
+                    'invoiceBarcode': PdfElementType.barcode,
+                    'Date': PdfElementType.text,
                   },
                 ),
                 const SizedBox(
@@ -89,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                                     {
                                       'CustomerName': 'Ahmed',
                                       'logo': [1, 1, 1, 2],
-                                      'barcode': 'wa.me/+201119369127'
+                                      'barcode': 'wa.me/+201119369127',
                                     },
                                     value)
                               ],

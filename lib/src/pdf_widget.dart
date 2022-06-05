@@ -5,7 +5,6 @@ class PdfWidget {
       Map<String, dynamic> json, Map<String, dynamic> data, font) {
     final PdfModel dataModel;
     dataModel = PdfModel.fromJson(json);
-    changeAlignmentToPrint(dataModel);
     print(dataModel.toJson());
     //   print(data);
     var barcodeData = data['barcode'];
@@ -28,7 +27,7 @@ class PdfWidget {
                     left: e.xPosition,
                     top: e.yPosition,
                     child: pw.Container(
-                      alignment: e.alignment,
+                      alignment: getAlignment(e.alignment!),
                       width: e.width,
                       height: e.height,
                       child: pw.Text(
@@ -98,29 +97,36 @@ class PdfWidget {
     return font;
   }
 
-  static changeAlignmentToPrint(PdfModel dataModel) {
-    dataModel.elements!.forEach((element) {
-      if (element.alignment == Alignment.topLeft) {
-        element.alignment = pw.Alignment.topLeft;
-      } else if (element.alignment == Alignment.centerLeft) {
-        element.alignment = pw.Alignment.centerLeft;
-      } else if (element.alignment == Alignment.center) {
-        element.alignment = pw.Alignment.center;
-      } else if (element.alignment == Alignment.centerRight) {
-        element.alignment = pw.Alignment.centerRight;
-      } else if (element.alignment == Alignment.bottomCenter) {
-        element.alignment = pw.Alignment.bottomCenter;
-      } else if (element.alignment == Alignment.bottomLeft) {
-        element.alignment = pw.Alignment.bottomLeft;
-      } else if (element.alignment == Alignment.topRight) {
-        element.alignment = pw.Alignment.topRight;
-      } else if (element.alignment == Alignment.bottomRight) {
-        element.alignment = pw.Alignment.bottomRight;
-      } else if (element.alignment == Alignment.topCenter) {
-        element.alignment = pw.Alignment.topCenter;
-      } else {
-        element.alignment = pw.Alignment.topLeft;
-      }
-    });
+  static pw.Alignment getAlignment(PdfAlign align) {
+    switch (align) {
+      case PdfAlign.bottomRight:
+        return pw.Alignment.bottomRight;
+      case PdfAlign.center:
+        return pw.Alignment.center;
+
+      case PdfAlign.bottomCenter:
+        return pw.Alignment.bottomCenter;
+
+      case PdfAlign.topCenter:
+        return pw.Alignment.topCenter;
+
+      case PdfAlign.topRight:
+        return pw.Alignment.topRight;
+
+      case PdfAlign.centerRight:
+        return pw.Alignment.centerRight;
+
+      case PdfAlign.centerLeft:
+        return pw.Alignment.centerLeft;
+
+      case PdfAlign.bottomLeft:
+        return pw.Alignment.bottomLeft;
+
+      case PdfAlign.topLeft:
+        return pw.Alignment.topLeft;
+
+      default:
+        return pw.Alignment.topLeft;
+    }
   }
 }
