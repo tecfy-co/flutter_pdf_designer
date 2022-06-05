@@ -28,10 +28,18 @@ class _LineEditDialogState extends State<LineEditDialog> {
 
   @override
   void initState() {
-    _lineWidthController.text = widget.element.width.toString();
-    _lineColorController.text = widget.element.color.toString();
-    _lineThicknessController.text = widget.element.height.toString();
-    pickerColor = Color(widget.element.color);
+    if (widget.element.width != null) {
+      _lineWidthController.text = widget.element.width.toString();
+    }
+    if (widget.element.color != null) {
+      _lineColorController.text = widget.element.color.toString();
+    }
+    if (widget.element.height != null) {
+      _lineThicknessController.text = widget.element.height.toString();
+    }
+    if (widget.element.color != null) {
+      pickerColor = Color(widget.element.color);
+    }
 
     super.initState();
   }

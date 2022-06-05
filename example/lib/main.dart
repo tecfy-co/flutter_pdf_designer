@@ -25,10 +25,10 @@ class _MyAppState extends State<MyApp> {
     PdfElement(
       type: PdfElementType.text,
       text: 'Tecfy.co',
-      color: 0xffFF000000,
-      fontSize: 40.0,
-      height: 250,
-      width: 250,
+      // color: 0xffFF000000,
+      // fontSize: 40.0,
+      // height: 250,
+      // width: 250,
       alignment: PdfAlign.topRight,
     ),
   ];

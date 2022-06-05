@@ -7,14 +7,14 @@ class PdfDesign extends StatefulWidget {
   final Map<String, dynamic>? json;
   final void Function(Map<String, dynamic>) onChange;
 
-  const PdfDesign(
-      {Key? key,
-      required this.onChange,
-      this.json,
-      this.width = 300,
-      this.height = 300,
-      this.variableList})
-      : super(key: key);
+  const PdfDesign({
+    Key? key,
+    required this.onChange,
+    required this.json,
+    this.width = 300,
+    this.height = 300,
+    required this.variableList,
+  }) : super(key: key);
 
   @override
   State<PdfDesign> createState() => _PdfDesignState();
@@ -419,7 +419,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         child: Draggable(
                           feedback: Material(
                             child: BarcodeWidget(
-                              data: e.text!,
+                              data: e.text! ?? "Barcode Data",
                               barcode: e.barcode!,
                               color: Color(e.color),
                               width: e.width,

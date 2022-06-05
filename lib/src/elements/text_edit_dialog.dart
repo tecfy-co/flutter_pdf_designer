@@ -112,10 +112,18 @@ class _TextEditDialogState extends State<TextEditDialog> {
 
   @override
   void initState() {
-    _textController.text = widget.element.text!;
-    _fontSizeController.text = widget.element.fontSize!.toString();
-    _widthController.text = widget.element.width!.toString();
-    _heightController.text = widget.element.height!.toString();
+    if (widget.element.text != null) {
+      _textController.text = widget.element.text!;
+    }
+    if (widget.element.fontSize != null) {
+      _fontSizeController.text = widget.element.fontSize!.toString();
+    }
+    if (widget.element.width != null) {
+      _widthController.text = widget.element.width!.toString();
+    }
+    if (widget.element.height != null) {
+      _heightController.text = widget.element.height!.toString();
+    }
     pickerColor = Color(widget.element.color ?? 0xff000000);
     super.initState();
   }

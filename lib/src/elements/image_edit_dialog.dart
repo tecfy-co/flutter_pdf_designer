@@ -18,8 +18,12 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
 
   @override
   void initState() {
-    _widthController.text = widget.element.width!.toString();
-    _heightController.text = widget.element.height!.toString();
+    if (widget.element.width != null) {
+      _widthController.text = widget.element.width!.toString();
+    }
+    if (widget.element.height != null) {
+      _heightController.text = widget.element.height!.toString();
+    }
     super.initState();
   }
 

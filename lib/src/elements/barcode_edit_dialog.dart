@@ -32,10 +32,18 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
   @override
   void initState() {
     // _textController.text = widget.element.text!;
-    conf.data = widget.element.text!;
-    _widthController.text = widget.element.width!.toString();
-    _heightController.text = widget.element.height!.toString();
-    pickerColor = Color(widget.element.color);
+    if (widget.element.text != null) {
+      conf.data = widget.element.text!;
+    }
+    if (widget.element.width != null) {
+      _widthController.text = widget.element.width!.toString();
+    }
+    if (widget.element.height != null) {
+      _heightController.text = widget.element.height!.toString();
+    }
+    if (widget.element.color != null) {
+      pickerColor = Color(widget.element.color);
+    }
     super.initState();
   }
 
