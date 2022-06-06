@@ -3,9 +3,13 @@ part of flutter_pdf_designer;
 class BarcodeEditDialog extends StatefulWidget {
   final PdfElement element;
   final void Function() onSubmitted;
+  final void Function(PdfElement element) onDeleted;
 
   const BarcodeEditDialog(
-      {Key? key, required this.element, required this.onSubmitted})
+      {Key? key,
+      required this.element,
+      required this.onSubmitted,
+      required this.onDeleted})
       : super(key: key);
 
   @override
@@ -63,34 +67,24 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
       types[item] = Barcode.fromType(item).name;
     }
     return SimpleDialog(
-      title: const Text('Edit your Barcode'),
+      title: Row(
+        children: [
+          const Text('Edit your barcode'),
+          const Spacer(),
+          IconButton(
+            onPressed: () {
+              widget.onDeleted.call(widget.element);
+            },
+            icon: const Icon(Icons.delete_forever),
+          ),
+        ],
+      ),
       children: [
         Form(
           key: formKey,
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(children: [
-              // TextFormField(
-              //   autofocus: true,
-              //   controller: _textController,
-              //   keyboardType: TextInputType.text,
-              //   enableSuggestions: true,
-              //   validator: (s) {
-              //     if (s!.isEmpty) {
-              //       return 'Text must be entered';
-              //     }
-              //     return null;
-              //   },
-              //   textInputAction: TextInputAction.next,
-              //   decoration: const InputDecoration(
-              //     hintText: 'Enter your text here',
-              //     labelText: 'Text',
-              //     border: OutlineInputBorder(),
-              //   ),
-              // ),
-              SizedBox(
-                height: 10,
-              ),
               TextFormField(
                 autofocus: true,
                 controller: _widthController,
@@ -141,32 +135,11 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
               const SizedBox(
                 height: 20,
               ),
-              // DropdownSearch(
-              //   items: const ['Code 39','Code 93','Code 128 A','Code 128 B','Co'
-              //     'de '
-              //       '128 C','GS1-128','Interleaved 2 of 5 (ITF)','ITF-14','IT'
-              //       'F-16','EAN 13','EAN 8','EAN 2','EAN 5','ISBN','UPC-A','U'
-              //       'PC-E','Telepen','Codabar','RM4SCC','QR-Code','PDF417','D'
-              //       'ata Matrix','Aztec'],
-              //
-              //   onChanged: (s){
-              //     print(Barcode.code128().toString());
-              //     if(s == Barcode.code128().toString()){
-              //       barcode = Barcode.code128();
-              //       print(barcode);
-              //     }
-              //
-              //     },
-              // ),
               DropdownPreference<BarcodeType>(
                 title: 'Barcode Type',
                 onRead: (context) => conf.type,
                 onWrite: (context, dynamic value) => setState(() {
                   conf.type = value;
-                  // print(conf.barcode.charSet);
-                  print(conf._method);
-                  print(conf.barcode);
-                  print(conf.data);
                 }),
                 values: types,
               ),

@@ -3,8 +3,13 @@ part of flutter_pdf_designer;
 class ImageEditDialog extends StatefulWidget {
   final PdfElement element;
   final void Function() onSubmitted;
+  final void Function(PdfElement element) onDeleted;
+
   const ImageEditDialog(
-      {Key? key, required this.element, required this.onSubmitted})
+      {Key? key,
+      required this.element,
+      required this.onSubmitted,
+      required this.onDeleted})
       : super(key: key);
 
   @override
@@ -37,7 +42,18 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text('Edit your Image'),
+      title: Row(
+        children: [
+          const Text('Edit your image'),
+          const Spacer(),
+          IconButton(
+            onPressed: () {
+              widget.onDeleted.call(widget.element);
+            },
+            icon: const Icon(Icons.delete_forever),
+          ),
+        ],
+      ),
       children: [
         Form(
           key: formKey,
@@ -59,10 +75,6 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
                   return null;
                 },
                 textInputAction: TextInputAction.next,
-                onFieldSubmitted: (String submittedText) {
-                  // widget.onSubmitted!.call(submittedText);
-                  // _textController.clear();
-                },
                 decoration: const InputDecoration(
                   hintText: 'Enter your Width',
                   labelText: 'Width',

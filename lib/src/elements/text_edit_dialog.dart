@@ -1,12 +1,15 @@
 part of flutter_pdf_designer;
 
-
 class TextEditDialog extends StatefulWidget {
   final PdfElement element;
   final void Function() onSubmitted;
+  final void Function(PdfElement element) onDeleted;
 
   const TextEditDialog(
-      {Key? key, required this.element, required this.onSubmitted})
+      {Key? key,
+      required this.element,
+      required this.onSubmitted,
+      required this.onDeleted})
       : super(key: key);
 
   @override
@@ -141,7 +144,18 @@ class _TextEditDialogState extends State<TextEditDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text('Edit'),
+      title: Row(
+        children: [
+          const Text('Edit your text'),
+          const Spacer(),
+          IconButton(
+            onPressed: () {
+              widget.onDeleted.call(widget.element);
+            },
+            icon: const Icon(Icons.delete_forever),
+          ),
+        ],
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
@@ -186,7 +200,8 @@ class _TextEditDialogState extends State<TextEditDialog> {
                             selectedItem = value!;
                           });
                         },
-                        value: getCurrentAlignment(widget.element.alignment!),
+                        value: getCurrentAlignment(
+                            widget.element.alignment ?? PdfAlign.topLeft),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Alignment',

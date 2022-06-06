@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // initialize dataModel
-    dataModel = PdfModel(width: 1.5, height: 1, elements: elements);
+    dataModel = PdfModel(width: 1.5, height: 1.0, elements: elements);
     super.initState();
   }
 
@@ -50,9 +50,9 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         //call PdfDesign in your widget tree, pass to it width and height to
         // make box of printing box's size
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 PdfDesign(
@@ -81,10 +81,14 @@ class _MyAppState extends State<MyApp> {
                         .then((value) async {
                       final doc = pw.Document();
                       doc.addPage(pw.Page(
+                          // pageFormat: PdfPageFormat(dataModel.width!,
+                          //     dataModel.height!),
+                          //pageFormat: PdfPageFormat.roll57,
                           textDirection: pw.TextDirection.rtl,
                           build: (context) {
                             return pw.Column(
                               children: [
+                                pw.Text('Header'),
                                 PdfWidget.generate(
                                     json,
                                     {
@@ -95,10 +99,6 @@ class _MyAppState extends State<MyApp> {
                                     value)
                               ],
                             );
-                            // pageFormat: PdfPageFormat(dataModel.width!,dat, '
-                            // aModel
-                            // .height!)
-                            //
                           }));
                       await Printing.layoutPdf(
                           onLayout: (PdfPageFormat format) async =>

@@ -3,8 +3,13 @@ part of flutter_pdf_designer;
 class LineEditDialog extends StatefulWidget {
   final PdfElement element;
   final void Function() onSubmitted;
+  final void Function(PdfElement element) onDeleted;
+
   const LineEditDialog(
-      {Key? key, required this.element, required this.onSubmitted})
+      {Key? key,
+      required this.element,
+      required this.onSubmitted,
+      required this.onDeleted})
       : super(key: key);
 
   @override
@@ -55,7 +60,18 @@ class _LineEditDialogState extends State<LineEditDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text('Edit your Line'),
+      title: Row(
+        children: [
+          const Text('Edit your line'),
+          const Spacer(),
+          IconButton(
+            onPressed: () {
+              widget.onDeleted.call(widget.element);
+            },
+            icon: const Icon(Icons.delete_forever),
+          ),
+        ],
+      ),
       children: [
         SingleChildScrollView(
           child: Padding(

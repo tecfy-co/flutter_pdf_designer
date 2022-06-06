@@ -12,8 +12,9 @@ class PdfWidget {
     final ttf = pw.Font.ttf(font.buffer.asByteData());
 
     return pw.Container(
-      width: dataModel.width,
-      height: dataModel.height,
+      width: dataModel.width! * PdfPageFormat.inch,
+      height: dataModel.height! * PdfPageFormat.inch,
+      color: PdfColors.red,
       child: pw.Stack(
         children: dataModel.elements!.map<pw.Widget>((e) {
           print(e.type);
@@ -35,9 +36,10 @@ class PdfWidget {
                             ? data.values.first.toString()
                             : e.text!,
                         style: pw.TextStyle(
-                            font: ttf,
-                            fontSize: e.fontSize,
-                            color: PdfColor.fromInt(e.color ?? 0xffFF000000)),
+                          font: ttf,
+                          fontSize: e.fontSize,
+                          color: PdfColor.fromInt(e.color ?? 0xffFF000000),
+                        ),
                       ),
                     ),
                   );
@@ -66,7 +68,7 @@ class PdfWidget {
                     left: e.xPosition,
                     top: e.yPosition,
                     child: pw.Container(
-                      color: PdfColor.fromInt(e.color),
+                      color: PdfColor.fromInt(e.color ?? 0xffFF000000),
                       height: e.height,
                       width: e.width ?? 300,
                     ),
