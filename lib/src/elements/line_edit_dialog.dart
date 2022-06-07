@@ -148,6 +148,7 @@ class _LineEditDialogState extends State<LineEditDialog> {
                             _lineWidthController.clear();
                             _lineThicknessController.clear();
                             _lineColorController.clear();
+                            widget.onSubmitted.call();
                             Navigator.pop(context);
                           }
                         });

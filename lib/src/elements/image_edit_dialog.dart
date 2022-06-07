@@ -137,8 +137,9 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
                         widget.element.height =
                             double.parse(_heightController.text);
                       });
+                      widget.onSubmitted.call();
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   },
                   child: const Text('Save')),
             ]),
