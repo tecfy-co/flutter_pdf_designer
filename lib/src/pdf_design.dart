@@ -310,7 +310,7 @@ class _PdfDesignState extends State<PdfDesign> {
           height: 20,
         ),
         SizedBox(
-          height: widget.height,
+          height: widget.height * PdfPageFormat.inch,
           child: LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxHeight == double.infinity) {
