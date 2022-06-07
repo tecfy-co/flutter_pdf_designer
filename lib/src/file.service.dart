@@ -2,14 +2,12 @@ part of flutter_pdf_designer;
 
 class FileService {
   static Uint8List? bytes;
-  static File? file;
 
   static Future pickFile() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image, withData: true);
+    final result = await FilePicker.platform
+        .pickFiles(withData: true, type: FileType.image);
 
-    if (result != null) {
-      file = File(result.files.single.path!);
+    if (result != null && result.files.isNotEmpty) {
       bytes = result.files.single.bytes;
     }
   }

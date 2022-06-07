@@ -23,9 +23,9 @@ class ImageElements extends StatefulWidget {
 
 class _ImageElementsState extends State<ImageElements> {
   final TextEditingController _widthController =
-      TextEditingController(text: 200.toString());
+      TextEditingController(text: 50.toString());
   final TextEditingController _heightController =
-      TextEditingController(text: 200.toString());
+      TextEditingController(text: 50.toString());
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -116,9 +116,9 @@ class _ImageElementsState extends State<ImageElements> {
                                               _heightController.text)),
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                             content: Text(
-                                                'Image ${FileService.file!.path} has been selected')));
+                                                'Image has been selected')));
                                     _widthController.clear();
                                     _heightController.clear();
                                     Navigator.pop(context);
@@ -127,48 +127,9 @@ class _ImageElementsState extends State<ImageElements> {
                               }
                             },
                             child: const Text('Browse my images ...')),
-                        // MaterialButton(
-                        //     color: Colors.blue,
-                        //     onPressed: () {
-                        //       if(formKey.currentState!.validate()){
-                        //         setState(() {
-                        //           print("Font Color =  "
-                        //               "${_fontColorController
-                        //               .text}");
-                        //           widget.onSubmitted!.call(Elements(type:
-                        //           WidgetType.text,
-                        //               text: _textController.text,
-                        //               fontSize: double.parse(_fontSizeController
-                        //                   .text),
-                        //               color: selectedColor));
-                        //         });
-                        //       }
-                        //       // widget.onSubmitted!.call(_textController.text,data:
-                        //       // double.parse(_fontSizeController.text));
-                        //       // setState(() {
-                        //       //   widget.onSubmitted!.call(_textController.text,
-                        //       //       data: double.parse(_fontSizeController.text));
-                        //       //   _textController.clear();
-                        //       //   _fontSizeController.clear();
-                        //       Navigator.pop(context);
-                        //     },
-                        //     child: Text('Save')),
                       ]),
                     ),
                   ),
-
-                  //     OutlinedButton(
-                  //     onPressed: () async {
-                  //   await MainController.pickFile().then((value) {
-                  //     setState(() {
-                  //       widget.onSubmitted.call(Elements.image(type: WidgetType.image,image:MainController.bytes, ));
-                  //       // widget.onSubmitted!
-                  //       //     .call(MainController.bytes);
-                  //       Navigator.pop(context);
-                  //     });
-                  //   });
-                  // },
-                  // child: const Text('Browse my images ...')),
                 ],
               );
             });

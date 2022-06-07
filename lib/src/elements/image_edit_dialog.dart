@@ -112,8 +112,7 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
                       await FileService.pickFile().then((value) {
                         setState(() {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  'Image ${FileService.file!.path} has been selected')));
+                              content: Text('Image  has been selected')));
                           widget.element.image = FileService.bytes;
                         });
                       });
