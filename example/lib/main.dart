@@ -55,25 +55,51 @@ class _MyAppState extends State<MyApp> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                PdfDesign(
-                  onChange: (json) {
-                    print(json);
-                    this.json = json;
-                  },
-                  json: dataModel.toJson(),
-                  width: 1.5,
-                  height: 1,
-                  boxHeight: 600,
-                  variableList: const {
-                    "CustomerName": PdfElementType.text,
-                    "Logo": PdfElementType.image,
-                    'invoiceBarcode': PdfElementType.barcode,
-                    'Date': PdfElementType.text,
-                  },
+                SizedBox(
+                  height: 600,
+                  child: PdfDesign(
+                    onChange: (json) {
+                      print(json);
+                      this.json = json;
+                    },
+                    json: dataModel.toJson(),
+                    width: 1.5,
+                    height: 1,
+                    variableList: [
+                      PdfDynamicField(
+                          type: PdfElementType.text,
+                          key: 'customerName',
+                          name: 'إسم العميل',
+                          designValue: 'Customer Name'),
+                      PdfDynamicField(
+                          type: PdfElementType.image,
+                          key: 'image',
+                          name: 'صورة',
+                          designValue: ''
+                              'Your Logo Here'),
+                      PdfDynamicField(
+                          type: PdfElementType.barcode,
+                          key: 'bar'
+                              'code',
+                          name: 'باركود',
+                          designValue: 'Barcode Data'),
+                      PdfDynamicField(
+                          type: PdfElementType.text,
+                          key: 'date',
+                          name: 'تاريخ الإنتاج / الإنتهاء',
+                          designValue: '2/2/'
+                              '2222'),
+                      PdfDynamicField(
+                          type: PdfElementType.text,
+                          key: 'price',
+                          name: 'السعر',
+                          designValue: '30'),
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 MaterialButton(
                   onPressed: () async {
                     // pass font path as a String in loadFont Function after
@@ -82,8 +108,9 @@ class _MyAppState extends State<MyApp> {
                         .then((value) async {
                       final doc = pw.Document();
                       doc.addPage(pw.Page(
-                          // pageFormat: PdfPageFormat(dataModel.width!,
-                          //     dataModel.height!),
+                          // pageFormat: PdfPageFormat(dataModel
+                          //     .width!*PdfPageFormat.inch,
+                          //     dataModel.height!*PdfPageFormat.inch),
                           //pageFormat: PdfPageFormat.roll57,
                           textDirection: pw.TextDirection.rtl,
                           build: (context) {
@@ -93,9 +120,9 @@ class _MyAppState extends State<MyApp> {
                                 PdfWidget.generate(
                                     json,
                                     {
-                                      'CustomerName': 'Ahmed',
                                       'logo': [1, 1, 1, 2],
                                       'barcode': 'wa.me/+201119369127',
+                                      'Customer Name': 'Ahmed',
                                     },
                                     value)
                               ],

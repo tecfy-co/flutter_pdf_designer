@@ -37,3 +37,5 @@ part './src/elements/barcode_dropdown.dart';
 part 'src/models/data.model.dart';
 part './src/models/element.model.dart';
 part './src/models/element_types.dart';
+
+part './src/models/dynamic_field.model.dart';

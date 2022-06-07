@@ -38,7 +38,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
     'Bottom Right',
   ];
 
-  String selectedItem = 'Top Left';
+  String? selectedItem;
 
   void changeAlignFromText(element) {
     switch (selectedItem) {
@@ -69,8 +69,8 @@ class _TextEditDialogState extends State<TextEditDialog> {
       case 'Top Left':
         element.alignment = PdfAlign.topLeft;
         break;
-      default:
-        element.alignment = PdfAlign.topLeft;
+      // default:
+      //   element.alignment = PdfAlign.topLeft;
     }
   }
 
@@ -320,7 +320,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
                 height: 10,
               ),
               MaterialButton(
-                  color: Colors.blue,
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       setState(() {

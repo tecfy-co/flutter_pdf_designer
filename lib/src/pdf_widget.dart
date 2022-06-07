@@ -31,8 +31,8 @@ class PdfWidget {
                       width: e.width,
                       height: e.height,
                       child: pw.Text(
-                        e.text == 'CustomerName'
-                            ? data.values.first.toString()
+                        e.text == 'Customer Name'
+                            ? getPrintText(data)!
                             : e.text!,
                         style: pw.TextStyle(
                           font: ttf,
@@ -134,5 +134,20 @@ class PdfWidget {
       default:
         return pw.Alignment.topLeft;
     }
+  }
+
+  static String? getPrintText(Map<String, dynamic> data) {
+    try {
+      for (MapEntry e in data.entries) {
+        print("Key ${e.key}, Value ${e.value}");
+        if (e.key.contains('Customer')) {
+          return data[e.key];
+        }
+      }
+    } catch (e, st) {
+      print(e);
+      print(st);
+    }
+    return null;
   }
 }
