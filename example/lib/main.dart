@@ -61,8 +61,9 @@ class _MyAppState extends State<MyApp> {
                     this.json = json;
                   },
                   json: dataModel.toJson(),
-                  width: 400,
-                  height: 400,
+                  width: 1.5,
+                  height: 1,
+                  boxHeight: 600,
                   variableList: const {
                     "CustomerName": PdfElementType.text,
                     "Logo": PdfElementType.image,

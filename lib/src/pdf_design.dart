@@ -8,6 +8,7 @@ class PdfDesign extends StatefulWidget {
 
   /// Printing Height in inches
   final double height;
+  final double boxHeight;
   final Map<String, dynamic>? json;
   final void Function(Map<String, dynamic>) onChange;
 
@@ -17,6 +18,7 @@ class PdfDesign extends StatefulWidget {
     required this.json,
     required this.width,
     required this.height,
+    required this.boxHeight,
     required this.variableList,
   }) : super(key: key);
 
@@ -310,7 +312,7 @@ class _PdfDesignState extends State<PdfDesign> {
           height: 20,
         ),
         SizedBox(
-          height: widget.height * PdfPageFormat.inch,
+          height: widget.boxHeight,
           child: LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxHeight == double.infinity) {

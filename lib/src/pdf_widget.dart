@@ -14,7 +14,6 @@ class PdfWidget {
     return pw.Container(
       width: dataModel.width! * PdfPageFormat.inch,
       height: dataModel.height! * PdfPageFormat.inch,
-      color: PdfColors.red,
       child: pw.Stack(
         children: dataModel.elements!.map<pw.Widget>((e) {
           print(e.type);
@@ -80,10 +79,12 @@ class PdfWidget {
                     left: e.xPosition,
                     top: e.yPosition,
                     child: pw.BarcodeWidget(
-                        height: e.height,
-                        width: e.width,
-                        barcode: e.barcode!,
-                        data: barcodeData),
+                      height: e.height,
+                      width: e.width,
+                      barcode: e.barcode!,
+                      data: barcodeData,
+                      color: PdfColor.fromInt(e.color ?? 0xffFF000000),
+                    ),
                   );
                 }
             }
