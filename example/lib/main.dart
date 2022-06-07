@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // initialize dataModel
-    dataModel = PdfModel(width: 1.5, height: 1.0, elements: elements);
+    dataModel = PdfModel(elements: elements);
     super.initState();
   }
 

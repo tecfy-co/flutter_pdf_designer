@@ -2,7 +2,11 @@ part of flutter_pdf_designer;
 
 class PdfDesign extends StatefulWidget {
   final Map<String, PdfElementType>? variableList;
+
+  /// Printing Width in inches
   final double? width;
+
+  /// Printing Height in inches
   final double? height;
   final Map<String, dynamic>? json;
   final void Function(Map<String, dynamic>) onChange;
@@ -145,11 +149,20 @@ class _PdfDesignState extends State<PdfDesign> {
   void initState() {
     dataModel = PdfModel.fromJson(widget.json!);
     if (widget.width != null) {
-      dataModel.width = widget.width;
+      if (widget.width! > 50) {
+        dataModel.width = widget.width! / PdfPageFormat.inch;
+      } else {
+        dataModel.width = widget.width!;
+      }
     }
     if (widget.height != null) {
-      dataModel.height = widget.height;
+      if (widget.height! > 50) {
+        dataModel.height = widget.height! / PdfPageFormat.inch;
+      } else {
+        dataModel.height = widget.height;
+      }
     }
+
     widget.variableList!.forEach((key, value) {
       list.add(key);
     });
@@ -176,19 +189,19 @@ class _PdfDesignState extends State<PdfDesign> {
                             var number = double.parse(v);
                             dataModel.height = number;
                           });
-                  },
-                  decoration: const InputDecoration(
-                      label: Text('Label Height (inch)')))),
-          const SizedBox(width: 10),
-          Expanded(
-              child: TextFormField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                  initialValue: dataModel.width!.toStringAsFixed(1),
+                        },
+                        decoration: const InputDecoration(
+                            label: Text('Label Height (inch)')))),
+                const SizedBox(width: 10),
+                Expanded(
+                    child: TextFormField(
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}')),
+                        ],
+                        initialValue: dataModel.width!.toStringAsFixed(1),
                         onChanged: (v) {
                           setState(() {
                             var number = double.parse(v);
@@ -354,18 +367,18 @@ class _PdfDesignState extends State<PdfDesign> {
                                                 ((e.fontSize ?? 14) * scale!),
                                             color:
                                                 Color(e.color ?? 0xffFF000000)),
-                                            // key: GlobalObjectKey(e.text ?? ''),
-                                          ))),
-                                  childWhenDragging: const SizedBox(),
-                                  child: InkWell(
-                                    onDoubleTap: () {
-                                      setState(() {
-                                        isDoubleTap = !isDoubleTap;
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return TextEditDialog(
-                                                element: e,
+                                        // key: GlobalObjectKey(e.text ?? ''),
+                                      ))),
+                              childWhenDragging: const SizedBox(),
+                              child: InkWell(
+                                onDoubleTap: () {
+                                  setState(() {
+                                    isDoubleTap = !isDoubleTap;
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return TextEditDialog(
+                                            element: e,
                                             onDeleted: (e) {
                                               dataModel.elements!.remove(e);
                                               setState(() {
@@ -381,13 +394,13 @@ class _PdfDesignState extends State<PdfDesign> {
                                               });
                                             },
                                           );
-                                            });
+                                        });
 
-                                        debugPrint(' Double Tap = $isDoubleTap');
-                                      });
-                                    },
-                                    child: Container(
-                                      color: Color(e.color ?? 0xffFF000000)
+                                    debugPrint(' Double Tap = $isDoubleTap');
+                                  });
+                                },
+                                child: Container(
+                                  color: Color(e.color ?? 0xffFF000000)
                                       .withOpacity(0.2),
                                   width: (e.width ?? 50) * scale!,
                                   height: (e.height ?? 50) * scale!,
@@ -403,11 +416,11 @@ class _PdfDesignState extends State<PdfDesign> {
                                 ),
                               ),
                             ),
-                              );
-                            }
-                          case PdfElementType.image:
-                            {
-                              return Positioned(
+                          );
+                        }
+                      case PdfElementType.image:
+                        {
+                          return Positioned(
                             left: e.xPosition > 0
                                 ? e.xPosition * scale!
                                 : e.xPosition,
@@ -425,27 +438,27 @@ class _PdfDesignState extends State<PdfDesign> {
                                       child: Container(
                                         color: Colors.red,
                                         width: 100,
-                                      height: 100,
-                                      child: const Center(
-                                        child: Text('YourLogoHere!'),
+                                        height: 100,
+                                        child: const Center(
+                                          child: Text('YourLogoHere!'),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  onDragEnd: (dragDetails) {
-                                    setState(() {
-                                      setWidgetOverStack(dragDetails, e);
+                              onDragEnd: (dragDetails) {
+                                setState(() {
+                                  setWidgetOverStack(dragDetails, e);
                                   e.xPosition /= scale!;
                                   e.yPosition /= scale!;
                                   widget.onChange(dataModel.toJson());
                                 });
-                                  },
-                                  child: InkWell(
-                                    onDoubleTap: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return ImageEditDialog(
-                                                element: e,
+                              },
+                              child: InkWell(
+                                onDoubleTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ImageEditDialog(
+                                            element: e,
                                             onDeleted: (e) {
                                               dataModel.elements!.remove(e);
                                               setState(() {
@@ -460,34 +473,34 @@ class _PdfDesignState extends State<PdfDesign> {
                                                     dataModel.toJson());
                                               });
                                             });
-                                          });
-                                    },
-                                    child: e.image != null
-                                        ? Image.memory(
-                                      e.image!,
+                                      });
+                                },
+                                child: e.image != null
+                                    ? Image.memory(
+                                        e.image!,
                                         key: e.key,
                                         // fit: BoxFit.contain,
                                         width: e.width! * scale!,
                                         height: e.height! * scale!,
                                       )
-                                        : Material(
-                                      child: Container(
-                                        key: e.key,
-                                        color: Colors.red,
-                                        width: 100,
-                                        height: 100,
-                                        child: const Center(
-                                          child: Text('YourLogoHere!'),
+                                    : Material(
+                                        child: Container(
+                                          key: e.key,
+                                          color: Colors.red,
+                                          width: 100,
+                                          height: 100,
+                                          child: const Center(
+                                            child: Text('YourLogoHere!'),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          case PdfElementType.line:
-                            {
-                              return Positioned(
+                              ),
+                            ),
+                          );
+                        }
+                      case PdfElementType.line:
+                        {
+                          return Positioned(
                             left: e.xPosition > 0
                                 ? e.xPosition * scale!
                                 : e.xPosition,
@@ -508,15 +521,15 @@ class _PdfDesignState extends State<PdfDesign> {
                                     e.yPosition /= scale!;
                                     widget.onChange(dataModel.toJson());
                                   },
-                                    );
-                                  },
-                                  child: InkWell(
-                                    onDoubleTap: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return LineEditDialog(
-                                                element: e,
+                                );
+                              },
+                              child: InkWell(
+                                onDoubleTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return LineEditDialog(
+                                            element: e,
                                             onDeleted: (e) {
                                               dataModel.elements!.remove(e);
                                               setState(() {
@@ -531,23 +544,23 @@ class _PdfDesignState extends State<PdfDesign> {
                                                     dataModel.toJson());
                                               });
                                             });
-                                          });
-                                    },
-                                    child: Container(
-                                      key: e.key,
+                                      });
+                                },
+                                child: Container(
+                                  key: e.key,
                                   color: Color(e.color ?? 0xffFF000000),
                                   height:
                                       (e.width! / PdfPageFormat.inch) * scale!,
                                   width:
                                       (e.width! / PdfPageFormat.inch) * scale!,
                                 ),
-                                  ),
-                                ),
-                              );
-                            }
-                          case PdfElementType.barcode:
-                            {
-                              return Positioned(
+                              ),
+                            ),
+                          );
+                        }
+                      case PdfElementType.barcode:
+                        {
+                          return Positioned(
                             left: e.xPosition > 0
                                 ? e.xPosition * scale!
                                 : e.xPosition,
@@ -569,22 +582,22 @@ class _PdfDesignState extends State<PdfDesign> {
                                     );
                                   },
                                 ),
-                                  ),
-                                  onDragEnd: (dragDetails) {
-                                    setState(() {
-                                      setWidgetOverStack(dragDetails, e);
+                              ),
+                              onDragEnd: (dragDetails) {
+                                setState(() {
+                                  setWidgetOverStack(dragDetails, e);
                                   e.xPosition /= scale!;
                                   e.yPosition /= scale!;
                                   widget.onChange(dataModel.toJson());
                                 });
-                                  },
-                                  child: InkWell(
-                                    onDoubleTap: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return BarcodeEditDialog(
-                                                element: e,
+                              },
+                              child: InkWell(
+                                onDoubleTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return BarcodeEditDialog(
+                                            element: e,
                                             onDeleted: (e) {
                                               dataModel.elements!.remove(e);
                                               setState(() {
@@ -599,10 +612,10 @@ class _PdfDesignState extends State<PdfDesign> {
                                                     dataModel.toJson());
                                               });
                                             });
-                                          });
-                                    },
-                                    child: BarcodeWidget(
-                                      data: e.text ?? 'Barcode Data',
+                                      });
+                                },
+                                child: BarcodeWidget(
+                                  data: e.text ?? 'Barcode Data',
                                   barcode: e.barcode!,
                                   width: e.width! * scale!,
                                   height: e.height! * scale!,
