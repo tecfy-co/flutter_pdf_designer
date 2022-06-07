@@ -85,6 +85,7 @@ class PdfElement {
       text = json['text'];
       barcode = json['barcode'];
       color = json['color'];
+      fontSize = json['fontSize'];
     }
     key = GlobalKey();
   }
@@ -111,6 +112,7 @@ class PdfElement {
       data['text'] = text;
       data['barcode'] = barcode;
       data['color'] = color;
+      data['fontSize'] = fontSize;
     }
     return data;
   }

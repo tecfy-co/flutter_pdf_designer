@@ -300,9 +300,10 @@ class _PdfDesignState extends State<PdfDesign> {
                           dataModel.elements!.add(PdfElement(
                               type: PdfElementType.barcode,
                               text: 'your barcode',
-                              width: 100,
-                              height: 100,
+                              width: 50,
+                              height: 50,
                               color: 1099494850560,
+                              fontSize: 4,
                               barcode: Barcode.code128()));
                           widget.onChange(dataModel.toJson());
                         });
@@ -576,6 +577,9 @@ class _PdfDesignState extends State<PdfDesign> {
                                   color: Color(e.color ?? 0xffFF000000),
                                   width: (e.width ?? 50) * scale!,
                                   height: (e.height ?? 50) * scale!,
+                                  style: TextStyle(
+                                    fontSize: (e.fontSize ?? 10) * scale!,
+                                  ),
                                   errorBuilder: (context, string) {
                                     return Container(
                                       child: Text(string),
@@ -620,6 +624,9 @@ class _PdfDesignState extends State<PdfDesign> {
                                   width: (e.width ?? 50) * scale!,
                                   height: (e.height ?? 50) * scale!,
                                   color: Color(e.color),
+                                  style: TextStyle(
+                                    fontSize: (e.fontSize ?? 14) * scale!,
+                                  ),
                                   errorBuilder: (context, string) {
                                     return Container(
                                       child: Text(string),

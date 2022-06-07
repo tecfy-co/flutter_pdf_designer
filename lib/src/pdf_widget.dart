@@ -82,6 +82,9 @@ class PdfWidget {
                       height: e.height,
                       width: e.width,
                       barcode: e.barcode!,
+                      textStyle: pw.TextStyle(
+                        fontSize: e.fontSize ?? 6,
+                      ),
                       data: barcodeData,
                       color: PdfColor.fromInt(e.color ?? 0xffFF000000),
                     ),

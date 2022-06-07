@@ -21,6 +21,7 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _lineColorController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _fontSizeController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
   late Barcode barcode;
@@ -45,6 +46,9 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
     if (widget.element.height != null) {
       _heightController.text = widget.element.height!.toString();
     }
+    if (widget.element.fontSize != null) {
+      _fontSizeController.text = widget.element.fontSize!.toString();
+    }
     if (widget.element.color != null) {
       pickerColor = Color(widget.element.color);
     }
@@ -57,6 +61,7 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
     _lineColorController.dispose();
     _heightController.dispose();
     _widthController.dispose();
+    _fontSizeController.dispose();
     super.dispose();
   }
 
@@ -152,6 +157,32 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
               const SizedBox(
                 height: 20,
               ),
+              TextFormField(
+                autofocus: true,
+                controller: _fontSizeController,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                validator: (s) {
+                  if (s!.isEmpty) {
+                    return 'Font Size Must be Entered';
+                  }
+                  return null;
+                },
+                textInputAction: TextInputAction.next,
+                enableSuggestions: true,
+                decoration: const InputDecoration(
+                  hintText: 'Enter your font size',
+                  labelText: 'Font Size',
+                  isDense: true,
+                  isCollapsed: false,
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               ColorPicker(
                 hexInputController: _lineColorController,
                 pickerColor: pickerColor,
@@ -179,6 +210,8 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
                             double.parse(_widthController.text);
                         widget.element.height =
                             double.parse(_heightController.text);
+                        widget.element.fontSize =
+                            double.parse(_fontSizeController.text);
                         if (selectedColor != null) {
                           widget.element.color = selectedColor;
                         }
