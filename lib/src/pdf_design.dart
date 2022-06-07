@@ -161,6 +161,10 @@ class _PdfDesignState extends State<PdfDesign> {
     } else {
       dataModel.height = widget.height;
     }
+    dataModel.elements!.forEach((element) {
+      element.height ??= 50;
+      element.width ??= 50;
+    });
 
     widget.variableList!.forEach((key, value) {
       list.add(key);
@@ -426,9 +430,9 @@ class _PdfDesignState extends State<PdfDesign> {
                             child: Draggable(
                               feedback: e.image != null
                                   ? Image.memory(
-                                      e.image!,
-                                      width: e.width! * scale!,
-                                      height: e.height! * scale!,
+                                e.image!,
+                                      width: (e.width ?? 50) * scale!,
+                                      height: (e.height ?? 50) * scale!,
                                     )
                                   : Material(
                                       child: Container(
@@ -473,11 +477,11 @@ class _PdfDesignState extends State<PdfDesign> {
                                 },
                                 child: e.image != null
                                     ? Image.memory(
-                                        e.image!,
+                                  e.image!,
                                         key: e.key,
                                         // fit: BoxFit.contain,
-                                        width: e.width! * scale!,
-                                        height: e.height! * scale!,
+                                        width: (e.width ?? 50) * scale!,
+                                        height: (e.height ?? 50) * scale!,
                                       )
                                     : Material(
                                         child: Container(
@@ -506,8 +510,8 @@ class _PdfDesignState extends State<PdfDesign> {
                             child: Draggable(
                               feedback: Container(
                                 color: Color(e.color ?? 0xffFF000000),
-                                height: (e.height!) * scale!,
-                                width: (e.width!) * scale!,
+                                width: (e.width ?? 50) * scale!,
+                                height: (e.height ?? 50) * scale!,
                               ),
                               onDragEnd: (dragDetails) {
                                 setState(
@@ -570,8 +574,8 @@ class _PdfDesignState extends State<PdfDesign> {
                                   data: e.text ?? "Barcode Data",
                                   barcode: e.barcode!,
                                   color: Color(e.color ?? 0xffFF000000),
-                                  width: e.width! * scale!,
-                                  height: e.height! * scale!,
+                                  width: (e.width ?? 50) * scale!,
+                                  height: (e.height ?? 50) * scale!,
                                   errorBuilder: (context, string) {
                                     return Container(
                                       child: Text(string),
@@ -613,8 +617,8 @@ class _PdfDesignState extends State<PdfDesign> {
                                 child: BarcodeWidget(
                                   data: e.text ?? 'Barcode Data',
                                   barcode: e.barcode!,
-                                  width: e.width! * scale!,
-                                  height: e.height! * scale!,
+                                  width: (e.width ?? 50) * scale!,
+                                  height: (e.height ?? 50) * scale!,
                                   color: Color(e.color),
                                   errorBuilder: (context, string) {
                                     return Container(
