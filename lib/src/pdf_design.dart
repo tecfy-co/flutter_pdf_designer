@@ -144,6 +144,12 @@ class _PdfDesignState extends State<PdfDesign> {
   @override
   void initState() {
     dataModel = PdfModel.fromJson(widget.json!);
+    if (widget.width != null) {
+      dataModel.width = widget.width;
+    }
+    if (widget.height != null) {
+      dataModel.height = widget.height;
+    }
     widget.variableList!.forEach((key, value) {
       list.add(key);
     });
@@ -156,18 +162,20 @@ class _PdfDesignState extends State<PdfDesign> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(children: [
-          Expanded(
-              child: TextFormField(
-                  inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-              ],
-                  initialValue: dataModel.height!.toStringAsFixed(1),
-                  onChanged: (v) {
-                    setState(() {
-                      var number = double.parse(v);
-                      dataModel.height = number;
-                    });
+        widget.width == null || widget.height == null
+            ? Row(children: [
+                Expanded(
+                    child: TextFormField(
+                        inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
+                        initialValue: dataModel.height!.toStringAsFixed(1),
+                        onChanged: (v) {
+                          setState(() {
+                            var number = double.parse(v);
+                            dataModel.height = number;
+                          });
                   },
                   decoration: const InputDecoration(
                       label: Text('Label Height (inch)')))),
@@ -181,17 +189,18 @@ class _PdfDesignState extends State<PdfDesign> {
                         RegExp(r'^\d+\.?\d{0,2}')),
                   ],
                   initialValue: dataModel.width!.toStringAsFixed(1),
-                  onChanged: (v) {
-                    setState(() {
-                      var number = double.parse(v);
-                      print(number * PdfPageFormat.inch);
-                      dataModel.width = number;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                      label: Text('Label Width (inch)')))),
-          const SizedBox(width: 10),
-        ]),
+                        onChanged: (v) {
+                          setState(() {
+                            var number = double.parse(v);
+                            print(number * PdfPageFormat.inch);
+                            dataModel.width = number;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                            label: Text('Label Width (inch)')))),
+                const SizedBox(width: 10),
+              ])
+            : SizedBox(),
         Wrap(
           children: [
             Padding(
