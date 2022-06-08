@@ -6,7 +6,7 @@ class PdfElement {
   String? dynamicFieldKey;
   String? text;
   double? fontSize;
-  List<dynamic>? image;
+  Uint8List? image;
   late double xPosition;
   late double yPosition;
   double? height;

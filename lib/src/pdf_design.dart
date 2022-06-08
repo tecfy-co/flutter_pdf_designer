@@ -153,7 +153,7 @@ class _PdfDesignState extends State<PdfDesign> {
     } else {
       dataModel.height = widget.height;
     }
-    if (dataModel.elements!.isNotEmpty) {
+    if (dataModel.elements!.isNotEmpty && dataModel.elements != null) {
       dataModel.elements!.forEach((element) {
         element.height ??= 50;
         element.width ??= 50;
@@ -446,7 +446,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                 child: Draggable(
                                   feedback: e.image != null
                                       ? Image.memory(
-                                    e.image! as Uint8List,
+                                    e.image!,
                                           width: (e.width ?? 25) * scale!,
                                           height: (e.height ?? 25) * scale!,
                                         )
@@ -493,7 +493,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                     },
                                     child: e.image != null
                                         ? Image.memory(
-                                      e.image! as Uint8List,
+                                      e.image!,
                                             key: e.key,
                                             // fit: BoxFit.contain,
                                             width: (e.width ?? 25) * scale!,

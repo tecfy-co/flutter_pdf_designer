@@ -61,6 +61,7 @@ class _MyAppState extends State<MyApp> {
                     onChange: (json) {
                       print(json);
                       this.json = json;
+                      dataModel = PdfModel.fromJson(json);
                     },
                     json: dataModel.toJson(),
                     width: 1.5,
