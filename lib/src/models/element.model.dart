@@ -12,7 +12,7 @@ class PdfElement {
   double? height;
   double? width;
   dynamic color;
-  Barcode? barcode;
+  BarcodeType? barcode;
   PdfAlign? alignment;
 
   PdfElement({
@@ -89,7 +89,7 @@ class PdfElement {
       color = json['color'];
     } else {
       text = json['text'];
-      barcode = json['barcode'];
+      barcode = BarcodeType.values[json['barcode'] ?? 0];
       color = json['color'];
       fontSize = json['fontSize'];
     }
@@ -117,7 +117,7 @@ class PdfElement {
       data['color'] = color;
     } else {
       data['text'] = text;
-      data['barcode'] = barcode;
+      data['barcode'] = barcode?.index;
       data['color'] = color;
       data['fontSize'] = fontSize;
     }

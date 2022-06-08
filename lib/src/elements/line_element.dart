@@ -50,7 +50,11 @@ class _LineElementState extends State<LineElement> {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColor),
+      ),
       onPressed: () {
         showDialog(
             context: context,
@@ -120,7 +124,7 @@ class _LineElementState extends State<LineElement> {
                               height: 10,
                             ),
                             MaterialButton(
-                                color: Colors.blue,
+                                color: Theme.of(context).primaryColor,
                                 onPressed: () {
                                   setState(() {
                                     if (formKey.currentState!.validate()) {

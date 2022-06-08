@@ -44,7 +44,11 @@ class _TextElementState extends State<TextElement> {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColor),
+      ),
       onPressed: () {
         showDialog(
             context: context,
@@ -199,7 +203,7 @@ class _TextElementState extends State<TextElement> {
                           height: 10,
                         ),
                         MaterialButton(
-                            color: Colors.blue,
+                            color: Theme.of(context).primaryColor,
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 setState(() {

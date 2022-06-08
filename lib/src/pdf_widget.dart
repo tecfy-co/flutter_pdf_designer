@@ -80,7 +80,7 @@ class PdfWidget {
                     child: pw.BarcodeWidget(
                       height: e.height,
                       width: e.width,
-                      barcode: e.barcode!,
+                      barcode: Barcode.fromType(e.barcode!),
                       textStyle: pw.TextStyle(
                         fontSize: e.fontSize ?? 6,
                       ),

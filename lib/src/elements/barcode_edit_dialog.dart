@@ -199,13 +199,13 @@ class _BarcodeEditDialogState extends State<BarcodeEditDialog> {
                 displayThumbColor: true,
               ),
               MaterialButton(
-                  color: Colors.blue,
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       setState(() {
                         // widget.element.text = _textController.text;
                         widget.element.text = conf.data;
-                        widget.element.barcode = conf.barcode;
+                        widget.element.barcode = conf.type;
                         widget.element.width =
                             double.parse(_widthController.text);
                         widget.element.height =

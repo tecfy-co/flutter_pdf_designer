@@ -135,7 +135,7 @@ class _LineEditDialogState extends State<LineEditDialog> {
                     height: 10,
                   ),
                   MaterialButton(
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       onPressed: () {
                         setState(() {
                           if (formKey.currentState!.validate()) {

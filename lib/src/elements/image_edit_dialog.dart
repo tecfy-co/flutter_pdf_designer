@@ -126,7 +126,7 @@ class _ImageEditDialogState extends State<ImageEditDialog> {
                 height: 20,
               ),
               MaterialButton(
-                  color: Colors.blue,
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     if (formKey.currentState!.validate() &&
                         FileService.bytes != null) {

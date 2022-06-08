@@ -37,7 +37,11 @@ class _ImageElementsState extends State<ImageElements> {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColor),
+      ),
       onPressed: () {
         showDialog(
             context: context,
@@ -101,7 +105,7 @@ class _ImageElementsState extends State<ImageElements> {
                           height: 20,
                         ),
                         MaterialButton(
-                            color: Colors.blue,
+                            color: Theme.of(context).primaryColor,
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
                                 await FileService.pickFile().then((value) {

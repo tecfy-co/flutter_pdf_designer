@@ -146,14 +146,17 @@ class _PdfDesignState extends State<PdfDesign> {
     } else {
       dataModel.height = widget.height;
     }
-    dataModel.elements!.forEach((element) {
-      element.height ??= 50;
-      element.width ??= 50;
-    });
-
-    widget.variableList!.forEach((element) {
-      list.add(element.name);
-    });
+    if (dataModel.elements!.isNotEmpty) {
+      dataModel.elements!.forEach((element) {
+        element.height ??= 50;
+        element.width ??= 50;
+      });
+    }
+    if (widget.variableList!.isNotEmpty) {
+      widget.variableList!.forEach((element) {
+        list.add(element.name);
+      });
+    }
     super.initState();
   }
 
@@ -282,7 +285,8 @@ class _PdfDesignState extends State<PdfDesign> {
                       }
                       if (element.name == s &&
                           element.type == PdfElementType.image) {
-                        print('-------Adding[ Image ]to your Model--------');
+                        debugPrint('-------Adding[ Image ]to your '
+                            'Model--------');
                         setState(() {
                           dataModel.elements!.add(PdfElement.image(
                             type: PdfElementType.image,
@@ -294,7 +298,7 @@ class _PdfDesignState extends State<PdfDesign> {
                       }
                       if (element.name == s &&
                           element.type == PdfElementType.barcode) {
-                        print('-------Adding[ Barcode ]to your '
+                        debugPrint('-------Adding[ Barcode ]to your '
                             'Model--------');
                         setState(() {
                           dataModel.elements!.add(PdfElement(
@@ -305,7 +309,7 @@ class _PdfDesignState extends State<PdfDesign> {
                               height: 50,
                               color: 1099494850560,
                               fontSize: 4,
-                              barcode: Barcode.code128()));
+                              barcode: BarcodeType.Code128));
                           widget.onChange(dataModel.toJson());
                         });
                       }
@@ -577,7 +581,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                   feedback: Material(
                                     child: BarcodeWidget(
                                       data: e.text ?? "Barcode Data",
-                                      barcode: e.barcode!,
+                                      barcode: Barcode.fromType(e.barcode!),
                                       color: Color(e.color ?? 0xffFF000000),
                                       width: (e.width ?? 25) * scale!,
                                       height: (e.height ?? 25) * scale!,
@@ -624,7 +628,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                     },
                                     child: BarcodeWidget(
                                       data: e.text ?? 'Barcode Data',
-                                      barcode: e.barcode!,
+                                      barcode: Barcode.fromType(e.barcode!),
                                       width: (e.width ?? 25) * scale!,
                                       height: (e.height ?? 25) * scale!,
                                       color: Color(e.color),
