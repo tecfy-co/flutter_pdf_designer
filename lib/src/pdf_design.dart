@@ -30,13 +30,6 @@ class _PdfDesignState extends State<PdfDesign> {
   GlobalKey containerKey = GlobalKey();
   List<String> list = [];
 
-  Uint8List _getImageBinary(dynamicList) {
-    List<int> intList =
-        dynamicList.cast<int>().toList(); //This is the magical line.
-    Uint8List data = Uint8List.fromList(intList);
-    return data;
-  }
-
   Alignment getAlignment(PdfAlign align) {
     switch (align) {
       case PdfAlign.bottomRight:
