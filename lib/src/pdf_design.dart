@@ -30,6 +30,13 @@ class _PdfDesignState extends State<PdfDesign> {
   GlobalKey containerKey = GlobalKey();
   List<String> list = [];
 
+  Uint8List _getImageBinary(dynamicList) {
+    List<int> intList =
+        dynamicList.cast<int>().toList(); //This is the magical line.
+    Uint8List data = Uint8List.fromList(intList);
+    return data;
+  }
+
   Alignment getAlignment(PdfAlign align) {
     switch (align) {
       case PdfAlign.bottomRight:
@@ -439,7 +446,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                 child: Draggable(
                                   feedback: e.image != null
                                       ? Image.memory(
-                                          e.image!,
+                                    _getImageBinary(e.image!),
                                           width: (e.width ?? 25) * scale!,
                                           height: (e.height ?? 25) * scale!,
                                         )
@@ -486,7 +493,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                     },
                                     child: e.image != null
                                         ? Image.memory(
-                                            e.image!,
+                                      _getImageBinary(e.image!),
                                             key: e.key,
                                             // fit: BoxFit.contain,
                                             width: (e.width ?? 25) * scale!,
