@@ -84,7 +84,7 @@ class PdfElement {
       color = json['color'];
       alignment = PdfAlign.values[json['alignment'] ?? 0];
     } else if (type == PdfElementType.image) {
-      image = json['image'];
+      image = Uint8List.fromList(json['image'] ?? []);
     } else if (type == PdfElementType.line) {
       color = json['color'];
     } else {
@@ -112,7 +112,7 @@ class PdfElement {
       data['color'] = color;
       data['alignment'] = alignment?.index;
     } else if (type == PdfElementType.image) {
-      data['image'] = image;
+      data['image'] = image as List<int>;
     } else if (type == PdfElementType.line) {
       data['color'] = color;
     } else {
