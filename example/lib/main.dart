@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
                           designValue: 'Customer Name'),
                       PdfDynamicField(
                           type: PdfElementType.image,
-                          key: 'image',
+                          key: 'logo',
                           name: 'صورة',
                           designValue: ''
                               'Your Logo Here'),
@@ -97,9 +97,6 @@ class _MyAppState extends State<MyApp> {
                     ],
                   ),
                 ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
                 MaterialButton(
                   onPressed: () async {
                     // pass font path as a String in loadFont Function after
@@ -122,7 +119,7 @@ class _MyAppState extends State<MyApp> {
                                     {
                                       'logo': [1, 1, 1, 2],
                                       'barcode': 'wa.me/+201119369127',
-                                      'Customer Name': 'Ahmed',
+                                      'customerName': 'Ahmed',
                                     },
                                     value)
                               ],

@@ -6,9 +6,6 @@ class PdfWidget {
     final PdfModel dataModel;
     dataModel = PdfModel.fromJson(json);
     print(dataModel.toJson());
-    //   print(data);
-    var barcodeData = data['barcode'];
-    //  print(barcodeData);
     final ttf = pw.Font.ttf(font.buffer.asByteData());
 
     return pw.Container(
@@ -31,8 +28,8 @@ class PdfWidget {
                       width: e.width,
                       height: e.height,
                       child: pw.Text(
-                        e.text == 'Customer Name'
-                            ? getPrintText(data)!
+                        e.dynamicFieldKey != null
+                            ? data[e.dynamicFieldKey] ?? ''
                             : e.text!,
                         style: pw.TextStyle(
                           font: ttf,
@@ -52,7 +49,9 @@ class PdfWidget {
                     child: e.image != null
                         ? pw.Image(
                             pw.MemoryImage(
-                              e.image!,
+                              e.dynamicFieldKey != null
+                                  ? data[e.dynamicFieldKey] ?? []
+                                  : e.image!,
                             ),
                             height: e.height,
                             width: e.width)
@@ -85,7 +84,7 @@ class PdfWidget {
                       textStyle: pw.TextStyle(
                         fontSize: e.fontSize ?? 6,
                       ),
-                      data: barcodeData,
+                      data: data[e.dynamicFieldKey] ?? 'No Data',
                       color: PdfColor.fromInt(e.color ?? 0xffFF000000),
                     ),
                   );
@@ -136,18 +135,4 @@ class PdfWidget {
     }
   }
 
-  static String? getPrintText(Map<String, dynamic> data) {
-    try {
-      for (MapEntry e in data.entries) {
-        print("Key ${e.key}, Value ${e.value}");
-        if (e.key.contains('Customer')) {
-          return data[e.key];
-        }
-      }
-    } catch (e, st) {
-      print(e);
-      print(st);
-    }
-    return null;
-  }
 }

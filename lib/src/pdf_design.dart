@@ -84,7 +84,7 @@ class _PdfDesignState extends State<PdfDesign> {
       }
 
       final widgetKeyContext = e.key.currentContext;
-      debugPrint('KeyContext = $widgetKeyContext');
+    //  debugPrint('KeyContext = $widgetKeyContext');
       if (widgetKeyContext != null) {
         final imageBox = widgetKeyContext.findRenderObject() as RenderBox;
 
@@ -119,24 +119,11 @@ class _PdfDesignState extends State<PdfDesign> {
       flexHeight = constraints.maxHeight;
       flexWidth =
           (dataModel.width! * constraints.maxHeight) / dataModel.height!;
-      //scale = flexWidth! / flexHeight!;
       scale = (dataModel.width! * PdfPageFormat.inch) / (flexWidth!);
-      print('11111111111   flexWidth = $flexWidth ---- '
-          'flexHeight = '
-          '$flexHeight '
-          '---- '
-          'Scale = $scale');
     } else {
       flexWidth = constraints.maxWidth;
       flexHeight =
           (dataModel.height! * constraints.maxWidth) / dataModel.width!;
-      //  scale = flexWidth! /flexHeight!;
-
-      print('222222222222    flexWidth = $flexWidth ---- '
-          'flexHeight = '
-          '$flexHeight '
-          '--- '
-          'Scale = $scale');
     }
     scale = flexWidth! / (dataModel.width! * PdfPageFormat.inch);
   }
@@ -204,7 +191,6 @@ class _PdfDesignState extends State<PdfDesign> {
                   onChanged: (v) {
                     setState(() {
                       var number = double.parse(v);
-                      print(number * PdfPageFormat.inch);
                       dataModel.width = number;
                     });
                   },
@@ -276,6 +262,7 @@ class _PdfDesignState extends State<PdfDesign> {
                           dataModel.elements!.add(PdfElement.text(
                               type: PdfElementType.text,
                               text: element.designValue,
+                              dynamicFieldKey: element.key,
                               fontSize: element.key == 'date' ||
                                       element.key == 'price'
                                   ? 4
@@ -300,6 +287,7 @@ class _PdfDesignState extends State<PdfDesign> {
                           dataModel.elements!.add(PdfElement.image(
                             type: PdfElementType.image,
                             image: null,
+                            dynamicFieldKey: element.key,
                           ));
                           widget.onChange(dataModel.toJson());
                         });
@@ -312,6 +300,7 @@ class _PdfDesignState extends State<PdfDesign> {
                           dataModel.elements!.add(PdfElement(
                               type: PdfElementType.barcode,
                               text: 'your barcode',
+                              dynamicFieldKey: element.key,
                               width: 50,
                               height: 50,
                               color: 1099494850560,
@@ -321,46 +310,6 @@ class _PdfDesignState extends State<PdfDesign> {
                         });
                       }
                     }
-                    // widget.variableList!.forEach((key, value) {
-                    //   print('S = $s,key = $key');
-                    //   if (s == key && value == PdfElementType.text) {
-                    //     print('-------Adding[ Text ]to your Model--------');
-                    //     setState(() {
-                    //       dataModel.elements!.add(PdfElement.text(
-                    //           type: PdfElementType.text,
-                    //           text: s,
-                    //           fontSize: 20.0,
-                    //           color: 1099494850560,
-                    //           alignment: PdfAlign.topLeft));
-                    //       widget.onChange(dataModel.toJson());
-                    //     });
-                    //   }
-                    //   if (s == key && value == PdfElementType.image) {
-                    //     print('-------Adding[ Image ]to your Model--------');
-                    //     setState(() {
-                    //       dataModel.elements!.add(PdfElement.image(
-                    //         type: PdfElementType.image,
-                    //         image: null,
-                    //       ));
-                    //       widget.onChange(dataModel.toJson());
-                    //     });
-                    //   }
-                    //   if (s == key && value == PdfElementType.barcode) {
-                    //     print('-------Adding[ Barcode ]to your '
-                    //         'Model--------');
-                    //     setState(() {
-                    //       dataModel.elements!.add(PdfElement(
-                    //           type: PdfElementType.barcode,
-                    //           text: 'your barcode',
-                    //           width: 50,
-                    //           height: 50,
-                    //           color: 1099494850560,
-                    //           fontSize: 4,
-                    //           barcode: Barcode.code128()));
-                    //       widget.onChange(dataModel.toJson());
-                    //     });
-                    //   }
-                    // });
                   },
                 )),
           ],

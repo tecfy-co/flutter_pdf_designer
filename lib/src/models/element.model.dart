@@ -3,6 +3,7 @@ part of flutter_pdf_designer;
 class PdfElement {
   PdfElementType? type;
   late GlobalKey key;
+  String? dynamicFieldKey;
   String? text;
   double? fontSize;
   dynamic image;
@@ -26,6 +27,7 @@ class PdfElement {
     this.color,
     this.barcode,
     this.alignment,
+    this.dynamicFieldKey,
   }) {
     key = GlobalKey();
   }
@@ -40,6 +42,7 @@ class PdfElement {
     this.yPosition = 0,
     this.color,
     this.alignment = PdfAlign.topLeft,
+    this.dynamicFieldKey,
   }) {
     key = GlobalKey();
   }
@@ -51,6 +54,7 @@ class PdfElement {
     this.height = 100,
     this.xPosition = 0,
     this.yPosition = 0,
+    this.dynamicFieldKey,
   }) {
     key = GlobalKey();
   }
@@ -62,6 +66,7 @@ class PdfElement {
     this.color,
     this.xPosition = 0,
     this.yPosition = 0,
+    this.dynamicFieldKey,
   }) {
     key = GlobalKey();
   }
@@ -72,6 +77,7 @@ class PdfElement {
     yPosition = json['yPosition'];
     width = json['width'];
     height = json['height'];
+    dynamicFieldKey = json['dynamicFieldKey'];
     if (type == PdfElementType.text) {
       text = json['text'];
       fontSize = json['fontSize'];
@@ -98,6 +104,7 @@ class PdfElement {
     data['yPosition'] = yPosition;
     data['width'] = width;
     data['height'] = height;
+    data['dynamicFieldKey'] = dynamicFieldKey;
 
     if (type == PdfElementType.text) {
       data['text'] = text;
