@@ -446,7 +446,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                 child: Draggable(
                                   feedback: e.image != null
                                       ? Image.memory(
-                                    e.image!,
+                                    Uint8List.fromList(e.image!),
                                           width: (e.width ?? 25) * scale!,
                                           height: (e.height ?? 25) * scale!,
                                         )
@@ -493,7 +493,7 @@ class _PdfDesignState extends State<PdfDesign> {
                                     },
                                     child: e.image != null
                                         ? Image.memory(
-                                      e.image!,
+                                      Uint8List.fromList(e.image!),
                                             key: e.key,
                                             // fit: BoxFit.contain,
                                             width: (e.width ?? 25) * scale!,
