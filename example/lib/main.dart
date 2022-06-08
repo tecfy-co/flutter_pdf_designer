@@ -72,6 +72,11 @@ class _MyAppState extends State<MyApp> {
                           name: 'إسم العميل',
                           designValue: 'Customer Name'),
                       PdfDynamicField(
+                          type: PdfElementType.text,
+                          key: 'branchName',
+                          name: 'إسم الفرع',
+                          designValue: 'إسم الفرع باللغة العربية'),
+                      PdfDynamicField(
                           type: PdfElementType.image,
                           key: 'logo',
                           name: 'صورة',
