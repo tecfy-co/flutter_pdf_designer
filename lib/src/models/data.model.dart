@@ -6,11 +6,11 @@ class PdfModel {
   String? printerName;
   List<PdfElement>? elements;
 
-  PdfModel({this.width, this.height, this.printerName, this.elements});
+  PdfModel({this.width = 1, this.height = 1, this.printerName, this.elements});
 
   PdfModel.fromJson(Map<String, dynamic> json) {
-    width = json['width'];
-    height = json['height'];
+    width = json['width'] ?? 1;
+    height = json['height'] ?? 1;
     printerName = json['printerName'];
 
     if (json['elements'] != null) {

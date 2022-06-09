@@ -1,16 +1,19 @@
 part of flutter_pdf_designer;
 
 class PdfWidget {
-  static pw.Widget generate(
-      Map<String, dynamic> json, Map<String, dynamic> data, font) {
+  static pw.Widget generate(Map<String, dynamic> json,
+      Map<String, dynamic> data, font, bool isDouble) {
     final PdfModel dataModel;
     dataModel = PdfModel.fromJson(json);
-    print(dataModel.toJson());
+    // print(dataModel.toJson());
+    print(dataModel.height);
     final ttf = pw.Font.ttf(font.buffer.asByteData());
 
     return pw.Container(
       width: dataModel.width! * PdfPageFormat.inch,
-      height: dataModel.height! * PdfPageFormat.inch,
+      height: isDouble
+          ? (dataModel.height! / 2) * PdfPageFormat.inch
+          : dataModel.height! * PdfPageFormat.inch,
       child: pw.Stack(
         children: dataModel.elements!.map<pw.Widget>((e) {
           print(e.type);

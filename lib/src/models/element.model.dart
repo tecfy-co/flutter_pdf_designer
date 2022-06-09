@@ -75,8 +75,8 @@ class PdfElement {
     type = PdfElementType.values[json['type']];
     xPosition = json['xPosition'];
     yPosition = json['yPosition'];
-    width = json['width'];
-    height = json['height'];
+    width = json['width'] ?? 50;
+    height = json['height'] ?? 50;
     dynamicFieldKey = json['dynamicFieldKey'];
     if (type == PdfElementType.text) {
       text = json['text'];

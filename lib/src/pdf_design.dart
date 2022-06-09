@@ -4,20 +4,40 @@ class PdfDesign extends StatefulWidget {
   final List<PdfDynamicField>? variableList;
 
   /// Printing Width in inches
-  final double width;
+  final double? width;
 
   /// Printing Height in inches
-  final double height;
+  final double? height;
+
+  final double? heightScale;
+
+  final Alignment? alignment;
+
   final Map<String, dynamic>? json;
+
   final void Function(Map<String, dynamic>) onChange;
+
+  final bool showTextFields;
+
+  final bool showDropDownMenu;
+
+  final bool showInsertBtns;
+
+  final bool disableDrag;
 
   const PdfDesign({
     Key? key,
     required this.onChange,
     required this.json,
-    required this.width,
-    required this.height,
-    required this.variableList,
+    this.width,
+    this.height,
+    this.alignment = Alignment.topLeft,
+    this.heightScale = 1.0,
+    this.variableList,
+    this.showTextFields = true,
+    this.showDropDownMenu = true,
+    this.showInsertBtns = true,
+    this.disableDrag = false,
   }) : super(key: key);
 
   @override
@@ -28,7 +48,6 @@ class _PdfDesignState extends State<PdfDesign> {
   late PdfModel dataModel;
   bool isDoubleTap = false;
   GlobalKey containerKey = GlobalKey();
-  List<String> list = [];
 
   Alignment getAlignment(PdfAlign align) {
     switch (align) {
@@ -84,7 +103,7 @@ class _PdfDesignState extends State<PdfDesign> {
       }
 
       final widgetKeyContext = e.key.currentContext;
-    //  debugPrint('KeyContext = $widgetKeyContext');
+      //  debugPrint('KeyContext = $widgetKeyContext');
       if (widgetKeyContext != null) {
         final imageBox = widgetKeyContext.findRenderObject() as RenderBox;
 
@@ -115,15 +134,16 @@ class _PdfDesignState extends State<PdfDesign> {
 
   void initializeScale(BoxConstraints constraints, PdfModel dataModel) {
     if ((constraints.maxWidth / constraints.maxHeight) >
-        (dataModel.width! / dataModel.height!)) {
+        (dataModel.width! / (dataModel.height! * widget.heightScale!))) {
       flexHeight = constraints.maxHeight;
-      flexWidth =
-          (dataModel.width! * constraints.maxHeight) / dataModel.height!;
+      flexWidth = (dataModel.width! * constraints.maxHeight) /
+          (dataModel.height! * widget.heightScale!);
       scale = (dataModel.width! * PdfPageFormat.inch) / (flexWidth!);
     } else {
       flexWidth = constraints.maxWidth;
       flexHeight =
-          (dataModel.height! * constraints.maxWidth) / dataModel.width!;
+          ((dataModel.height! * widget.heightScale!) * constraints.maxWidth) /
+              dataModel.width!;
     }
     scale = flexWidth! / (dataModel.width! * PdfPageFormat.inch);
   }
@@ -135,28 +155,13 @@ class _PdfDesignState extends State<PdfDesign> {
   @override
   void initState() {
     dataModel = PdfModel.fromJson(widget.json!);
-    if (widget.width > 50) {
-      dataModel.width = widget.width / PdfPageFormat.inch;
-    } else {
+    if (widget.width != null) {
       dataModel.width = widget.width;
     }
-
-    if (widget.height > 50) {
-      dataModel.height = widget.height / PdfPageFormat.inch;
-    } else {
+    if (widget.height != null) {
       dataModel.height = widget.height;
     }
-    if (dataModel.elements!.isNotEmpty && dataModel.elements != null) {
-      dataModel.elements!.forEach((element) {
-        element.height ??= 50;
-        element.width ??= 50;
-      });
-    }
-    if (widget.variableList!.isNotEmpty) {
-      widget.variableList!.forEach((element) {
-        list.add(element.name);
-      });
-    }
+    print(widget.variableList == null);
     super.initState();
   }
 
@@ -166,101 +171,108 @@ class _PdfDesignState extends State<PdfDesign> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(children: [
-          Expanded(
-              child: TextFormField(
-                  inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-              ],
-                  initialValue: dataModel.height!.toStringAsFixed(1),
-                  onChanged: (v) {
-                    setState(() {
-                      var number = double.parse(v);
-                      dataModel.height = number;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                      label: Text('Label Height (inch)')))),
-          const SizedBox(width: 10),
-          Expanded(
-              child: TextFormField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                  initialValue: dataModel.width!.toStringAsFixed(1),
-                  onChanged: (v) {
-                    setState(() {
-                      var number = double.parse(v);
-                      dataModel.width = number;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                      label: Text('Label Width (inch)')))),
-          const SizedBox(width: 10),
-        ]),
+        if (widget.showTextFields)
+          Row(children: [
+            Expanded(
+                child: TextFormField(
+                    inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
+                    initialValue: dataModel.height!.toStringAsFixed(1),
+                    onChanged: (v) {
+                      setState(() {
+                        var number = double.parse(v);
+                        dataModel.height = number;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                        label: Text('Label Height (inch)')))),
+            const SizedBox(width: 10),
+            Expanded(
+                child: TextFormField(
+                    keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
+                    initialValue: dataModel.width!.toStringAsFixed(1),
+                    onChanged: (v) {
+                      setState(() {
+                        var number = double.parse(v);
+                        dataModel.width = number;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                        label: Text('Label Width (inch)')))),
+            const SizedBox(width: 10),
+          ]),
         Wrap(
           children: [
-            Padding(
-                padding: const EdgeInsets.only(right: 10, top: 15),
-                child: TextElement(
-                    titleDialog: 'Enter your Text',
-                    outlineBtnName: 'Text'
-                        '',
-                    onSubmitted: (elm) {
-                      setState(() {
-                        dataModel.elements!.add(elm);
-                        widget.onChange(dataModel.toJson());
-                      });
-                    })),
-            Padding(
-                padding: const EdgeInsets.only(right: 10, top: 15),
-                child: ImageElements(
-                    titleDialog: 'Add your Images',
-                    outlineBtnName: 'Im'
-                        'age',
-                    onSubmitted: (elm) {
-                      setState(() {
-                        dataModel.elements!.add(elm);
-                        widget.onChange(dataModel.toJson());
-                      });
-                    })),
-            Padding(
-                padding: const EdgeInsets.only(right: 10, top: 15),
-                child: LineElement(
-                  titleDialog: 'Add your Lines',
-                  outlineBtnName: 'Line',
-                  onSubmitted: (elm) {
-                    setState(() {
-                      dataModel.elements!.add(elm);
-                      widget.onChange(dataModel.toJson());
-                    });
-                  },
+            if (widget.showInsertBtns)
+              Row(
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(right: 10, top: 15),
+                      child: TextElement(
+                          titleDialog: 'Enter your Text',
+                          outlineBtnName: 'Text'
+                              '',
+                          onSubmitted: (elm) {
+                            setState(() {
+                              dataModel.elements!.add(elm);
+                              widget.onChange(dataModel.toJson());
+                            });
+                          })),
+                  Padding(
+                      padding: const EdgeInsets.only(right: 10, top: 15),
+                      child: ImageElements(
+                          titleDialog: 'Add your Images',
+                          outlineBtnName: 'Im'
+                              'age',
+                          onSubmitted: (elm) {
+                            setState(() {
+                              dataModel.elements!.add(elm);
+                              widget.onChange(dataModel.toJson());
+                            });
+                          })),
+                  Padding(
+                      padding: const EdgeInsets.only(right: 10, top: 15),
+                      child: LineElement(
+                        titleDialog: 'Add your Lines',
+                        outlineBtnName: 'Line',
+                        onSubmitted: (elm) {
+                          setState(() {
+                            dataModel.elements!.add(elm);
+                            widget.onChange(dataModel.toJson());
+                          });
+                        },
 
-                  ///
-                  lineWidth: dataModel.width!,
-                )),
-            SizedBox(
-                width: 150,
-                child: DropdownSearch<String>(
-                  popupProps: const PopupProps.menu(
-                    showSelectedItems: true,
-                    showSearchBox: false,
-                  ),
-                  items: list,
-                  dropdownSearchDecoration: const InputDecoration(
-                    labelText: "Your Components",
-                    hintText: "Components",
-                    labelStyle: TextStyle(fontSize: 12),
-                  ),
-                  onChanged: (s) {
-                    for (var element in widget.variableList!) {
-                      if (element.name == s &&
-                          element.type == PdfElementType.text) {
-                        debugPrint('-------Adding[ Text ]to your '
-                            'Model--------');
+                        ///
+                        lineWidth: dataModel.width!,
+                      )),
+                ],
+              ),
+            if (widget.showDropDownMenu && widget.variableList != null)
+              SizedBox(
+                  width: 150,
+                  child: DropdownSearch<String>(
+                    popupProps: const PopupProps.menu(
+                      showSelectedItems: true,
+                      showSearchBox: false,
+                    ),
+                    items: widget.variableList!.map((e) => e.name).toList(),
+                    dropdownSearchDecoration: const InputDecoration(
+                      labelText: "Your Components",
+                      hintText: "Components",
+                      labelStyle: TextStyle(fontSize: 12),
+                    ),
+                    onChanged: (s) {
+                      for (var element in widget.variableList!) {
+                        if (element.name == s &&
+                            element.type == PdfElementType.text) {
+                          debugPrint('-------Adding[ Text ]to your '
+                              'Model--------');
                         setState(() {
                           dataModel.elements!.add(PdfElement.text(
                               type: PdfElementType.text,
@@ -330,7 +342,7 @@ class _PdfDesignState extends State<PdfDesign> {
               initializeScale(constraints, dataModel);
               print(constraints);
               return Align(
-                  alignment: Alignment.topLeft,
+                  alignment: widget.alignment!,
                   child: Container(
                     key: containerKey,
                     decoration: BoxDecoration(border: Border.all()),
@@ -348,18 +360,19 @@ class _PdfDesignState extends State<PdfDesign> {
                                 top: e.yPosition > 0
                                     ? e.yPosition * scale!
                                     : e.yPosition,
-                                child: Draggable(
-                                  onDragEnd: (dragDetails) {
-                                    setState(() {
-                                      setWidgetOverStack(dragDetails, e);
-                                      e.xPosition /= scale!;
-                                      e.yPosition /= scale!;
-                                      widget.onChange(dataModel.toJson());
-                                    });
-                                  },
-                                  feedback: Material(
-                                      child: Container(
-                                          width: (e.width ?? 25) * scale!,
+                                child: widget.disableDrag == false
+                                    ? Draggable(
+                                        onDragEnd: (dragDetails) {
+                                          setState(() {
+                                            setWidgetOverStack(dragDetails, e);
+                                            e.xPosition /= scale!;
+                                            e.yPosition /= scale!;
+                                            widget.onChange(dataModel.toJson());
+                                          });
+                                        },
+                                        feedback: Material(
+                                            child: Container(
+                                                width: (e.width ?? 25) * scale!,
                                           height: (e.height ?? 25) * scale!,
                                           alignment: getAlignment(
                                               e.alignment ?? PdfAlign.center),
@@ -414,17 +427,32 @@ class _PdfDesignState extends State<PdfDesign> {
                                       alignment: getAlignment(
                                           e.alignment ?? PdfAlign.center),
                                       child: Text(
-                                        e.text ?? '-',
-                                        key: e.key,
-                                        style: TextStyle(
-                                            fontSize:
-                                                (e.fontSize ?? 8) * scale!,
-                                            color:
-                                                Color(e.color ?? 0xffFF000000)),
+                                              e.text ?? '-',
+                                              key: e.key,
+                                              style: TextStyle(
+                                                  fontSize: (e.fontSize ?? 8) *
+                                                      scale!,
+                                                  color: Color(
+                                                      e.color ?? 0xffFF000000)),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        width: (e.width ?? 25) * scale!,
+                                        height: (e.height ?? 25) * scale!,
+                                        alignment: getAlignment(
+                                            e.alignment ?? PdfAlign.center),
+                                        child: Text(
+                                          e.text ?? '-',
+                                          key: e.key,
+                                          style: TextStyle(
+                                              fontSize:
+                                                  (e.fontSize ?? 8) * scale!,
+                                              color: Color(
+                                                  e.color ?? 0xffFF000000)),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
                               );
                             }
                           case PdfElementType.image:
@@ -436,18 +464,20 @@ class _PdfDesignState extends State<PdfDesign> {
                                 top: e.yPosition > 0
                                     ? e.yPosition * scale!
                                     : e.yPosition,
-                                child: Draggable(
-                                  feedback: e.image != null
-                                      ? Image.memory(
-                                    Uint8List.fromList(e.image!),
-                                          width: (e.width ?? 25) * scale!,
-                                          height: (e.height ?? 25) * scale!,
-                                        )
-                                      : Material(
-                                          child: Container(
-                                            color: Colors.red,
-                                            width: 100,
-                                            height: 100,
+                                child: widget.disableDrag == false
+                                    ? Draggable(
+                                        feedback: e.image != null
+                                            ? Image.memory(
+                                                Uint8List.fromList(e.image!),
+                                                width: (e.width ?? 25) * scale!,
+                                                height:
+                                                    (e.height ?? 25) * scale!,
+                                              )
+                                            : Material(
+                                                child: Container(
+                                                  color: Colors.red,
+                                                  width: 100,
+                                                  height: 100,
                                             child: const Center(
                                               child: Text('YourLogoHere!'),
                                             ),
@@ -487,6 +517,30 @@ class _PdfDesignState extends State<PdfDesign> {
                                     child: e.image != null
                                         ? Image.memory(
                                       Uint8List.fromList(e.image!),
+                                                  key: e.key,
+                                                  // fit: BoxFit.contain,
+                                                  width:
+                                                      (e.width ?? 25) * scale!,
+                                                  height:
+                                                      (e.height ?? 25) * scale!,
+                                                )
+                                        : Material(
+                                            child: Container(
+                                                    key: e.key,
+                                                    color: Colors.red,
+                                                    width: 100,
+                                                    height: 100,
+                                                    child: const Center(
+                                                      child:
+                                                          Text('YourLogoHere!'),
+                                                    ),
+                                                  ),
+                                                ),
+                                        ),
+                                      )
+                                    : e.image != null
+                                        ? Image.memory(
+                                            Uint8List.fromList(e.image!),
                                             key: e.key,
                                             // fit: BoxFit.contain,
                                             width: (e.width ?? 25) * scale!,
@@ -503,8 +557,6 @@ class _PdfDesignState extends State<PdfDesign> {
                                               ),
                                             ),
                                           ),
-                                  ),
-                                ),
                               );
                             }
                           case PdfElementType.line:
@@ -516,18 +568,20 @@ class _PdfDesignState extends State<PdfDesign> {
                                 top: e.yPosition > 0
                                     ? e.yPosition * scale!
                                     : e.yPosition,
-                                child: Draggable(
-                                  feedback: Container(
-                                    color: Color(e.color ?? 0xffFF000000),
-                                    width: (e.width ?? 25) * scale!,
-                                    height: (e.height ?? 25) * scale!,
-                                  ),
-                                  onDragEnd: (dragDetails) {
-                                    setState(
-                                      () {
-                                        setWidgetOverStack(dragDetails, e);
-                                        e.xPosition /= scale!;
-                                        e.yPosition /= scale!;
+                                child: widget.disableDrag == false
+                                    ? Draggable(
+                                        feedback: Container(
+                                          color: Color(e.color ?? 0xffFF000000),
+                                          width: (e.width ?? 25) * scale!,
+                                          height: (e.height ?? 25) * scale!,
+                                        ),
+                                        onDragEnd: (dragDetails) {
+                                          setState(
+                                            () {
+                                              setWidgetOverStack(
+                                                  dragDetails, e);
+                                              e.xPosition /= scale!;
+                                              e.yPosition /= scale!;
                                         widget.onChange(dataModel.toJson());
                                       },
                                     );
@@ -554,17 +608,29 @@ class _PdfDesignState extends State<PdfDesign> {
                                                   });
                                                 });
                                           });
-                                    },
-                                    child: Container(
-                                      key: e.key,
-                                      color: Color(e.color ?? 0xffFF000000),
-                                      height: (e.width! / PdfPageFormat.inch) *
-                                          scale!,
-                                      width: (e.width! / PdfPageFormat.inch) *
-                                          scale!,
-                                    ),
-                                  ),
-                                ),
+                                          },
+                                          child: Container(
+                                            key: e.key,
+                                            color:
+                                                Color(e.color ?? 0xffFF000000),
+                                            height: (e.width! /
+                                                    PdfPageFormat.inch) *
+                                                scale!,
+                                            width: (e.width! /
+                                                    PdfPageFormat.inch) *
+                                                scale!,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        key: e.key,
+                                        color: Color(e.color ?? 0xffFF000000),
+                                        height:
+                                            (e.width! / PdfPageFormat.inch) *
+                                                scale!,
+                                        width: (e.width! / PdfPageFormat.inch) *
+                                            scale!,
+                                      ),
                               );
                             }
                           case PdfElementType.barcode:
@@ -577,18 +643,22 @@ class _PdfDesignState extends State<PdfDesign> {
                                     ? e.yPosition * scale!
                                     : e.yPosition,
                                 key: e.key,
-                                child: Draggable(
-                                  feedback: Material(
-                                    child: BarcodeWidget(
-                                      data: e.text ?? "Barcode Data",
-                                      barcode: Barcode.fromType(e.barcode!),
-                                      color: Color(e.color ?? 0xffFF000000),
-                                      width: (e.width ?? 25) * scale!,
-                                      height: (e.height ?? 25) * scale!,
-                                      style: TextStyle(
-                                        fontSize: (e.fontSize ?? 10) * scale!,
-                                      ),
-                                      errorBuilder: (context, string) {
+                                child: widget.disableDrag == false
+                                    ? Draggable(
+                                        feedback: Material(
+                                          child: BarcodeWidget(
+                                            data: e.text ?? "Barcode Data",
+                                            barcode:
+                                                Barcode.fromType(e.barcode!),
+                                            color:
+                                                Color(e.color ?? 0xffFF000000),
+                                            width: (e.width ?? 25) * scale!,
+                                            height: (e.height ?? 25) * scale!,
+                                            style: TextStyle(
+                                              fontSize:
+                                                  (e.fontSize ?? 10) * scale!,
+                                            ),
+                                            errorBuilder: (context, string) {
                                         return Container(
                                           child: Text(string),
                                         );
@@ -632,17 +702,33 @@ class _PdfDesignState extends State<PdfDesign> {
                                       width: (e.width ?? 25) * scale!,
                                       height: (e.height ?? 25) * scale!,
                                       color: Color(e.color),
-                                      style: TextStyle(
-                                        fontSize: (e.fontSize ?? 8) * scale!,
+                                            style: TextStyle(
+                                              fontSize:
+                                                  (e.fontSize ?? 8) * scale!,
+                                            ),
+                                            errorBuilder: (context, string) {
+                                              return Container(
+                                                child: Text(string),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                    : BarcodeWidget(
+                                        data: e.text ?? 'Barcode Data',
+                                        barcode: Barcode.fromType(e.barcode!),
+                                        width: (e.width ?? 25) * scale!,
+                                        height: (e.height ?? 25) * scale!,
+                                        color: Color(e.color),
+                                        style: TextStyle(
+                                          fontSize: (e.fontSize ?? 8) * scale!,
+                                        ),
+                                        errorBuilder: (context, string) {
+                                          return Container(
+                                            child: Text(string),
+                                          );
+                                        },
                                       ),
-                                      errorBuilder: (context, string) {
-                                        return Container(
-                                          child: Text(string),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
                               );
                             }
                         }
