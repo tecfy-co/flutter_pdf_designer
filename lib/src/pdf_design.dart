@@ -155,6 +155,7 @@ class _PdfDesignState extends State<PdfDesign> {
   @override
   void initState() {
     dataModel = PdfModel.fromJson(widget.json!);
+    dataModel.elements = [];
     if (widget.width != null) {
       dataModel.width = widget.width;
     }
@@ -181,8 +182,13 @@ class _PdfDesignState extends State<PdfDesign> {
                     initialValue: dataModel.height!.toStringAsFixed(1),
                     onChanged: (v) {
                       setState(() {
-                        var number = double.parse(v);
-                        dataModel.height = number;
+                        if (v.isEmpty) {
+                          dataModel.height = 1.0;
+                        }
+                        if (v.isNotEmpty) {
+                          var number = double.parse(v);
+                          dataModel.height = number;
+                        }
                       });
                     },
                     decoration: const InputDecoration(
@@ -191,16 +197,21 @@ class _PdfDesignState extends State<PdfDesign> {
             Expanded(
                 child: TextFormField(
                     keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           RegExp(r'^\d+\.?\d{0,2}')),
                     ],
-                    initialValue: dataModel.width!.toStringAsFixed(1),
+                    initialValue: dataModel.width?.toStringAsFixed(1),
                     onChanged: (v) {
                       setState(() {
-                        var number = double.parse(v);
-                        dataModel.width = number;
+                        if (v.isEmpty) {
+                          dataModel.width = 1.0;
+                        }
+                        if (v.isNotEmpty) {
+                          var number = double.parse(v);
+                          dataModel.width = number;
+                        }
                       });
                     },
                     decoration: const InputDecoration(
@@ -220,7 +231,7 @@ class _PdfDesignState extends State<PdfDesign> {
                               '',
                           onSubmitted: (elm) {
                             setState(() {
-                              dataModel.elements!.add(elm);
+                              dataModel.elements?.add(elm);
                               widget.onChange(dataModel.toJson());
                             });
                           })),
@@ -232,7 +243,7 @@ class _PdfDesignState extends State<PdfDesign> {
                               'age',
                           onSubmitted: (elm) {
                             setState(() {
-                              dataModel.elements!.add(elm);
+                              dataModel.elements?.add(elm);
                               widget.onChange(dataModel.toJson());
                             });
                           })),
@@ -243,7 +254,7 @@ class _PdfDesignState extends State<PdfDesign> {
                         outlineBtnName: 'Line',
                         onSubmitted: (elm) {
                           setState(() {
-                            dataModel.elements!.add(elm);
+                            dataModel.elements?.add(elm);
                             widget.onChange(dataModel.toJson());
                           });
                         },
@@ -274,18 +285,18 @@ class _PdfDesignState extends State<PdfDesign> {
                           debugPrint('-------Adding[ Text ]to your '
                               'Model--------');
                         setState(() {
-                          dataModel.elements!.add(PdfElement.text(
-                              type: PdfElementType.text,
-                              text: element.designValue,
-                              dynamicFieldKey: element.key,
-                              fontSize: element.key == 'date' ||
-                                      element.key == 'price'
-                                  ? 4
-                                  : 8,
-                              width: element.key == 'date' ||
-                                      element.key == 'price'
-                                  ? 20
-                                  : 50,
+                          dataModel.elements?.add(PdfElement.text(
+                                type: PdfElementType.text,
+                                text: element.designValue,
+                                dynamicFieldKey: element.key,
+                                fontSize: element.key == 'date' ||
+                                        element.key == 'price'
+                                    ? 4
+                                    : 8,
+                                width: element.key == 'date' ||
+                                        element.key == 'price'
+                                    ? 20
+                                    : 50,
                               height: element.key == 'date' ||
                                       element.key == 'price'
                                   ? 10
@@ -300,11 +311,11 @@ class _PdfDesignState extends State<PdfDesign> {
                         debugPrint('-------Adding[ Image ]to your '
                             'Model--------');
                         setState(() {
-                          dataModel.elements!.add(PdfElement.image(
-                            type: PdfElementType.image,
-                            image: null,
-                            dynamicFieldKey: element.key,
-                          ));
+                          dataModel.elements?.add(PdfElement.image(
+                              type: PdfElementType.image,
+                              image: null,
+                              dynamicFieldKey: element.key,
+                            ));
                           widget.onChange(dataModel.toJson());
                         });
                       }
@@ -313,15 +324,15 @@ class _PdfDesignState extends State<PdfDesign> {
                         debugPrint('-------Adding[ Barcode ]to your '
                             'Model--------');
                         setState(() {
-                          dataModel.elements!.add(PdfElement(
-                              type: PdfElementType.barcode,
-                              text: 'your barcode',
-                              dynamicFieldKey: element.key,
-                              width: 50,
-                              height: 50,
-                              color: 1099494850560,
-                              fontSize: 4,
-                              barcode: BarcodeType.Code128));
+                          dataModel.elements?.add(PdfElement(
+                                type: PdfElementType.barcode,
+                                text: 'your barcode',
+                                dynamicFieldKey: element.key,
+                                width: 50,
+                                height: 50,
+                                color: 1099494850560,
+                                fontSize: 4,
+                                barcode: BarcodeType.Code128));
                           widget.onChange(dataModel.toJson());
                         });
                       }
@@ -349,18 +360,19 @@ class _PdfDesignState extends State<PdfDesign> {
                     height: flexHeight,
                     width: flexWidth,
                     child: Stack(
-                      children: dataModel.elements!.map<Widget>((e) {
-                        switch (e.type) {
-                          case PdfElementType.text:
-                            {
-                              return Positioned(
-                                left: e.xPosition > 0
-                                    ? e.xPosition * scale!
-                                    : e.xPosition,
-                                top: e.yPosition > 0
-                                    ? e.yPosition * scale!
-                                    : e.yPosition,
-                                child: widget.disableDrag == false
+                      children: dataModel.elements != null
+                          ? dataModel.elements!.map<Widget>((e) {
+                              switch (e.type) {
+                                case PdfElementType.text:
+                                  {
+                                    return Positioned(
+                                      left: e.xPosition > 0
+                                          ? e.xPosition * scale!
+                                          : e.xPosition,
+                                      top: e.yPosition > 0
+                                          ? e.yPosition * scale!
+                                          : e.yPosition,
+                                      child: widget.disableDrag == false
                                     ? Draggable(
                                         onDragEnd: (dragDetails) {
                                           setState(() {
@@ -723,17 +735,18 @@ class _PdfDesignState extends State<PdfDesign> {
                                         style: TextStyle(
                                           fontSize: (e.fontSize ?? 8) * scale!,
                                         ),
-                                        errorBuilder: (context, string) {
-                                          return Container(
-                                            child: Text(string),
-                                          );
-                                        },
-                                      ),
-                              );
-                            }
-                        }
-                        return const SizedBox();
-                      }).toList(),
+                                              errorBuilder: (context, string) {
+                                                return Container(
+                                                  child: Text(string),
+                                                );
+                                              },
+                                            ),
+                                    );
+                                  }
+                              }
+                              return const SizedBox();
+                            }).toList()
+                          : [],
                     ),
                   ));
             },

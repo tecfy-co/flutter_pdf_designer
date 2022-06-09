@@ -110,7 +110,7 @@ class _ImageElementsState extends State<ImageElements> {
                               if (formKey.currentState!.validate()) {
                                 await FileService.pickFile().then((value) {
                                   setState(() {
-                                    widget.onSubmitted!.call(
+                                    widget.onSubmitted?.call(
                                       PdfElement(
                                           type: PdfElementType.image,
                                           image: FileService.bytes,

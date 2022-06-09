@@ -19,24 +19,26 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   //declare dataModel as late to initialize lately at initState function and
-  late PdfModel dataModel;
-  // initialize List of Elements
-  List<PdfElement>? elements = [
-    PdfElement(
-      type: PdfElementType.text,
-      text: 'Tecfy.co',
-      // color: 0xffFF000000,
-      // fontSize: 40.0,
-      // height: 250,
-      // width: 250,
-      alignment: PdfAlign.topRight,
-    ),
-  ];
-  var json;
+  // late PdfModel dataModel;
+  // // initialize List of Elements
+  // List<PdfElement>? elements = [
+  //   PdfElement(
+  //     type: PdfElementType.text,
+  //     text: 'Tecfy.co',
+  //     // color: 0xffFF000000,
+  //     // fontSize: 40.0,
+  //     // height: 250,
+  //     // width: 250,
+  //     alignment: PdfAlign.topRight,
+  //   ),
+  // ];
+  late Map<String, dynamic> json;
+
   @override
   void initState() {
-    // initialize dataModel
-    dataModel = PdfModel(elements: elements);
+    json = {};
+    // // initialize dataModel
+    // dataModel = PdfModel(elements: elements);
     super.initState();
   }
 
@@ -61,9 +63,8 @@ class _MyAppState extends State<MyApp> {
                     onChange: (json) {
                       print(json);
                       this.json = json;
-                      dataModel = PdfModel.fromJson(json);
                     },
-                    json: dataModel.toJson(),
+                    json: json,
                     width: 1.5,
                     height: 1,
                     variableList: [

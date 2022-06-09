@@ -128,7 +128,7 @@ class _LineElementState extends State<LineElement> {
                                 onPressed: () {
                                   setState(() {
                                     if (formKey.currentState!.validate()) {
-                                      widget.onSubmitted!.call(PdfElement(
+                                      widget.onSubmitted?.call(PdfElement(
                                           type: PdfElementType.line,
                                           height: double.parse(
                                               _lineThicknessController.text),

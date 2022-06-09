@@ -209,7 +209,7 @@ class _TextElementState extends State<TextElement> {
                                 setState(() {
                                   print("Font Color =  "
                                       "${_fontColorController.text}");
-                                  widget.onSubmitted!.call(PdfElement(
+                                  widget.onSubmitted?.call(PdfElement(
                                       type: PdfElementType.text,
                                       text: _textController.text,
                                       fontSize: double.parse(

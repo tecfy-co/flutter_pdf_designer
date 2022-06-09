@@ -138,4 +138,11 @@ class PdfWidget {
     }
   }
 
+  static double getWidth(json) {
+    return json['width'];
+  }
+
+  static double getHeight(json) {
+    return json['height'];
+  }
 }
