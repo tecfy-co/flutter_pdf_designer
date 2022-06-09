@@ -155,7 +155,9 @@ class _PdfDesignState extends State<PdfDesign> {
   @override
   void initState() {
     dataModel = PdfModel.fromJson(widget.json!);
-    dataModel.elements = [];
+    if (widget.json?['elements'] == null || dataModel.elements == null) {
+      dataModel.elements = [];
+    }
     if (widget.width != null) {
       dataModel.width = widget.width;
     }
