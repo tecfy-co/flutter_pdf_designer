@@ -1,25 +1,25 @@
 part of flutter_pdf_designer;
 
 class PdfWidget {
-  static pw.Widget generate(Map<String, dynamic> json,
-      Map<String, dynamic> data, font, bool isDouble) {
+  static pw.Widget generatePrintWidget(Map<String, dynamic> json,
+      Map<String, dynamic> data, pw.Font font, bool isDouble) {
     final PdfModel dataModel;
     dataModel = PdfModel.fromJson(json);
     // print(dataModel.toJson());
-    print(dataModel.height);
-    final ttf = pw.Font.ttf(font.buffer.asByteData());
+    if (font == null) {
+      return pw.Text('font must be initalize');
+    } else {
+      return pw.Container(
+        width: dataModel.width! * PdfPageFormat.inch,
+        height: isDouble
+            ? (dataModel.height! / 2) * PdfPageFormat.inch
+            : dataModel.height! * PdfPageFormat.inch,
+        child: pw.Stack(
+          children: dataModel.elements!.map<pw.Widget>((e) {
+            print(e.type);
 
-    return pw.Container(
-      width: dataModel.width! * PdfPageFormat.inch,
-      height: isDouble
-          ? (dataModel.height! / 2) * PdfPageFormat.inch
-          : dataModel.height! * PdfPageFormat.inch,
-      child: pw.Stack(
-        children: dataModel.elements!.map<pw.Widget>((e) {
-          print(e.type);
-
-          if (dataModel.elements!.isNotEmpty) {
-            switch (e.type) {
+            if (dataModel.elements!.isNotEmpty) {
+              switch (e.type) {
               case PdfElementType.text:
                 {
                   print('it\'s Text !');
@@ -35,10 +35,10 @@ class PdfWidget {
                             ? data[e.dynamicFieldKey] ?? ''
                             : e.text!,
                         style: pw.TextStyle(
-                          font: ttf,
-                          fontSize: e.fontSize,
-                          color: PdfColor.fromInt(e.color ?? 0xffFF000000),
-                        ),
+                          font: font,
+                            fontSize: e.fontSize,
+                            color: PdfColor.fromInt(e.color ?? 0xffFF000000),
+                          ),
                       ),
                     ),
                   );
@@ -91,18 +91,20 @@ class PdfWidget {
                       color: PdfColor.fromInt(e.color ?? 0xffFF000000),
                     ),
                   );
-                }
+                  }
+              }
             }
-          }
-          return pw.Container(color: PdfColors.red, width: 50, height: 50);
-        }).toList(),
-      ),
-    );
+            return pw.Container(color: PdfColors.red, width: 50, height: 50);
+          }).toList(),
+        ),
+      );
+    }
   }
 
-  static Future<ByteData> loadFont(String fontPath) async {
-    final font = await rootBundle.load(fontPath);
-    return font;
+  static Future<pw.Font> getAssetFont(String fontAssetPath) async {
+    final font = await rootBundle.load(fontAssetPath);
+    final ttf = pw.Font.ttf(font.buffer.asByteData());
+    return ttf;
   }
 
   static pw.Alignment getAlignment(PdfAlign align) {

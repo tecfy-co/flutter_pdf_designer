@@ -50,22 +50,24 @@ class _LineElementState extends State<LineElement> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColor),
-      ),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                title: Text(widget.titleDialog),
-                children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Form(
+    return Tooltip(
+      message: 'Insert Line',
+      child: IconButton(
+        icon: Icon(
+          Icons.dehaze,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text(widget.titleDialog),
+                  children: [
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Form(
                         key: formKey,
                         child: Column(
                           children: [
@@ -144,17 +146,17 @@ class _LineElementState extends State<LineElement> {
                                     }
                                   });
                                 },
-                                child: const Text('Save')),
-                          ],
+                                  child: const Text('Save')),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            });
-      },
-      child: Text(widget.outlineBtnName),
+                  ],
+                );
+              });
+        },
+      ),
     );
   }
 }

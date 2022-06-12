@@ -44,22 +44,21 @@ class _TextElementState extends State<TextElement> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColor),
-      ),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                title: Text(widget.titleDialog),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Form(
-                      key: formKey,
+    return Tooltip(
+      message: 'Insert Text',
+      child: IconButton(
+        icon: Icon(Icons.text_fields, color: Theme.of(context).primaryColor),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text(widget.titleDialog),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Form(
+                        key: formKey,
                       child: Column(children: [
                         TextFormField(
                           autofocus: true,
@@ -231,17 +230,17 @@ class _TextElementState extends State<TextElement> {
                               //   widget.onSubmitted!.call(_textController.text,
                               //       data: double.parse(_fontSizeController.text));
                               //   _textController.clear();
-                              //   _fontSizeController.clear();
-                            },
-                            child: Text('Save')),
-                      ]),
+                                //   _fontSizeController.clear();
+                              },
+                              child: Text('Save')),
+                        ]),
+                      ),
                     ),
-                  ),
-                ],
-              );
-            });
-      },
-      child: Text(widget.outlineBtnName),
+                  ],
+                );
+              });
+        },
+      ),
     );
   }
 }

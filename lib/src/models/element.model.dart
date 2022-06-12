@@ -20,8 +20,8 @@ class PdfElement {
     this.text,
     this.fontSize,
     this.image,
-    this.xPosition = 0,
-    this.yPosition = 0,
+    this.xPosition = 10,
+    this.yPosition = 10,
     this.height,
     this.width,
     this.color,
@@ -73,8 +73,8 @@ class PdfElement {
 
   PdfElement.fromJson(Map<String, dynamic> json) {
     type = PdfElementType.values[json['type']];
-    xPosition = json['xPosition'];
-    yPosition = json['yPosition'];
+    xPosition = json['xPosition'] ?? 0;
+    yPosition = json['yPosition'] ?? 0;
     width = json['width'] ?? 50;
     height = json['height'] ?? 50;
     dynamicFieldKey = json['dynamicFieldKey'];

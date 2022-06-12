@@ -37,22 +37,21 @@ class _ImageElementsState extends State<ImageElements> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColor),
-      ),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                title: Text(widget.titleDialog),
-                children: [
-                  Form(
-                    key: formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
+    return Tooltip(
+      message: 'Insert Image',
+      child: IconButton(
+        icon: Icon(Icons.image, color: Theme.of(context).primaryColor),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text(widget.titleDialog),
+                  children: [
+                    Form(
+                      key: formKey,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
                       child: Column(children: [
                         TextFormField(
                           autofocus: true,
@@ -128,17 +127,17 @@ class _ImageElementsState extends State<ImageElements> {
                                     Navigator.pop(context);
                                   });
                                 });
-                              }
-                            },
-                            child: const Text('Browse my images ...')),
-                      ]),
+                                }
+                              },
+                              child: const Text('Browse my images ...')),
+                        ]),
+                      ),
                     ),
-                  ),
-                ],
-              );
-            });
-      },
-      child: Text(widget.outlineBtnName),
+                  ],
+                );
+              });
+        },
+      ),
     );
   }
 }

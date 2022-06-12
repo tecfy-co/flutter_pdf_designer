@@ -39,3 +39,5 @@ part './src/models/element.model.dart';
 part './src/models/element_types.dart';
 
 part './src/models/dynamic_field.model.dart';
+
+part './src/pdf_insert_widgets.dart';
