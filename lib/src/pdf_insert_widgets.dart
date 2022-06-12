@@ -2,7 +2,7 @@ part of flutter_pdf_designer;
 
 class PdfInsertWidgets extends StatefulWidget {
   final Map<String, dynamic> json;
-  final List<PdfDynamicField> variableList;
+  final List<PdfDynamicField> dynamicVariableList;
   final void Function(Map<String, dynamic>) onChange;
   final InputBorder? textFieldBorder;
   final String? heightLabel;
@@ -11,7 +11,7 @@ class PdfInsertWidgets extends StatefulWidget {
   const PdfInsertWidgets({
     Key? key,
     required this.json,
-    required this.variableList,
+    required this.dynamicVariableList,
     required this.onChange,
     this.textFieldBorder,
     this.heightLabel,
@@ -24,6 +24,8 @@ class PdfInsertWidgets extends StatefulWidget {
 
 class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
   late PdfModel dataModel;
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
 
   @override
   void initState() {
@@ -32,6 +34,8 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
       print('elements = null');
       dataModel.elements = [];
     }
+    _heightController.text = dataModel.height!.toStringAsFixed(1);
+    _widthController.text = dataModel.width!.toStringAsFixed(1);
 
     super.initState();
   }
@@ -49,16 +53,17 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
               width: 140,
               height: 50,
               child: TextFormField(
+                controller: _heightController,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
-                initialValue: dataModel.height!.toStringAsFixed(1),
-                onFieldSubmitted: (v) {
+                onTap: () => _heightController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _heightController.value.text.length),
+                onChanged: (v) {
                   setState(() {
-                    if (v.isNotEmpty) {
-                      dataModel.height = double.parse(v);
-                      widget.onChange.call(dataModel.toJson());
-                    }
+                    dataModel.height = double.parse(v);
+                    widget.onChange.call(dataModel.toJson());
                   });
                 },
                 decoration: InputDecoration(
@@ -73,14 +78,17 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
               width: 170,
               height: 50,
               child: TextFormField(
+                  controller: _widthController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+\.?\d{0,2}')),
                   ],
-                  initialValue: dataModel.width?.toStringAsFixed(1),
-                  onFieldSubmitted: (v) {
+                  onTap: () => _widthController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _widthController.value.text.length),
+                  onChanged: (v) {
                     setState(() {
                       if (v.isNotEmpty) {
                         dataModel.width = double.parse(v);
@@ -144,7 +152,9 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                         showSelectedItems: true,
                         showSearchBox: false,
                       ),
-                      items: widget.variableList.map((e) => e.name).toList(),
+                      items: widget.dynamicVariableList
+                          .map((e) => e.name)
+                          .toList(),
                       dropdownSearchDecoration: InputDecoration(
                         border: widget.textFieldBorder,
                         isDense: true,
@@ -155,7 +165,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                         hintStyle: TextStyle(fontSize: 12),
                       ),
                       onChanged: (s) {
-                        for (var element in widget.variableList) {
+                        for (var element in widget.dynamicVariableList) {
                           if (element.name == s &&
                               element.type == PdfElementType.text) {
                             debugPrint('-------Adding[ Text ]to your '
@@ -168,15 +178,15 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                                   fontSize: element.key == 'date' ||
                                           element.key == 'price'
                                       ? 4
-                                      : 8,
+                                      : 6,
                                   width: element.key == 'date' ||
                                           element.key == 'price'
                                       ? 20
-                                      : 50,
+                                      : 40,
                                   height: element.key == 'date' ||
                                           element.key == 'price'
                                       ? 10
-                                      : 50,
+                                      : 15,
                                   color: 1099494850560,
                                   alignment: PdfAlign.topLeft));
                               widget.onChange(dataModel.toJson());
@@ -205,7 +215,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                                   text: 'your barcode',
                                   dynamicFieldKey: element.key,
                                   width: 50,
-                                  height: 50,
+                                  height: 20,
                                   color: 1099494850560,
                                   fontSize: 4,
                                   barcode: BarcodeType.Code128));

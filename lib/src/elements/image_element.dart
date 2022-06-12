@@ -23,9 +23,9 @@ class ImageElements extends StatefulWidget {
 
 class _ImageElementsState extends State<ImageElements> {
   final TextEditingController _widthController =
-      TextEditingController(text: 50.toString());
+      TextEditingController(text: 25.toString());
   final TextEditingController _heightController =
-      TextEditingController(text: 50.toString());
+      TextEditingController(text: 25.toString());
   var formKey = GlobalKey<FormState>();
 
   @override

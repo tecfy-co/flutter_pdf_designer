@@ -1,8 +1,6 @@
 part of flutter_pdf_designer;
 
 class PdfBoxDesign extends StatefulWidget {
-  final List<PdfDynamicField>? variableList;
-
   /// Printing Width in inches
   final double? width;
 
@@ -26,7 +24,6 @@ class PdfBoxDesign extends StatefulWidget {
     this.height,
     this.alignment = Alignment.center,
     this.heightScale = 1.0,
-    this.variableList,
   }) : super(key: key);
 
   @override
@@ -586,15 +583,11 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                           },
                                           child: Container(
                                             key: e.key,
-                                            color:
-                                                Color(e.color ?? 0xffFF000000),
-                                            height: (e.width! /
-                                                    PdfPageFormat.inch) *
-                                                scale!,
-                                            width: (e.width! /
-                                                    PdfPageFormat.inch) *
-                                                scale!,
-                                          ),
+                                              color: Color(
+                                                  e.color ?? 0xffFF000000),
+                                              width: (e.width ?? 25) * scale!,
+                                              height: (e.height ?? 25) * scale!,
+                                            ),
                                         ),
                                       ));
                             }

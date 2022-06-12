@@ -26,10 +26,10 @@ class LineElement extends StatefulWidget {
 
 class _LineElementState extends State<LineElement> {
   final TextEditingController _lineWidthController =
-      TextEditingController(text: 300.toString());
+      TextEditingController(text: 70.toString());
   final TextEditingController _lineColorController = TextEditingController();
   final TextEditingController _lineThicknessController =
-      TextEditingController(text: 10.toString());
+      TextEditingController(text: 1.toString());
 
   var formKey = GlobalKey<FormState>();
   Color pickerColor = const Color(0xff000000);
@@ -54,7 +54,7 @@ class _LineElementState extends State<LineElement> {
       message: 'Insert Line',
       child: IconButton(
         icon: Icon(
-          Icons.dehaze,
+          Icons.remove,
           color: Theme.of(context).primaryColor,
         ),
         onPressed: () {

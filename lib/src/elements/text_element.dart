@@ -19,12 +19,12 @@ class _TextElementState extends State<TextElement> {
   var formKey = GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _fontSizeController =
-      TextEditingController(text: 25.toString());
+      TextEditingController(text: 4.toString());
   final TextEditingController _fontColorController = TextEditingController();
   final TextEditingController _widthController =
       TextEditingController(text: 50.toString());
   final TextEditingController _heightController =
-      TextEditingController(text: 50.toString());
+      TextEditingController(text: 10.toString());
 
   Color pickerColor = const Color(0xff000000);
   Color currentColor = const Color(0xff000000);

@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                   heightLabel: 'Height in Inches',
                   textFieldBorder: OutlineInputBorder(),
                   widthLabel: 'Width in Inches',
-                  variableList: [
+                  dynamicVariableList: [
                     PdfDynamicField(
                         type: PdfElementType.text,
                         key: 'customerName',
