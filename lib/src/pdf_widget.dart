@@ -16,13 +16,10 @@ class PdfWidget {
             : dataModel.height! * PdfPageFormat.inch,
         child: pw.Stack(
           children: dataModel.elements!.map<pw.Widget>((e) {
-            print(e.type);
-
             if (dataModel.elements!.isNotEmpty) {
               switch (e.type) {
               case PdfElementType.text:
                 {
-                  print('it\'s Text !');
                   return pw.Positioned(
                     left: e.xPosition,
                     top: e.yPosition,
@@ -45,7 +42,6 @@ class PdfWidget {
                 }
               case PdfElementType.image:
                 {
-                  print('it\'s Image !');
                   return pw.Positioned(
                     left: e.xPosition,
                     top: e.yPosition,
@@ -64,7 +60,6 @@ class PdfWidget {
                 }
               case PdfElementType.line:
                 {
-                  print('it\'s Line !');
                   return pw.Positioned(
                     left: e.xPosition,
                     top: e.yPosition,
