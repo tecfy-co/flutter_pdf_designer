@@ -4,26 +4,29 @@ class PdfInsertWidgets extends StatefulWidget {
   final Map<String, dynamic> json;
   final List<PdfDynamicField> dynamicVariableList;
   final void Function(Map<String, dynamic>) onChange;
+  final String Function(String val)? translate;
   final InputBorder? textFieldBorder;
   final String? heightLabel;
   final String? widthLabel;
-  final String? textBtnTooltipMessage;
-  final String? imageBtnTooltipMessage;
-  final String? lineBtnTooltipMessage;
-  final String? dropdownLabel;
+
+  // final String? textBtnTooltipMessage;
+  // final String? imageBtnTooltipMessage;
+  // final String? lineBtnTooltipMessage;
+  // final String? dropdownLabel;
 
   const PdfInsertWidgets({
     Key? key,
     required this.json,
     required this.dynamicVariableList,
     required this.onChange,
+    this.translate,
     this.textFieldBorder,
     this.heightLabel,
     this.widthLabel,
-    this.textBtnTooltipMessage = 'Insert Text',
-    this.imageBtnTooltipMessage = 'Insert Image',
-    this.lineBtnTooltipMessage = 'Insert Line',
-    this.dropdownLabel = 'Components',
+    // this.textBtnTooltipMessage = 'Insert Text',
+    // this.imageBtnTooltipMessage = 'Insert Image',
+    // this.lineBtnTooltipMessage = 'Insert Line',
+    // this.dropdownLabel = 'Components',
   }) : super(key: key);
 
   @override
@@ -83,7 +86,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
             ),
             const SizedBox(width: 10),
             SizedBox(
-              width: 170,
+              width: 140,
               height: 50,
               child: TextFormField(
                   controller: _widthController,
@@ -110,14 +113,13 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
             ),
             const SizedBox(width: 10),
           ]),
-          Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                   padding: const EdgeInsets.only(right: 10, top: 15),
                   child: TextElement(
-                      tooltipMessage: widget.textBtnTooltipMessage!,
+                      translate: (val) => widget.translate!(val),
                       onSubmitted: (elm) {
                         setState(() {
                           dataModel.elements?.add(elm);
@@ -127,7 +129,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
               Padding(
                   padding: const EdgeInsets.only(right: 10, top: 15),
                   child: ImageElements(
-                      tooltipMessage: widget.imageBtnTooltipMessage!,
+                      translate: (val) => widget.translate!(val),
                       onSubmitted: (elm) {
                         setState(() {
                           dataModel.elements?.add(elm);
@@ -137,7 +139,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
               Padding(
                   padding: const EdgeInsets.only(right: 10, top: 15),
                   child: LineElement(
-                    tooltipMessage: widget.lineBtnTooltipMessage!,
+                    translate: (val) => widget.translate!(val),
                     onSubmitted: (elm) {
                       setState(() {
                         dataModel.elements?.add(elm);
@@ -164,7 +166,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                         border: widget.textFieldBorder,
                         isDense: true,
                         contentPadding: EdgeInsets.all(15),
-                        labelText: widget.dropdownLabel,
+                        labelText: widget.translate!('Components'),
                         labelStyle: TextStyle(fontSize: 12),
                       ),
                       onChanged: (s) {

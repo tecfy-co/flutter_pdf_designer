@@ -4,13 +4,15 @@ class TextEditDialog extends StatefulWidget {
   final PdfElement element;
   final void Function() onSubmitted;
   final void Function(PdfElement element) onDeleted;
+  final String Function(String val)? translate;
 
-  const TextEditDialog(
-      {Key? key,
-      required this.element,
-      required this.onSubmitted,
-      required this.onDeleted})
-      : super(key: key);
+  const TextEditDialog({
+    Key? key,
+    required this.element,
+    required this.onSubmitted,
+    required this.onDeleted,
+    this.translate,
+  }) : super(key: key);
 
   @override
   State<TextEditDialog> createState() => _TextEditDialogState();
@@ -146,7 +148,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
     return SimpleDialog(
       title: Row(
         children: [
-          const Text('Edit your text'),
+          Text(widget.translate!('Edit your text')),
           const Spacer(),
           IconButton(
             onPressed: () {
@@ -173,14 +175,14 @@ class _TextEditDialogState extends State<TextEditDialog> {
                       enableSuggestions: true,
                       validator: (s) {
                         if (s!.isEmpty) {
-                          return 'Text must be entered';
+                          return widget.translate!('Text must be entered');
                         }
                         return null;
                       },
                       textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your text here',
-                        labelText: 'Text',
+                      decoration: InputDecoration(
+                        hintText: widget.translate!('Enter your text'),
+                        labelText: widget.translate!('Text'),
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -202,13 +204,14 @@ class _TextEditDialogState extends State<TextEditDialog> {
                         },
                         value: getCurrentAlignment(
                             widget.element.alignment ?? PdfAlign.topLeft),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Alignment',
+                          labelText: widget.translate!('Alignment'),
                         ),
                         validator: (s) {
                           if (s!.isEmpty) {
-                            return 'Alignment must be entered';
+                            return widget
+                                .translate!('Alignment must be entered');
                           }
                           return null;
                         }),
@@ -228,15 +231,15 @@ class _TextEditDialogState extends State<TextEditDialog> {
                       ],
                       validator: (s) {
                         if (s!.isEmpty) {
-                          return 'Font Size Must be Entered';
+                          return widget.translate!('Font Size must be entered');
                         }
                         return null;
                       },
                       textInputAction: TextInputAction.next,
                       enableSuggestions: true,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your font size',
-                        labelText: 'Font Size',
+                      decoration: InputDecoration(
+                        hintText: widget.translate!('Enter your font size'),
+                        labelText: widget.translate!('Font Size'),
                         isDense: true,
                         isCollapsed: false,
                         border: OutlineInputBorder(),
@@ -256,15 +259,15 @@ class _TextEditDialogState extends State<TextEditDialog> {
                     ],
                     validator: (s) {
                       if (s!.isEmpty) {
-                        return 'Width Must be Entered';
+                        return widget.translate!('Width must be entered');
                       }
                       return null;
                     },
                     textInputAction: TextInputAction.next,
                     enableSuggestions: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your Width',
-                      labelText: 'Width',
+                    decoration: InputDecoration(
+                      hintText: widget.translate!('Enter your Width'),
+                      labelText: widget.translate!('Width'),
                       isDense: true,
                       isCollapsed: false,
                       border: OutlineInputBorder(),
@@ -283,15 +286,15 @@ class _TextEditDialogState extends State<TextEditDialog> {
                     ],
                     validator: (s) {
                       if (s!.isEmpty) {
-                        return 'Height Must be Entered';
+                        return widget.translate!('Height Must be Entered');
                       }
                       return null;
                     },
                     textInputAction: TextInputAction.next,
                     enableSuggestions: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your Height',
-                      labelText: 'Height',
+                    decoration: InputDecoration(
+                      hintText: widget.translate!('Enter your Height'),
+                      labelText: widget.translate!('Height'),
                       isDense: true,
                       isCollapsed: false,
                       border: OutlineInputBorder(),
@@ -339,7 +342,7 @@ class _TextEditDialogState extends State<TextEditDialog> {
                       });
                     }
                   },
-                  child: const Text('Save')),
+                  child: Text(widget.translate!('Save'))),
             ]),
           ),
         ),

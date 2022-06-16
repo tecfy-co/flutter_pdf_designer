@@ -1,11 +1,10 @@
 part of flutter_pdf_designer;
 
 class TextElement extends StatefulWidget {
-  final String tooltipMessage;
-  void Function(PdfElement elements)? onSubmitted;
+  final void Function(PdfElement elements)? onSubmitted;
+  final String Function(String val)? translate;
 
-  TextElement({Key? key, this.tooltipMessage = 'Insert Text', this.onSubmitted})
-      : super(key: key);
+  TextElement({Key? key, this.onSubmitted, this.translate}) : super(key: key);
 
   @override
   State<TextElement> createState() => _TextElementState();
@@ -41,7 +40,7 @@ class _TextElementState extends State<TextElement> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: widget.tooltipMessage,
+      message: widget.translate!('Insert Text'),
       child: IconButton(
         icon: Icon(Icons.text_fields, color: Theme.of(context).primaryColor),
         onPressed: () {
@@ -49,7 +48,7 @@ class _TextElementState extends State<TextElement> {
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text(widget.tooltipMessage),
+                  title: Text(widget.translate!('Insert Text')),
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -61,22 +60,24 @@ class _TextElementState extends State<TextElement> {
                             controller: _textController,
                             keyboardType: TextInputType.text,
                             enableSuggestions: true,
-                          validator: (s) {
-                            if (s!.isEmpty) {
-                              return 'Text must be entered';
-                            }
-                          },
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (String submittedText) {
-                            // widget.onSubmitted!.call(submittedText);
-                            // _textController.clear();
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your text here',
-                            labelText: 'Text',
-                            border: OutlineInputBorder(),
+                            validator: (s) {
+                              if (s!.isEmpty) {
+                                return widget
+                                    .translate!('Text must be entered');
+                              }
+                            },
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (String submittedText) {
+                              // widget.onSubmitted!.call(submittedText);
+                              // _textController.clear();
+                            },
+                            decoration: InputDecoration(
+                              hintText:
+                                  widget.translate!('Enter your text here'),
+                              labelText: widget.translate!('Text'),
+                              border: OutlineInputBorder(),
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 10),
                         Row(children: [
                           Expanded(
@@ -89,25 +90,28 @@ class _TextElementState extends State<TextElement> {
                               ],
                               validator: (s) {
                                 if (s!.isEmpty) {
-                                  return 'Font Size Must be Entered';
-                                }
+                                  return widget.translate!(
+                                        'Font Size Must be Entered');
+                                  }
                               },
-                              textInputAction: TextInputAction.next,
-                              enableSuggestions: true,
-                              onFieldSubmitted: (String submittedText, [size]) {
-                                // widget.onSubmitted!.call(submittedText,data: [size]);
-                                // _textController.clear();
-                                // _fontSizeController.clear();
-                              },
-                              onEditingComplete: () {
-                                print('OnEditingComplete');
-                              },
-                              decoration: const InputDecoration(
-                                hintText: 'Enter your font size',
-                                labelText: 'Font Size',
-                                border: OutlineInputBorder(),
+                                textInputAction: TextInputAction.next,
+                                enableSuggestions: true,
+                                onFieldSubmitted: (String submittedText,
+                                    [size]) {
+                                  // widget.onSubmitted!.call(submittedText,data: [size]);
+                                  // _textController.clear();
+                                  // _fontSizeController.clear();
+                                },
+                                onEditingComplete: () {
+                                  print('OnEditingComplete');
+                                },
+                                decoration: InputDecoration(
+                                  hintText:
+                                      widget.translate!('Enter your font size'),
+                                  labelText: widget.translate!('Font Size'),
+                                  border: OutlineInputBorder(),
+                                ),
                               ),
-                            ),
                           ),
                           const SizedBox(
                             width: 10,
@@ -122,25 +126,28 @@ class _TextElementState extends State<TextElement> {
                               ],
                               validator: (s) {
                                 if (s!.isEmpty) {
-                                  return 'Width Must be Entered';
-                                }
+                                  return widget
+                                        .translate!('Width Must be Entered');
+                                  }
                               },
-                              textInputAction: TextInputAction.next,
-                              enableSuggestions: true,
-                              onFieldSubmitted: (String submittedText, [size]) {
-                                // widget.onSubmitted!.call(submittedText,data: [size]);
-                                // _textController.clear();
-                                // _fontSizeController.clear();
-                              },
-                              onEditingComplete: () {
-                                print('OnEditingComplete');
-                              },
-                              decoration: const InputDecoration(
-                                hintText: 'Enter your width',
-                                labelText: 'Width',
-                                border: OutlineInputBorder(),
+                                textInputAction: TextInputAction.next,
+                                enableSuggestions: true,
+                                onFieldSubmitted: (String submittedText,
+                                    [size]) {
+                                  // widget.onSubmitted!.call(submittedText,data: [size]);
+                                  // _textController.clear();
+                                  // _fontSizeController.clear();
+                                },
+                                onEditingComplete: () {
+                                  print('OnEditingComplete');
+                                },
+                                decoration: InputDecoration(
+                                  hintText:
+                                      widget.translate!('Enter your width'),
+                                  labelText: widget.translate!('Width'),
+                                  border: OutlineInputBorder(),
+                                ),
                               ),
-                            ),
                           ),
                           const SizedBox(
                             width: 10,
@@ -155,25 +162,28 @@ class _TextElementState extends State<TextElement> {
                               ],
                               validator: (s) {
                                 if (s!.isEmpty) {
-                                  return 'Height Must be Entered';
-                                }
+                                  return widget
+                                        .translate!('Height Must be Entered');
+                                  }
                               },
-                              textInputAction: TextInputAction.next,
-                              enableSuggestions: true,
-                              onFieldSubmitted: (String submittedText, [size]) {
-                                // widget.onSubmitted!.call(submittedText,data: [size]);
-                                // _textController.clear();
-                                // _fontSizeController.clear();
-                              },
-                              onEditingComplete: () {
-                                print('OnEditingComplete');
-                              },
-                              decoration: const InputDecoration(
-                                hintText: 'Enter your height',
-                                labelText: 'Height',
-                                border: OutlineInputBorder(),
+                                textInputAction: TextInputAction.next,
+                                enableSuggestions: true,
+                                onFieldSubmitted: (String submittedText,
+                                    [size]) {
+                                  // widget.onSubmitted!.call(submittedText,data: [size]);
+                                  // _textController.clear();
+                                  // _fontSizeController.clear();
+                                },
+                                onEditingComplete: () {
+                                  print('OnEditingComplete');
+                                },
+                                decoration: InputDecoration(
+                                  hintText:
+                                      widget.translate!('Enter your height'),
+                                  labelText: widget.translate!('Height'),
+                                  border: OutlineInputBorder(),
+                                ),
                               ),
-                            ),
                           ),
                         ]),
                         const SizedBox(
@@ -218,17 +228,17 @@ class _TextElementState extends State<TextElement> {
                                   _textController.clear();
                                   _fontColorController.clear();
                                   Navigator.pop(context);
-                                });
-                              }
-                              // widget.onSubmitted!.call(_textController.text,data:
-                              // double.parse(_fontSizeController.text));
-                              // setState(() {
-                              //   widget.onSubmitted!.call(_textController.text,
-                              //       data: double.parse(_fontSizeController.text));
-                              //   _textController.clear();
+                                  });
+                                }
+                                // widget.onSubmitted!.call(_textController.text,data:
+                                // double.parse(_fontSizeController.text));
+                                // setState(() {
+                                //   widget.onSubmitted!.call(_textController.text,
+                                //       data: double.parse(_fontSizeController.text));
+                                //   _textController.clear();
                                 //   _fontSizeController.clear();
                               },
-                              child: Text('Save')),
+                              child: Text(widget.translate!('Save'))),
                         ]),
                       ),
                     ),

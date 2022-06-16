@@ -7,12 +7,10 @@ part of flutter_pdf_designer;
 // import '../../models/data_model.dart';
 
 class ImageElements extends StatefulWidget {
-  final String tooltipMessage;
   void Function(PdfElement elements)? onSubmitted;
+  final String Function(String val)? translate;
 
-  ImageElements(
-      {Key? key, this.tooltipMessage = 'Insert Image', this.onSubmitted})
-      : super(key: key);
+  ImageElements({Key? key, this.onSubmitted, this.translate}) : super(key: key);
 
   @override
   State<ImageElements> createState() => _ImageElementsState();
@@ -35,7 +33,7 @@ class _ImageElementsState extends State<ImageElements> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: widget.tooltipMessage,
+      message: widget.translate!('Insert Image'),
       child: IconButton(
         icon: Icon(Icons.image, color: Theme.of(context).primaryColor),
         onPressed: () {
@@ -43,7 +41,7 @@ class _ImageElementsState extends State<ImageElements> {
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text(widget.tooltipMessage),
+                  title: Text(widget.translate!('Insert Image')),
                   children: [
                     Form(
                       key: formKey,
@@ -60,43 +58,45 @@ class _ImageElementsState extends State<ImageElements> {
                           enableSuggestions: true,
                           validator: (s) {
                             if (s!.isEmpty) {
-                              return 'Width must be entered';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (String submittedText) {
-                            // widget.onSubmitted!.call(submittedText);
-                            // _textController.clear();
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your Width',
-                            labelText: 'Width',
-                            border: OutlineInputBorder(),
+                                return widget.translate!('Width Must be '
+                                    'Entered');
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (String submittedText) {
+                              // widget.onSubmitted!.call(submittedText);
+                              // _textController.clear();
+                            },
+                            decoration: InputDecoration(
+                              hintText: widget.translate!('Enter your width'),
+                              labelText: widget.translate!('Width'),
+                              border: OutlineInputBorder(),
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 20),
                         TextFormField(
                           autofocus: true,
                           controller: _heightController,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          validator: (s) {
-                            if (s!.isEmpty) {
-                              return 'Height Must be Entered';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          enableSuggestions: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your Height',
-                            labelText: 'Height',
-                            border: OutlineInputBorder(),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            validator: (s) {
+                              if (s!.isEmpty) {
+                                return widget
+                                    .translate!('Height Must be Entered');
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            enableSuggestions: true,
+                            decoration: InputDecoration(
+                              hintText: widget.translate!('Enter your Height'),
+                              labelText: widget.translate!('Height'),
+                              border: OutlineInputBorder(),
+                            ),
                           ),
-                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -108,25 +108,25 @@ class _ImageElementsState extends State<ImageElements> {
                                   setState(() {
                                     widget.onSubmitted?.call(
                                       PdfElement(
-                                          type: PdfElementType.image,
-                                          image: FileService.bytes,
-                                          width: double.parse(
-                                              _widthController.text),
-                                          height: double.parse(
-                                              _heightController.text)),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Image has been selected')));
-                                    _widthController.clear();
-                                    _heightController.clear();
-                                    Navigator.pop(context);
+                                            type: PdfElementType.image,
+                                            image: FileService.bytes,
+                                            width: double.parse(
+                                                _widthController.text),
+                                            height: double.parse(
+                                                _heightController.text)),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(widget.translate!(
+                                                  'Image has been selected'))));
+                                      _widthController.clear();
+                                      _heightController.clear();
+                                      Navigator.pop(context);
+                                    });
                                   });
-                                });
                                 }
                               },
-                              child: const Text('Browse my images ...')),
+                              child: const Text('Browse Images ...')),
                         ]),
                       ),
                     ),

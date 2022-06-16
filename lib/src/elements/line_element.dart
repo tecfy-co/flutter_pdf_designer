@@ -2,15 +2,12 @@ part of flutter_pdf_designer;
 
 
 class LineElement extends StatefulWidget {
-  final String tooltipMessage;
   final double lineWidth;
   void Function(PdfElement elements)? onSubmitted;
+  final String Function(String val)? translate;
 
   LineElement(
-      {Key? key,
-      this.tooltipMessage = 'Insert Line',
-      this.onSubmitted,
-      required this.lineWidth})
+      {Key? key, this.translate, this.onSubmitted, required this.lineWidth})
       : super(key: key);
 
   @override
@@ -44,7 +41,7 @@ class _LineElementState extends State<LineElement> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: widget.tooltipMessage,
+      message: widget.translate!('Insert Line'),
       child: IconButton(
         icon: Icon(
           Icons.remove,
@@ -55,7 +52,7 @@ class _LineElementState extends State<LineElement> {
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text(widget.tooltipMessage),
+                  title: Text(widget.translate!('Insert Line')),
                   children: [
                     SingleChildScrollView(
                       child: Padding(
@@ -72,34 +69,36 @@ class _LineElementState extends State<LineElement> {
                               keyboardType: TextInputType.number,
                               validator: (s) {
                                 if (s!.isEmpty) {
-                                  return 'Line Thickness must'
-                                      ' be entered';
-                                }
-                                if (int.parse(s) >= 11) {
-                                  return 'Line Thickness must'
-                                      ' be lower than 11';
-                                }
-                                return null;
-                              },
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Enter Line Thickness',
-                                  labelText: 'Thickness'),
-                              //   initialValue: 20.toString(),
+                                    return widget.translate!(
+                                        'Thickness must be entered');
+                                  }
+                                  if (int.parse(s) >= 11) {
+                                    return widget
+                                            .translate!('Line Thickness must'
+                                        ' be lower than 11');
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: widget.translate!('Enter Line '
+                                        'Thickness'),
+                                    labelText: widget.translate!('Thickness')),
+                                //   initialValue: 20.toString(),
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
                               controller: _lineWidthController,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText:
-                                      'Enter Line width (Max ${widget.lineWidth.toInt()})',
-                                  labelText: 'Width'),
-                            ),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: widget.translate!('Enter your '
+                                        'width'),
+                                    labelText: widget.translate!('Width')),
+                              ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -129,17 +128,17 @@ class _LineElementState extends State<LineElement> {
                                               _lineThicknessController.text),
                                           width: double.parse(
                                               _lineWidthController.text),
-                                          color: selectedColor,
-                                          yPosition: 0,
-                                          xPosition: 0));
-                                      _lineWidthController.clear();
-                                      _lineThicknessController.clear();
-                                      _lineColorController.clear();
-                                      Navigator.pop(context);
-                                    }
-                                  });
-                                },
-                                  child: const Text('Save')),
+                                            color: selectedColor,
+                                            yPosition: 0,
+                                            xPosition: 0));
+                                        _lineWidthController.clear();
+                                        _lineThicknessController.clear();
+                                        _lineColorController.clear();
+                                        Navigator.pop(context);
+                                      }
+                                    });
+                                  },
+                                  child: Text(widget.translate!('Save'))),
                             ],
                           ),
                         ),

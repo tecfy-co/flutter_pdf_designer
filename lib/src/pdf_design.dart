@@ -13,19 +13,24 @@ class PdfBoxDesign extends StatefulWidget {
 
   final Map<String, dynamic>? json;
 
+  final Map<String, dynamic>? designJson;
+
   final bool readOnly;
 
   final void Function(Map<String, dynamic>) onChange;
+  final String Function(String val)? translate;
 
   const PdfBoxDesign({
     Key? key,
     required this.onChange,
     required this.json,
+    this.designJson,
     this.width,
     this.height,
     this.alignment = Alignment.center,
     this.heightScale = 1.0,
     this.readOnly = false,
+    this.translate,
   }) : super(key: key);
 
   @override
@@ -147,7 +152,7 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
 
   @override
   void initState() {
-    dataModel = PdfModel.fromJson(widget.json!);
+    dataModel = PdfModel();
     if (widget.json?['elements'] == null || dataModel.elements == null) {
       dataModel.elements = [];
     }
@@ -157,6 +162,7 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
     if (widget.height != null) {
       dataModel.height = widget.height;
     }
+    dataModel = PdfModel.fromJson(widget.json!);
     super.initState();
   }
 
@@ -170,10 +176,9 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxHeight == double.infinity) {
-                return const Text('Height is not constrained');
+                return Text(widget.translate!('Height is not constrained'));
               }
               initializeScale(constraints, dataModel);
-              print(constraints);
               return Container(
                 color: Colors.grey,
                 child: Align(
@@ -218,15 +223,23 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                           color: Color(e.color ?? 0xffFF000000)
                                               .withOpacity(0.3),
                                           child: Text(
-                                            e.text ?? '-',
-                                            key: e.key,
-                                            style: TextStyle(
-                                                fontSize: ((e.fontSize ?? 8) *
-                                                    scale!),
-                                                color: Color(
-                                                    e.color ?? 0xffFF000000)),
-                                            // key: GlobalObjectKey(e.text ?? ''),
-                                          ))),
+                                                        e.dynamicFieldKey !=
+                                                                null
+                                                            ? widget.designJson![
+                                                                    e.dynamicFieldKey] ??
+                                                                ''
+                                                            : e.text!,
+                                                        key: e.key,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                ((e.fontSize ??
+                                                                        8) *
+                                                                    scale!),
+                                                            color: Color(e
+                                                                    .color ??
+                                                                0xffFF000000)),
+                                                        // key: GlobalObjectKey(e.text ?? ''),
+                                                      ))),
                                   childWhenDragging: const SizedBox(),
                                   child: InkWell(
                                     onDoubleTap: () {
@@ -237,17 +250,24 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                             builder: (context) {
                                               return TextEditDialog(
                                                 element: e,
-                                                onDeleted: (e) {
-                                                  dataModel.elements!.remove(e);
-                                                  setState(() {
-                                                    Navigator.pop(context);
-                                                    widget.onChange(
-                                                        dataModel.toJson());
-                                                  });
-                                                },
-                                                onSubmitted: () {
-                                                  setState(() {
-                                                    widget.onChange(
+                                                            translate: (val) =>
+                                                                widget.translate!(
+                                                                    val),
+                                                            onDeleted: (e) {
+                                                              dataModel
+                                                                  .elements!
+                                                                  .remove(e);
+                                                              setState(() {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                widget.onChange(
+                                                                    dataModel
+                                                                        .toJson());
+                                                              });
+                                                            },
+                                                            onSubmitted: () {
+                                                              setState(() {
+                                                                widget.onChange(
                                                         dataModel.toJson());
                                                   });
                                                 },
