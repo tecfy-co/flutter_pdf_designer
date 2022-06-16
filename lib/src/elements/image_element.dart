@@ -7,14 +7,11 @@ part of flutter_pdf_designer;
 // import '../../models/data_model.dart';
 
 class ImageElements extends StatefulWidget {
-  final String titleDialog;
-  final String outlineBtnName;
+  final String tooltipMessage;
   void Function(PdfElement elements)? onSubmitted;
+
   ImageElements(
-      {Key? key,
-      required this.titleDialog,
-      required this.outlineBtnName,
-      this.onSubmitted})
+      {Key? key, this.tooltipMessage = 'Insert Image', this.onSubmitted})
       : super(key: key);
 
   @override
@@ -38,7 +35,7 @@ class _ImageElementsState extends State<ImageElements> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Insert Image',
+      message: widget.tooltipMessage,
       child: IconButton(
         icon: Icon(Icons.image, color: Theme.of(context).primaryColor),
         onPressed: () {
@@ -46,18 +43,18 @@ class _ImageElementsState extends State<ImageElements> {
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text(widget.titleDialog),
+                  title: Text(widget.tooltipMessage),
                   children: [
                     Form(
                       key: formKey,
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                      child: Column(children: [
-                        TextFormField(
-                          autofocus: true,
-                          controller: _widthController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
+                        child: Column(children: [
+                          TextFormField(
+                            autofocus: true,
+                            controller: _widthController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           enableSuggestions: true,

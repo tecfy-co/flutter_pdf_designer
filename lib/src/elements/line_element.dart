@@ -1,21 +1,14 @@
 part of flutter_pdf_designer;
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-//
-// import '../../models/data_model.dart';
 
 class LineElement extends StatefulWidget {
-  final String titleDialog;
-  final String outlineBtnName;
+  final String tooltipMessage;
   final double lineWidth;
   void Function(PdfElement elements)? onSubmitted;
 
   LineElement(
       {Key? key,
-      required this.titleDialog,
-      required this.outlineBtnName,
+      this.tooltipMessage = 'Insert Line',
       this.onSubmitted,
       required this.lineWidth})
       : super(key: key);
@@ -51,7 +44,7 @@ class _LineElementState extends State<LineElement> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Insert Line',
+      message: widget.tooltipMessage,
       child: IconButton(
         icon: Icon(
           Icons.remove,
@@ -62,18 +55,18 @@ class _LineElementState extends State<LineElement> {
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text(widget.titleDialog),
+                  title: Text(widget.tooltipMessage),
                   children: [
                     SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Form(
-                        key: formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
                               ],
                               controller: _lineThicknessController,
                               keyboardType: TextInputType.number,

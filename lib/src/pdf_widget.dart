@@ -7,7 +7,7 @@ class PdfWidget {
     dataModel = PdfModel.fromJson(json);
     // print(dataModel.toJson());
     if (font == null) {
-      return pw.Text('font must be initalize');
+      return pw.Text('font must be initialize');
     } else {
       return pw.Container(
         width: dataModel.width! * PdfPageFormat.inch,

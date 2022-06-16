@@ -7,6 +7,10 @@ class PdfInsertWidgets extends StatefulWidget {
   final InputBorder? textFieldBorder;
   final String? heightLabel;
   final String? widthLabel;
+  final String? textBtnTooltipMessage;
+  final String? imageBtnTooltipMessage;
+  final String? lineBtnTooltipMessage;
+  final String? dropdownLabel;
 
   const PdfInsertWidgets({
     Key? key,
@@ -16,6 +20,10 @@ class PdfInsertWidgets extends StatefulWidget {
     this.textFieldBorder,
     this.heightLabel,
     this.widthLabel,
+    this.textBtnTooltipMessage = 'Insert Text',
+    this.imageBtnTooltipMessage = 'Insert Image',
+    this.lineBtnTooltipMessage = 'Insert Line',
+    this.dropdownLabel = 'Components',
   }) : super(key: key);
 
   @override
@@ -48,7 +56,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(
               width: 140,
               height: 50,
@@ -103,13 +111,13 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
             const SizedBox(width: 10),
           ]),
           Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Padding(
                   padding: const EdgeInsets.only(right: 10, top: 15),
                   child: TextElement(
-                      titleDialog: 'Enter your Text',
-                      outlineBtnName: 'Text'
-                          '',
+                      tooltipMessage: widget.textBtnTooltipMessage!,
                       onSubmitted: (elm) {
                         setState(() {
                           dataModel.elements?.add(elm);
@@ -119,9 +127,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
               Padding(
                   padding: const EdgeInsets.only(right: 10, top: 15),
                   child: ImageElements(
-                      titleDialog: 'Add your Images',
-                      outlineBtnName: 'Im'
-                          'age',
+                      tooltipMessage: widget.imageBtnTooltipMessage!,
                       onSubmitted: (elm) {
                         setState(() {
                           dataModel.elements?.add(elm);
@@ -131,8 +137,7 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
               Padding(
                   padding: const EdgeInsets.only(right: 10, top: 15),
                   child: LineElement(
-                    titleDialog: 'Add your Lines',
-                    outlineBtnName: 'Line',
+                    tooltipMessage: widget.lineBtnTooltipMessage!,
                     onSubmitted: (elm) {
                       setState(() {
                         dataModel.elements?.add(elm);
@@ -159,10 +164,8 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                         border: widget.textFieldBorder,
                         isDense: true,
                         contentPadding: EdgeInsets.all(15),
-                        labelText: "Components",
-                        hintText: "Components",
+                        labelText: widget.dropdownLabel,
                         labelStyle: TextStyle(fontSize: 12),
-                        hintStyle: TextStyle(fontSize: 12),
                       ),
                       onChanged: (s) {
                         for (var element in widget.dynamicVariableList) {
@@ -176,15 +179,15 @@ class _PdfInsertWidgetsState extends State<PdfInsertWidgets> {
                                   text: element.designValue,
                                   dynamicFieldKey: element.key,
                                   fontSize: element.key == 'date' ||
-                                          element.key == 'price'
+                                      element.key == 'price'
                                       ? 4
                                       : 6,
                                   width: element.key == 'date' ||
-                                          element.key == 'price'
+                                      element.key == 'price'
                                       ? 20
                                       : 40,
                                   height: element.key == 'date' ||
-                                          element.key == 'price'
+                                      element.key == 'price'
                                       ? 10
                                       : 15,
                                   color: 1099494850560,

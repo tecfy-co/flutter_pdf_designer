@@ -1,14 +1,10 @@
 part of flutter_pdf_designer;
 
 class TextElement extends StatefulWidget {
-  final String titleDialog;
-  final String outlineBtnName;
+  final String tooltipMessage;
   void Function(PdfElement elements)? onSubmitted;
-  TextElement(
-      {Key? key,
-      required this.titleDialog,
-      required this.outlineBtnName,
-      this.onSubmitted})
+
+  TextElement({Key? key, this.tooltipMessage = 'Insert Text', this.onSubmitted})
       : super(key: key);
 
   @override
@@ -45,7 +41,7 @@ class _TextElementState extends State<TextElement> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Insert Text',
+      message: widget.tooltipMessage,
       child: IconButton(
         icon: Icon(Icons.text_fields, color: Theme.of(context).primaryColor),
         onPressed: () {
@@ -53,18 +49,18 @@ class _TextElementState extends State<TextElement> {
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text(widget.titleDialog),
+                  title: Text(widget.tooltipMessage),
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Form(
                         key: formKey,
-                      child: Column(children: [
-                        TextFormField(
-                          autofocus: true,
-                          controller: _textController,
-                          keyboardType: TextInputType.text,
-                          enableSuggestions: true,
+                        child: Column(children: [
+                          TextFormField(
+                            autofocus: true,
+                            controller: _textController,
+                            keyboardType: TextInputType.text,
+                            enableSuggestions: true,
                           validator: (s) {
                             if (s!.isEmpty) {
                               return 'Text must be entered';
