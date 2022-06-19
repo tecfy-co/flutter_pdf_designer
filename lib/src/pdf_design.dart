@@ -13,7 +13,7 @@ class PdfBoxDesign extends StatefulWidget {
 
   final Map<String, dynamic>? json;
 
-  final Map<String, dynamic>? designJson;
+  final Map<String, dynamic>? dynamicVariables;
 
   final bool readOnly;
 
@@ -24,7 +24,7 @@ class PdfBoxDesign extends StatefulWidget {
     Key? key,
     required this.onChange,
     required this.json,
-    this.designJson,
+    this.dynamicVariables,
     this.width,
     this.height,
     this.alignment = Alignment.center,
@@ -216,19 +216,26 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                               },
                                               feedback: Material(
                                               child: Container(
-                                                  width: (e.width ?? 25) * scale!,
-                                          height: (e.height ?? 25) * scale!,
-                                          alignment: getAlignment(
-                                              e.alignment ?? PdfAlign.center),
-                                          color: Color(e.color ?? 0xffFF000000)
-                                              .withOpacity(0.3),
-                                          child: Text(
-                                                        e.dynamicFieldKey !=
+                                                  width: (e.width ?? 25) *
+                                                          scale!,
+                                                      height: (e.height ?? 25) *
+                                                          scale!,
+                                                      alignment: getAlignment(
+                                                          e.alignment ??
+                                                              PdfAlign.center),
+                                                      color: Color(e.color ??
+                                                              0xffFF000000)
+                                                          .withOpacity(0.3),
+                                                      child: Text(
+                                                        widget.dynamicVariables ==
                                                                 null
-                                                            ? widget.designJson![
-                                                                    e.dynamicFieldKey] ??
-                                                                ''
-                                                            : e.text!,
+                                                            ? e.text!
+                                                            : e.dynamicFieldKey !=
+                                                                    null
+                                                                ? widget.dynamicVariables![
+                                                                        e.dynamicFieldKey] ??
+                                                                    ''
+                                                                : e.text!,
                                                         key: e.key,
                                                         style: TextStyle(
                                                             fontSize:
@@ -279,14 +286,26 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                       });
                                     },
                                     child: Container(
-                                      color: Color(e.color ?? 0xffFF000000)
-                                          .withOpacity(0.2),
-                                      width: (e.width ?? 25) * scale!,
-                                      height: (e.height ?? 25) * scale!,
-                                      alignment: getAlignment(
-                                          e.alignment ?? PdfAlign.center),
-                                      child: Text(
-                                                    e.text ?? '-',
+                                      color: Color(e.color ??
+                                                          0xffFF000000)
+                                                      .withOpacity(0.2),
+                                                  width:
+                                                      (e.width ?? 25) * scale!,
+                                                  height:
+                                                      (e.height ?? 25) * scale!,
+                                                  alignment: getAlignment(
+                                                      e.alignment ??
+                                                          PdfAlign.center),
+                                                  child: Text(
+                                                    widget.dynamicVariables ==
+                                                            null
+                                                        ? e.text!
+                                                        : e.dynamicFieldKey !=
+                                                                null
+                                                            ? widget.dynamicVariables![
+                                                                    e.dynamicFieldKey] ??
+                                                                ''
+                                                            : e.text!,
                                                     key: e.key,
                                                     style: TextStyle(
                                                         fontSize:
@@ -299,13 +318,19 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                               ),
                                             )
                                           : Container(
-                                              width: (e.width ?? 25) * scale!,
+                                        width: (e.width ?? 25) * scale!,
                                               height: (e.height ?? 25) * scale!,
                                               alignment: getAlignment(
                                                   e.alignment ??
                                                       PdfAlign.center),
                                               child: Text(
-                                                e.text ?? '-',
+                                                widget.dynamicVariables == null
+                                                    ? e.text!
+                                                    : e.dynamicFieldKey != null
+                                                        ? widget.dynamicVariables![
+                                                                e.dynamicFieldKey] ??
+                                                            ''
+                                                        : e.text!,
                                                 key: e.key,
                                                 style: TextStyle(
                                                     fontSize:
@@ -585,7 +610,15 @@ class _PdfBoxDesignState extends State<PdfBoxDesign> {
                                               ),
                                             )
                                           : BarcodeWidget(
-                                              data: e.text ?? 'Barcode Data',
+                                              data: widget.dynamicVariables ==
+                                                      null
+                                                  ? e.text
+                                                  : e.dynamicFieldKey != null
+                                                      ? widget.dynamicVariables![
+                                                          e.dynamicFieldKey]
+                                                      : e.text ??
+                                                          'Ba'
+                                                              'rcode Data',
                                               barcode:
                                                   Barcode.fromType(e.barcode!),
                                               width: (e.width ?? 25) * scale!,

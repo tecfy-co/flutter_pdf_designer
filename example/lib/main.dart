@@ -40,6 +40,9 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               children: [
                 PdfInsertWidgets(
+                  translate: (val) {
+                    return val;
+                  },
                   key: UniqueKey(),
                   onChange: (json) {
                     print('insert Widget json = $json');
